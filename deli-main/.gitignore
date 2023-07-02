@@ -1,5 +1,6 @@
 __pycache__
 build*
+!*build_config.hpp.in
 compile_commands.json
 .cache/
 .ccache/

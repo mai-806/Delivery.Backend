@@ -34,3 +34,4 @@ static-analyzer-report
 .clangd
 .vscode
 build_*
+!*build_config.hpp.in
