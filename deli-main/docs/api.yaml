@@ -62,6 +62,9 @@ components:
           $ref: '#/components/schemas/Coordinate'
         finish:
           $ref: '#/components/schemas/Coordinate'
+        status:
+          type: string
+          enum: [new, waiting, in_progress, done]
 
       required:
         - start
