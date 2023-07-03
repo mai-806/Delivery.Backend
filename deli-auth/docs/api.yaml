@@ -64,6 +64,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResetResponse200'
+          headers:
+            password:
+              schema:
+                type: string
+                format: password
         '400':
           description: Invalid input
           content:
@@ -109,16 +114,13 @@ components:
     ResetResponse200:
       title: ResetSuccessResponse
       type: object
+      description: "password on header"
       properties:
         login:
           type: string
           description: unique user name
-        newPassword:
-          type: string
-          format: password
       required:
         - login
-        - newPassword
     ErrorResponse: 
       type: object
       properties:
