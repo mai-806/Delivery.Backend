@@ -18,9 +18,15 @@ paths:
       description: User registration in the service
       parameters:
         - in: header
-          name: Register
+          name: password
           schema:
-            $ref: '#/components/schemas/RegisterRequest'
+            type: string
+            format: password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
       responses:
         '200':
           description: Success responce
@@ -31,15 +37,15 @@ paths:
         '400':
           description: Invalid input
           content:
-            text/plain: #maybe json?
+            application/json:
               schema:
-                $ref: '#/components/schemas/PostResponse400'
+                $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: Already exists
           content:
-            text/plain:
+            application/json:
               schema:
-                $ref: '#/components/schemas/PostResponse409'
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     UserType:
@@ -52,10 +58,8 @@ components:
       description: "type of user: customer, courier or admin"
     RegisterRequest:
       type: object
+      description: "password on header"
       properties:
-        password:
-          type: string
-          format: password
         login:
           type: string
           description: unique user name
@@ -66,25 +70,21 @@ components:
         - password
         - userType
     PostResponse200:
-      title: Success response
+      title: RegisterSuccessResponse
       type: object
       properties:
         id:
           type: integer
-        login:
-          type: string
-          description: unique user name
-        userType:
-          $ref: '#/components/schemas/UserType'
       required:
         - id
-        - login
-        - userType
-    PostResponse400:
-      title: Invalid input
-      type: string
-      default: Invalid input
-    PostResponse409:
-      title: User already exists
-      type: string
-      default: User already exists
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        err_code:
+          type: integer
+          minimum: 0
+      required:
+        - message
+        - err_code
