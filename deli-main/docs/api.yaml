@@ -33,10 +33,7 @@ paths:
           content:
             text/plain:
               schema:
-                title: Order not found
-                type: string
-                default: "We don't have an order with such ID. Check, that ID you have passed is above than 0"
-
+                $ref: '#/components/schemas/ErrorResponse'
 
 components:
   schemas:
@@ -75,7 +72,6 @@ components:
       properties:
         message:
           type: string
-          default: "Can't make response"
         err_code:
           type: integer
           minimum: 0
