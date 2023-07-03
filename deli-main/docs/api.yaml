@@ -32,7 +32,6 @@ paths:
             application/json:
               schema:
                 title: Courier not found
-                type: string
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
