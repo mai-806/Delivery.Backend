@@ -1,0 +1,89 @@
+openapi: 3.0.3
+info:
+  title: Authentication API
+  description:
+    API for register, login and logout users
+  version: 1.0.0
+#servers:
+  #- url: https://url.ru/v1/
+tags:
+  - name: auth
+    #description: 
+paths:
+  /v1/auth/register:
+    post:
+      tags:
+        - auth
+      summary: Creating a new user
+      description: User registration in the service
+      parameters:
+        - in: header
+          name: password
+          schema:
+            type: string
+            format: password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '200':
+          description: Success responce
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponse200'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    UserType:
+      type: string
+      enum:
+        - customer
+        - courier
+        - admin
+      default: customer
+      description: "type of user: customer, courier or admin"
+    RegisterRequest:
+      type: object
+      description: "password on header"
+      properties:
+        login:
+          type: string
+          description: unique user name
+        userType:
+          $ref: '#/components/schemas/UserType'
+      required:
+        - login
+        - userType
+    PostResponse200:
+      title: RegisterSuccessResponse
+      type: object
+      properties:
+        id:
+          type: integer
+      required:
+        - id
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        err_code:
+          type: integer
+          minimum: 0
+      required:
+        - message
+        - err_code
