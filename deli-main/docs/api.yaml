@@ -7,7 +7,7 @@ info:
 
   #servers:
   # - url: https://url.ru/
-  
+
 paths:
   /v1/courier:
     get:
@@ -59,7 +59,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-                
+
     post:
       tags:
         - order
@@ -85,7 +85,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-                
+
   /v1/orders:
     get:
       operationId: getCouriers
@@ -123,7 +123,45 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-                
+
+  /v1/couriers/available:
+    get:
+      summary: Get array of IDs of all available couriers
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of couriers in response.
+          schema:
+            type: integer
+            minimum: 0
+            default: 10
+
+        - name: offset
+          in: query
+          required: false
+          description: Number of couriers to skip.
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAvailableCouriersResponse'
+
+        '400':
+          description: Wrong limit or offset parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
 
 components:
   schemas:
@@ -146,7 +184,15 @@ components:
         - id
         - login
         - orders_id
-        
+
+    GetAvailableCouriersResponse:
+      type: object
+      properties:
+        courier_ids:
+          type: array
+          items:
+            type: integer
+
     Coordinate:
       type: object
       properties:
@@ -201,7 +247,7 @@ components:
           type: integer
           minimum: 0
           example: 1
-          
+
     Order:
       required:
         - orderId
