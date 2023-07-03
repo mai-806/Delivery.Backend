@@ -38,7 +38,7 @@ paths:
                 items:
                   type: array
                   items:
-                    $ref: '#/components/schemas/GetOrderResponse'
+                    $ref: '#/components/schemas/OrderDto'
 
         '400':
           description: Wrong limit or offset parameters
@@ -68,9 +68,11 @@ components:
         - lon
         - lat
 
-    GetOrderResponse:
+    OrderDto:
       type: object
       properties:
+        id:
+          type: integer
         start:
           $ref: '#/components/schemas/Coordinate'
         finish:
@@ -83,6 +85,7 @@ components:
         - start
         - finish
         - status
+        - id
 
     ErrorResponse:
       type: object
