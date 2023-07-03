@@ -5,27 +5,27 @@ info:
   title: Delivery API
   description: API to interact with delivery orders
 
-servers:
-  - url: https://url.ru/v1/
+
 paths:
-  /order:
+  /v1/order:
     post:
       tags:
         - order
-      summary: Add a new order to the store
-      description: Add a new order to the store
+      summary: Add a new order
+      description: Add a new order
       operationId: addOrder
-      parameters:
-        - $ref: "#/components/parameters/orderId"
-        - $ref: "#/components/parameters/latitude"
-        - $ref: "#/components/parameters/longitude"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
+                $ref: '#/components/schemas/OrderId'
         '404':
           description: Invalid input
 
@@ -46,8 +46,8 @@ components:
       description: "**latitude** where to deliver the order."
       schema:
         type: number
-        minimum: -180
-        maximum: 180
+        minimum: -90
+        maximum: 90
 
     longitude:
       name: longitude
@@ -80,4 +80,14 @@ components:
           minimum: -180
           maximum: 180
           example: -30.301
+
+    OrderId:
+      required:
+        - orderId
+      type: object
+      properties:
+        orderId:
+          type: integer
+          minimum: 0
+          example: 1
 
