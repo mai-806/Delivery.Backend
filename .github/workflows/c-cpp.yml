@@ -31,6 +31,22 @@ jobs:
                     os: ubuntu-22.04
                     info: clang-14 + debug + sanitize addr+ub
                     tests-flags: ''
+                    test: deli-auth
+                  - cmake-flags: >-
+                        -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang
+                        -DUSERVER_FEATURE_MYSQL=1
+                        -DUSERVER_SANITIZE="ub addr"
+                        -DCMAKE_BUILD_TYPE=Debug
+                        -DUSERVER_NAMESPACE=userver_ns
+                        -DUSERVER_NAMESPACE_BEGIN="namespace userver_ns { inline namespace
+                        v1 {"
+                        -DUSERVER_NAMESPACE_END="}}"
+                        -DUSERVER_PG_SERVER_INCLUDE_DIR=/usr/include/postgresql/15/server
+                        -DUSERVER_PG_SERVER_LIBRARY_DIR=/usr/lib/postgresql/15/lib
+                    os: ubuntu-22.04
+                    info: clang-14 + debug + sanitize addr+ub
+                    tests-flags: ''
+                    test: deli-main
         name: '${{matrix.os}}: ${{matrix.info}}'
         runs-on: ${{matrix.os}}
 
@@ -41,7 +57,7 @@ jobs:
 
           - name: Install packages
             run: |
-                cd deli-auth
+                cd ${{matrix.test}}
                 # Instructions from https://clickhouse.com/docs/en/getting-started/install/
                 sudo apt-get install -y apt-transport-https ca-certificates dirmngr
                 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 8919F6BD2B48D754
@@ -56,7 +72,11 @@ jobs:
                 echo "deb https://apt-archive.postgresql.org/pub/repos/apt jammy-pgdg-archive main" | sudo tee /etc/apt/sources.list.d/pgdg.list
                 sudo apt update
                 sudo apt install -y postgresql-15 postgresql-client-15 postgresql-server-dev-15
-          - name: Run tests (auth)
+          - name: Run tests (${{matrix.test}} debug)
             run: |
-                cd deli-auth
+                cd ${{matrix.test}}
                 make test-debug
+          - name: Run tests (${{matrix.test}} release)
+            run: |
+                cd ${{matrix.test}}
+                make test-release
