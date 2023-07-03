@@ -1,0 +1,83 @@
+openapi: 3.0.3
+
+info:
+  version: 1.0.0
+  title: Delivery API
+  description: API to interact with delivery orders
+
+servers:
+  - url: https://url.ru/v1/
+paths:
+  /order:
+    post:
+      tags:
+        - order
+      summary: Add a new order to the store
+      description: Add a new order to the store
+      operationId: addOrder
+      parameters:
+        - $ref: "#/components/parameters/orderId"
+        - $ref: "#/components/parameters/latitude"
+        - $ref: "#/components/parameters/longitude"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Invalid input
+
+components:
+
+  parameters:
+    orderId:
+      name: orderId
+      in: query
+      description: "order id"
+      schema:
+        type: integer
+        minimum: 0
+
+    latitude:
+      name: latitude
+      in: query
+      description: "**latitude** where to deliver the order."
+      schema:
+        type: number
+        minimum: -180
+        maximum: 180
+
+    longitude:
+      name: longitude
+      in: query
+      description: "**longitude** where to deliver the order."
+      schema:
+        type: number
+        minimum: -180
+        maximum: 180
+
+  schemas:
+    Order:
+      required:
+        - orderId
+        - latitude
+        - longitude
+      type: object
+      properties:
+        orderId:
+          type: integer
+          minimum: 0
+          example: 1
+        latitude:
+          type: number
+          minimum: -180
+          maximum: 180
+          example: 90.3131
+        longitude:
+          type: number
+          minimum: -180
+          maximum: 180
+          example: -30.301
+
