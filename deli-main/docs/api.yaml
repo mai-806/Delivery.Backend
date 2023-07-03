@@ -9,6 +9,31 @@ info:
   # - url: https://url.ru/
   
 paths:
+  /v1/courier:
+    get:
+      summary: Get all information about a courier
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+            description: Identifier for order
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourierInfo'
+        '404':
+          description: Courier not found
+          content:
+            application/json:
+              schema:
+                title: Courier not found
+                $ref: '#/components/schemas/ErrorResponse'
   /v1/order:
     get:
       parameters:
@@ -76,6 +101,26 @@ paths:
 
 components:
   schemas:
+    CourierInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Courier ID
+        login:
+          type: string
+          description: Courier login
+        orders_id:
+          type: array
+          items:
+            type: integer
+            minimum: 0
+          description: Courier orders
+      required:
+        - id
+        - login
+        - orders_id
+        
     Coordinate:
       type: object
       properties:
@@ -120,7 +165,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OrderDto'
-
 
     ErrorResponse:
       type: object
