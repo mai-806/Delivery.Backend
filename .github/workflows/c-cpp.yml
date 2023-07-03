@@ -1,13 +1,15 @@
+
 name: CI
 
 'on':
     pull_request:
     push:
         branches:
-          - develop
+          - main
 
 env:
     UBSAN_OPTIONS: print_stacktrace=1
+    ASAN_OPTIONS: detect_odr_violation=2
 
 jobs:
     posix:
@@ -15,61 +17,46 @@ jobs:
             fail-fast: false
             matrix:
                 include:
-                  - os: ubuntu-20.04
-                    make: test-debug
-                    info: g++-9 + test-debug
-
-                  - os: ubuntu-20.04
-                    make: test-release
-                    info: g++-9 + test-release
-
+                  - cmake-flags: >-
+                        -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang
+                        -DUSERVER_FEATURE_MYSQL=1
+                        -DUSERVER_SANITIZE="ub addr"
+                        -DCMAKE_BUILD_TYPE=Debug
+                        -DUSERVER_NAMESPACE=userver_ns
+                        -DUSERVER_NAMESPACE_BEGIN="namespace userver_ns { inline namespace
+                        v1 {"
+                        -DUSERVER_NAMESPACE_END="}}"
+                        -DUSERVER_PG_SERVER_INCLUDE_DIR=/usr/include/postgresql/15/server
+                        -DUSERVER_PG_SERVER_LIBRARY_DIR=/usr/lib/postgresql/15/lib
+                    os: ubuntu-22.04
+                    info: clang-14 + debug + sanitize addr+ub
+                    tests-flags: ''
         name: '${{matrix.os}}: ${{matrix.info}}'
         runs-on: ${{matrix.os}}
 
         steps:
-          - uses: actions/checkout@v2
+          - uses: actions/checkout@v3
             with:
-                submodules: true
+                fetch-depth: 0
 
-          - name: Reuse ccache directory
-            uses: actions/cache@v2
-            with:
-                path: ~/.ccache
-                key: '${{matrix.os}} ${{matrix.info}} ccache-dir ${{github.ref}} run-${{github.run_number}}'
-                restore-keys: |
-                    ${{matrix.os}} ${{matrix.info}} ccache-dir ${{github.ref}} run-'
-                    ${{matrix.os}} ${{matrix.info}} ccache-
           - name: Install packages
             run: |
-                cd auth
+                cd deli-auth
+                # Instructions from https://clickhouse.com/docs/en/getting-started/install/
+                sudo apt-get install -y apt-transport-https ca-certificates dirmngr
+                sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 8919F6BD2B48D754
+                echo "deb https://packages.clickhouse.com/deb stable main" | sudo tee /etc/apt/sources.list.d/clickhouse.list
+                wget https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
+                chmod +x mariadb_repo_setup
+                sudo ./mariadb_repo_setup
                 sudo apt update
-                sudo apt install --allow-downgrades -y pep8 $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ')
-          - name: Setup ccache
+                sudo apt install --allow-downgrades -y clickhouse-common-static libmariadb-dev $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ')
+                # GH Ubuntu image has libpq version 15+ from pg's repo that is API incompatible with postgresql-14.
+                sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7FCC7D46ACCC4CF8
+                echo "deb https://apt-archive.postgresql.org/pub/repos/apt jammy-pgdg-archive main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+                sudo apt update
+                sudo apt install -y postgresql-15 postgresql-client-15 postgresql-server-dev-15
+          - name: Run tests (auth)
             run: |
-                ccache -M 2.0GB
-                ccache -s
-          - name: Run ${{matrix.make}}
-            run: |
-                cd auth
-                make ${{matrix.make}}
-          - name: Test install ${{matrix.make}}
-            if: matrix.make == 'test-release'
-            run: |
-                cd auth
-                make dist-clean
-                make install PREFIX=`pwd`/local_installation/
-          - name: Test run after install
-            if: matrix.make == 'test-release'
-            run: |
-                cd auth
-                ./local_installation/bin/pg_service_template --config=./local_installation/etc/pg_service_template/static_config.yaml &
-          - name: Check work run service
-            if: matrix.make == 'test-release'
-            run: |
-                cd auth
-                ps aux | grep pg_service_template | grep config && curl http://localhost:8080/ping -v
-          - name: Stop all
-            if: matrix.make == 'test-release'
-            run: |
-                cd auth
-                killall pg_service_template
+                cd deli-auth
+                make test-debug
