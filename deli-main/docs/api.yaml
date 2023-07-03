@@ -1,0 +1,55 @@
+openapi: 3.0.3
+
+info:
+  version: 1.0.0
+  title: Delivery API
+  description: API to interact with delivery orders
+
+paths:
+  /v1/orders:
+    get:
+      operationId: getCouriers
+      description: Get order ids.
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of orders in response.
+          schema:
+            type: integer
+            minimum: 0
+            default: 1
+
+        - name: offset
+          in: query
+          required: false
+          description: Number of orders to skip.
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOrdersResponse'
+
+        '400':
+          description: Bad request
+
+
+components:
+  schemas:
+    GetOrdersResponse:
+      type: object
+      properties:
+        couriers:
+          type: array
+          items:
+            type: integer
+
+      required:
+        - couriers
