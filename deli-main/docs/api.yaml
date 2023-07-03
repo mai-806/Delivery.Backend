@@ -26,47 +26,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OrderId'
-        '404':
-          description: Invalid input
+      '400':
+        description: Invalid value
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+
 
 components:
-
-  parameters:
-    orderId:
-      name: orderId
-      in: query
-      description: "order id"
-      schema:
-        type: integer
-        minimum: 0
-
-    latitude:
-      name: latitude
-      in: query
-      description: "**latitude** where to deliver the order."
-      schema:
-        type: number
-        minimum: -90
-        maximum: 90
-
-    longitude:
-      name: longitude
-      in: query
-      description: "**longitude** where to deliver the order."
-      schema:
-        type: number
-        minimum: -180
-        maximum: 180
 
   schemas:
     Order:
       required:
         - orderId
+        - customerId
         - latitude
         - longitude
       type: object
       properties:
         orderId:
+          type: integer
+          minimum: 0
+          example: 1
+        customerId:
           type: integer
           minimum: 0
           example: 1
@@ -81,6 +64,7 @@ components:
           maximum: 180
           example: -30.301
 
+
     OrderId:
       required:
         - orderId
@@ -91,3 +75,11 @@ components:
           minimum: 0
           example: 1
 
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        err_code:
+          type: integer
+          minimum: 0
