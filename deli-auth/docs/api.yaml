@@ -67,7 +67,6 @@ components:
           $ref: '#/components/schemas/UserType'
       required:
         - login
-        - password
         - userType
     PostResponse200:
       title: RegisterSuccessResponse
