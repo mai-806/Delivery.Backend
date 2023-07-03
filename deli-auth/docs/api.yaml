@@ -10,31 +10,28 @@ tags:
   - name: auth
     #description: 
 paths:
-  /auth/register:
+  /v1/auth/register:
     post:
       tags:
         - auth
       summary: Creating a new user
       description: User registration in the service
-      operationId: authRegister
-      requestBody:
-        description: Creating a new user
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Register'
-        required: true
+      parameters:
+        - in: header
+          name: Register
+          schema:
+            $ref: '#/components/schemas/RegisterRequest'
       responses:
         '200':
-          description: Successful operation
+          description: Success responce
           content:
-            text/plain:
+            application/json:
               schema:
                 $ref: '#/components/schemas/PostResponse200'
         '400':
           description: Invalid input
           content:
-            text/plain:
+            text/plain: #maybe json?
               schema:
                 $ref: '#/components/schemas/PostResponse400'
         '409':
@@ -45,31 +42,49 @@ paths:
                 $ref: '#/components/schemas/PostResponse409'
 components:
   schemas:
-    Register:
+    UserType:
+      type: string
+      enum:
+        - customer
+        - courier
+        - admin
+      default: customer
+      description: "type of user: customer, courier or admin"
+    RegisterRequest:
       type: object
       properties:
-        login:
-          type: string
-          description: unique user name
-        email:
-          type: string
-          format: email
         password:
           type: string
           format: password
+        login:
+          type: string
+          description: unique user name
+        userType:
+          $ref: '#/components/schemas/UserType'
       required:
         - login
-        - email
         - password
+        - userType
     PostResponse200:
-      title: Successful operation
-      type: string
-      example: Successful operation
+      title: Success response
+      type: object
+      properties:
+        id:
+          type: integer
+        login:
+          type: string
+          description: unique user name
+        userType:
+          $ref: '#/components/schemas/UserType'
+      required:
+        - id
+        - login
+        - userType
     PostResponse400:
       title: Invalid input
       type: string
-      example: Invalid input
+      default: Invalid input
     PostResponse409:
-      title: Login or email already exists
+      title: User already exists
       type: string
-      example: Login or email already exists
+      default: User already exists
