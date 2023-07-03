@@ -1,0 +1,75 @@
+openapi: 3.0.3
+info:
+  title: Authentication API
+  description:
+    API for register, login and logout users
+  version: 1.0.0
+#servers:
+  #- url: https://url.ru/v1/
+tags:
+  - name: auth
+    #description: 
+paths:
+  /auth/register:
+    post:
+      tags:
+        - auth
+      summary: Creating a new user
+      description: User registration in the service
+      operationId: authRegister
+      requestBody:
+        description: Creating a new user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PostResponse200'
+        '400':
+          description: Invalid input
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PostResponse400'
+        '409':
+          description: Already exists
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PostResponse409'
+components:
+  schemas:
+    Register:
+      type: object
+      properties:
+        login:
+          type: string
+          description: unique user name
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+      required:
+        - login
+        - email
+        - password
+    PostResponse200:
+      title: Successful operation
+      type: string
+      example: Successful operation
+    PostResponse400:
+      title: Invalid input
+      type: string
+      example: Invalid input
+    PostResponse409:
+      title: Login or email already exists
+      type: string
+      example: Login or email already exists
