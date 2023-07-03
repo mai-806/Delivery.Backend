@@ -31,7 +31,7 @@ paths:
         '404':
           description: Order not found
           content:
-            text/plain:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
@@ -69,7 +69,8 @@ components:
       required:
         - start
         - finish
-
+        - status
+        
     ErrorResponse:
       type: object
       properties:
