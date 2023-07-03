@@ -18,7 +18,7 @@ paths:
           schema:
             type: integer
             minimum: 0
-            default: 1
+            default: 10
 
         - name: offset
           in: query
@@ -35,21 +35,63 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetOrdersResponse'
+                items:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/GetOrderResponse'
 
         '400':
-          description: Bad request
+          description: Wrong limit or offset parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
 
 components:
   schemas:
-    GetOrdersResponse:
+    Coordinate:
       type: object
       properties:
-        couriers:
-          type: array
-          items:
-            type: integer
+        lon:
+          type: number
+          maximum: 180
+          minimum: -180
+          description: City geographic location (longitude)
+
+        lat:
+          type: number
+          maximum: 90
+          minimum: -90
+          description: City geographic location (latitude)
+      required:
+        - lon
+        - lat
+
+    GetOrderResponse:
+      type: object
+      properties:
+        start:
+          $ref: '#/components/schemas/Coordinate'
+        finish:
+          $ref: '#/components/schemas/Coordinate'
+        status:
+          type: string
+          enum: [new, waiting, in_progress, done]
 
       required:
-        - couriers
+        - start
+        - finish
+        - status
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        err_code:
+          type: integer
+          minimum: 0
+      required:
+        - message
+        - err_code
