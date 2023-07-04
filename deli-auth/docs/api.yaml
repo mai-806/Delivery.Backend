@@ -46,6 +46,50 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1/auth/login:
+    post:
+      tags:
+        - auth
+      summary: Authorization user
+      description: Authorization user in the server
+      parameters:
+        - in: header
+          name: password
+          schema:
+            type: string
+            format: password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+      responses:
+        '200':
+          description: Success authorization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse200'
+          headers:
+            tokens:
+              schema:
+                $ref: '#/components/schemas/TokenDto'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+
+
 components:
   schemas:
     UserType:
@@ -56,6 +100,17 @@ components:
         - admin
       default: customer
       description: "type of user: customer, courier or admin"
+    TokenDto:
+      properties:
+        access_token:
+          type: string
+          description: ""
+        refresh_token:
+          type: string
+          description: ""
+      required:
+        - access_token
+        - refresh_token
     RegisterRequest:
       type: object
       description: "password on header"
@@ -68,6 +123,15 @@ components:
       required:
         - login
         - userType
+    AuthRequest:
+      type: object
+      description: schema for authorization, password in header
+      properties:
+        login:
+          type: string
+          description: unique user name
+      required:
+        - login
     PostResponse200:
       title: RegisterSuccessResponse
       type: object
@@ -76,6 +140,15 @@ components:
           type: integer
       required:
         - id
+    AuthResponse200:
+      title: AuthSuccessResponse
+      type: object
+      properties:
+        isAuth:
+          type: boolean
+      required:
+        - isAuth
+
     ErrorResponse:
       type: object
       properties:
