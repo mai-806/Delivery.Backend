@@ -13,13 +13,14 @@ paths:
         get:
             summary: Get all information about a courier
             parameters:
-                - name: id
-                  in: query
-                  required: true
-                  schema:
-                      type: integer
-                      minimum: 0
-                      description: Identifier for order
+                -   name: id
+                    in: query
+                    required: true
+                    schema:
+                        type: integer
+                        minimum: 0
+                        description: Identifier for order
+
             responses:
                 '200':
                     description: Successful response
@@ -32,18 +33,18 @@ paths:
                     content:
                         application/json:
                             schema:
-                                title: Courier not found
                                 $ref: '#/components/schemas/ErrorResponse'
+
     /v1/order:
         get:
             parameters:
-                - name: id
-                  in: query
-                  required: true
-                  schema:
-                      type: integer
-                      minimum: 0
-                      description: Identifier for order
+                -   name: id
+                    in: query
+                    required: true
+                    schema:
+                        type: integer
+                        minimum: 0
+                        description: Identifier for order
 
             responses:
                 '200':
@@ -70,7 +71,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Order'
+                            $ref: '#/components/schemas/OrderCreationRequest'
             responses:
                 '200':
                     description: Successful operation
@@ -85,29 +86,28 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
 
-
     /v1/orders:
         get:
             operationId: getCouriers
             description: Get order ids.
             parameters:
-                - name: limit
-                  in: query
-                  required: false
-                  description: Maximum number of orders in response.
-                  schema:
-                      type: integer
-                      minimum: 0
-                      default: 10
+                -   name: limit
+                    in: query
+                    required: false
+                    description: Maximum number of orders in response.
+                    schema:
+                        type: integer
+                        minimum: 0
+                        default: 10
 
-                - name: offset
-                  in: query
-                  required: false
-                  description: Number of orders to skip.
-                  schema:
-                      type: integer
-                      minimum: 0
-                      default: 0
+                -   name: offset
+                    in: query
+                    required: false
+                    description: Number of orders to skip.
+                    schema:
+                        type: integer
+                        minimum: 0
+                        default: 0
 
             responses:
                 '200':
@@ -128,23 +128,23 @@ paths:
         get:
             summary: Get array of IDs of all available couriers
             parameters:
-                - name: limit
-                  in: query
-                  required: false
-                  description: Maximum number of couriers in response.
-                  schema:
-                      type: integer
-                      minimum: 0
-                      default: 10
+                -   name: limit
+                    in: query
+                    required: false
+                    description: Maximum number of couriers in response.
+                    schema:
+                        type: integer
+                        minimum: 0
+                        default: 10
 
-                - name: offset
-                  in: query
-                  required: false
-                  description: Number of couriers to skip.
-                  schema:
-                      type: integer
-                      minimum: 0
-                      default: 0
+                -   name: offset
+                    in: query
+                    required: false
+                    description: Number of couriers to skip.
+                    schema:
+                        type: integer
+                        minimum: 0
+                        default: 0
 
             responses:
                 '200':
@@ -215,19 +215,23 @@ components:
             properties:
                 id:
                     type: integer
+                customerId:
+                    type: integer
+                    minimum: 0
+                    example: 1
                 start:
                     $ref: '#/components/schemas/Coordinate'
                 finish:
                     $ref: '#/components/schemas/Coordinate'
                 status:
                     type: string
-                    enum: [new, waiting, in_progress, done]
-
+                    enum: [ new, waiting, in_progress, done, canceled ]
             required:
+                - id
                 - start
                 - finish
+                - customerId
                 - status
-                - id
 
         GetOrdersResponse:
             type: object
@@ -237,6 +241,22 @@ components:
                     items:
                         $ref: '#/components/schemas/OrderDto'
 
+        OrderCreationRequest:
+            type: object
+            properties:
+                customerId:
+                    type: integer
+                    minimum: 0
+                    example: 1
+                start:
+                    $ref: '#/components/schemas/Coordinate'
+                finish:
+                    $ref: '#/components/schemas/Coordinate'
+            required:
+                - start
+                - finish
+                - customerId
+
         OrderId:
             required:
                 - orderId
@@ -245,43 +265,12 @@ components:
                 orderId:
                     type: integer
                     minimum: 0
-                    example: 1
-
-        Order:
-            required:
-                - orderId
-                - customerId
-                - latitude
-                - longitude
-            type: object
-            properties:
-                orderId:
-                    type: integer
-                    minimum: 0
-                    example: 1
-                customerId:
-                    type: integer
-                    minimum: 0
-                    example: 1
-                latitude:
-                    type: number
-                    minimum: -180
-                    maximum: 180
-                    example: 90.3131
-                longitude:
-                    type: number
-                    minimum: -180
-                    maximum: 180
-                    example: -30.301
+                    example: 1v
 
         ErrorResponse:
             type: object
             properties:
                 message:
                     type: string
-                err_code:
-                    type: integer
-                    minimum: 0
             required:
                 - message
-                - err_code

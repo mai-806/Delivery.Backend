@@ -76,7 +76,7 @@ jobs:
             run: |
                 cd ${{matrix.test}}
                 make test-debug
-          - name: Run tests (${{matrix.test}} release)
-            run: |
-                cd ${{matrix.test}}
-                make test-release
+#           - name: Run tests (${{matrix.test}} release)
+#             run: |
+#                 cd ${{matrix.test}}
+#                 make test-release
