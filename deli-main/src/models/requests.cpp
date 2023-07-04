@@ -13,4 +13,4 @@ namespace deli_main::models::requests {
     return result.AsSingleRow<int64_t>();
   }
 
-} // namespace deli_main::requests
+} // namespace deli_main::models::requests

@@ -58,4 +58,4 @@ namespace userver::storages::postgres::io {
             {EnumType::kOrderStatusCanceled,   "canceled"}};
   };
 
-} // namespace storages::postgres::io
+} // namespace userver::storages::postgres::io

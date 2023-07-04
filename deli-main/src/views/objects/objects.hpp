@@ -26,4 +26,4 @@ namespace deli_main::views {
   };
   }
 
-} // namespace deli_main::views::objects
+} // namespace deli_main::views

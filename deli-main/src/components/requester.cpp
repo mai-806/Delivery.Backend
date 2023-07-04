@@ -17,4 +17,4 @@ namespace deli_main::components {
               cluster_(context.FindComponent<userver::components::Postgres>(common::consts::kPgClusterName)
                                .GetCluster()) {}
 
-} // deli_main::components
+} // namespace deli_main::components

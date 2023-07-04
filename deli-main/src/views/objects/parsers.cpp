@@ -160,7 +160,7 @@ namespace userver::formats::parse {
   }
 
 
-}
+} // namespace userver::formats::parse
 
 
 namespace userver::formats::serialize {
@@ -182,4 +182,4 @@ namespace userver::formats::serialize {
 
     return builder.ExtractValue();
   }
-}
+} // namespace userver::formats::serialize
