@@ -4,7 +4,8 @@ from testsuite.databases import pgsql
 
 
 @pytest.mark.parametrize(
-    'request_body, expected_response_body, expected_response_code, expected_db_data',
+    'request_body, expected_response_body, '
+    'expected_response_code, expected_db_data',
     [
         pytest.param(
             {
@@ -62,7 +63,8 @@ from testsuite.databases import pgsql
     ],
 )
 async def test_v1_order_post(service_client, request_body,
-                             expected_response_body, expected_response_code,
+                             expected_response_body,
+                             expected_response_code,
                              expected_db_data, pgsql, ):
     response = await service_client.post(
         '/v1/order',
