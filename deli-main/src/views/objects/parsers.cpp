@@ -55,10 +55,10 @@ namespace {
   }
 
   bool IsEqual(FieldType typel, FieldType typer) {
-    if (typel != FieldType::kDouble && typer != FieldType::kDouble)
+    if (typer != FieldType::kDouble)
       return typel == typer;
     const std::unordered_set<FieldType> d = {FieldType::kInt, FieldType::kDouble};
-    return d.contains(typel) && d.contains(typer);
+    return d.contains(typel);
   }
 
 
