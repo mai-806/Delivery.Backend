@@ -5,15 +5,10 @@ info:
         API for register, login and logout users
     version: 1.0.0
 #servers:
-    #- url: https://url.ru/v1/
-tags:
-    - name: auth
-    #description: 
+    #- url: https://url.ru/v1/Ф
 paths:
     /v1/auth/register:
         post:
-            tags:
-              - auth
             summary: Creating a new user
             description: User registration in the service
             parameters:
@@ -48,8 +43,6 @@ paths:
                                 $ref: '#/components/schemas/ErrorResponse'
     /v1/auth/user/reset:
         post:
-            tags:
-              - auth
             summary: Reset password
             description: Reset password to the user
             parameters:
@@ -67,10 +60,6 @@ paths:
             responses:
                 '204':
                     description: Success responce
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ResetResponse204'
                 '400':
                     description: Invalid input
                     content:
@@ -125,19 +114,6 @@ components:
                     type: integer
             required:
                 - id
-        ResetResponse204:
-            title: ResetSuccessResponse
-            type: object
-            properties:
-                message:
-                    type: string
-                    example: OK
-                code:
-                    type: integer
-                    example: 204
-            required:
-                - message
-                - code
         ErrorResponse: 
             type: object
             properties:
