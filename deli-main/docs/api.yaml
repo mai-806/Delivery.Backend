@@ -122,6 +122,33 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
 
+    v1/courier/assign:
+        post:
+            summary: the method connects the order and the courier with each other
+            description: connect order and courier
+            operationId: connectOrderAndCourier
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ConnectOrderAndCourierRequest'
+            responses:
+                '204':
+                    description: Successful operation
+                '400':
+                    description: Wrong param
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '404':
+                    description: no found order or courier
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+
+
 
 components:
     schemas:
@@ -218,7 +245,22 @@ components:
                 orderId:
                     type: integer
                     minimum: 0
-                    example: 1v
+                    example: 1
+
+        ConnectOrderAndCourierRequest:
+            required:
+                - orderId
+                - courierId
+            type: object
+            properties:
+                orderId:
+                    type: integer
+                    minimum: 0
+                    example: 1
+                courierId:
+                    type: integer
+                    minimum: 0
+                    example: 1
 
         ErrorResponse:
             type: object
