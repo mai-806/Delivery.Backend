@@ -57,14 +57,20 @@ paths:
                 name: id
                 schema:
                     type: integer
+                required: true
               - in: header
                 name: password
                 schema:
                     type: string
                     format: password
+                required: true
             responses:
                 '204':
                     description: Success responce
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ResetResponse204'
                 '400':
                     description: Invalid input
                     content:
@@ -119,6 +125,19 @@ components:
                     type: integer
             required:
                 - id
+        ResetResponse204:
+            title: ResetSuccessResponse
+            type: object
+            properties:
+                message:
+                    type: string
+                    example: OK
+                code:
+                    type: integer
+                    example: 204
+            required:
+                - message
+                - code
         ErrorResponse: 
             type: object
             properties:
