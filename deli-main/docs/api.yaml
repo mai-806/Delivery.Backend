@@ -84,6 +84,35 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
 
+    /v1/order/change-status:
+        post:
+            description: Change order status
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/OrderChangeStatus'
+            responses:
+                '200':
+                    description: Successful
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/OrderId'
+                '400':
+                    description: Invalid value
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '404':
+                    description: Order not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+
+
     /v1/orders:
         get:
             operationId: getCouriers
@@ -220,6 +249,18 @@ components:
                     minimum: 0
                     example: 1v
 
+        OrderChangeStatus:
+            type: object
+            properties:
+                orderId:
+                    type: integer
+                    minimum: 0
+                status:
+                    type: string
+                    enum: [in_progress, delivered, canceled]
+            required:
+                - orderId
+                - status
         ErrorResponse:
             type: object
             properties:
