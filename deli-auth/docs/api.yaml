@@ -46,6 +46,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1/user:
+    patch:
+      summary: Update user information
+      description: Change user login or type
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdateResponse200'
+        '400':
+          description: Invalid input (wrong params)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     UserType:
@@ -87,3 +116,37 @@ components:
       required:
         - message
         - err_code
+    UserUpdateRequest:
+      type: object
+      description: Object containing information for updating a user
+      properties:
+        id:
+          type: integer
+          description: User ID
+        login:
+          type: string
+          description: Unique user name
+        userType:
+          type: string
+          enum: [customer, courier, admin]
+          description: Type of user (customer, courier or admin)
+      required:
+        - id
+      oneOf:
+        - required: [login]
+        - required: [userType]
+    UserUpdateResponse200:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: User ID
+        login:
+          type: string
+          description: Unique user name
+        userType:
+          type: string
+          enum: [customer, courier, admin]
+          description: Type of user (customer, courier or admin)
+      required:
+        - id
