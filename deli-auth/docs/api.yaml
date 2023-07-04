@@ -1,134 +1,134 @@
 openapi: 3.0.3
 info:
-  title: Authentication API
-  description:
-    API for register, login and logout users
-  version: 1.0.0
+    title: Authentication API
+    description:
+        API for register, login and logout users
+    version: 1.0.0
 #servers:
-  #- url: https://url.ru/v1/
+    #- url: https://url.ru/v1/
 tags:
-  - name: auth
+    - name: auth
     #description: 
 paths:
-  /v1/auth/register:
-    post:
-      tags:
-        - auth
-      summary: Creating a new user
-      description: User registration in the service
-      parameters:
-        - in: header
-          name: password
-          schema:
-            type: string
-            format: password
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegisterRequest'
-      responses:
-        '200':
-          description: Success responce
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RegisterResponse200'
-        '400':
-          description: Invalid input
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
-          description: Already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /v1/auth/user/reset:
-    post:
-      tags:
-        - auth
-      summary: Reset password
-      description: Reset password to the user
-      parameters:
-        - in: query
-          name: id
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Success responce
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResetResponse200'
-          headers:
-            password:
-              schema:
-                type: string
-                format: password
-        '400':
-          description: Invalid input
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: User not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+    /v1/auth/register:
+        post:
+            tags:
+              - auth
+            summary: Creating a new user
+            description: User registration in the service
+            parameters:
+              - name: password
+                in: header
+                schema:
+                    type: string
+                    format: password
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RegisterRequest'
+            responses:
+                '200':
+                    description: Success responce
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RegisterResponse200'
+                '400':
+                    description: Invalid input
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '409':
+                    description: Already exists
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+    /v1/auth/user/reset:
+        post:
+            tags:
+              - auth
+            summary: Reset password
+            description: Reset password to the user
+            parameters:
+              - in: query
+                name: id
+                schema:
+                    type: integer
+            responses:
+                '200':
+                    description: Success responce
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ResetResponse200'
+                    headers:
+                        password:
+                            schema:
+                                type: string
+                                format: password
+                '400':
+                    description: Invalid input
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '404':
+                    description: User not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
 components:
-  schemas:
-    UserType:
-      type: string
-      enum:
-        - customer
-        - courier
-        - admin
-      default: customer
-      description: "type of user: customer, courier or admin"
-    RegisterRequest:
-      type: object
-      description: "password on header"
-      properties:
-        login:
-          type: string
-          description: unique user name
-        userType:
-          $ref: '#/components/schemas/UserType'
-      required:
-        - login
-        - userType
-    RegisterResponse200:
-      title: RegisterSuccessResponse
-      type: object
-      properties:
-        id:
-          type: integer
-      required:
-        - id
-    ResetResponse200:
-      title: ResetSuccessResponse
-      type: object
-      description: "password on header"
-      properties:
-        login:
-          type: string
-          description: unique user name
-      required:
-        - login
-    ErrorResponse: 
-      type: object
-      properties:
-        message:
-          type: string
-        err_code:
-          type: integer
-          minimum: 0
-      required:
-        - message
-        - err_code
+    schemas:
+        UserType:
+            type: string
+            enum:
+                - customer
+                - courier
+                - admin
+            default: customer
+            description: "type of user: customer, courier or admin"
+        RegisterRequest:
+            type: object
+            description: "password on header"
+            properties:
+                login:
+                    type: string
+                    description: unique user name
+                userType:
+                    $ref: '#/components/schemas/UserType'
+            required:
+                - login
+                - userType
+        RegisterResponse200:
+            title: RegisterSuccessResponse
+            type: object
+            properties:
+                id:
+                    type: integer
+            required:
+                - id
+        ResetResponse200:
+            title: ResetSuccessResponse
+            type: object
+            description: "password on header"
+            properties:
+                login:
+                    type: string
+                    description: unique user name
+            required:
+                - login
+        ErrorResponse: 
+            type: object
+            properties:
+                message:
+                    type: string
+                err_code:
+                    type: integer
+                    minimum: 0
+            required:
+                - message
+                - err_code
