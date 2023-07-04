@@ -127,9 +127,7 @@ components:
           type: string
           description: Unique user name
         userType:
-          type: string
-          enum: [customer, courier, admin]
-          description: Type of user (customer, courier or admin)
+          $ref: '#/components/schemas/UserType'
       required:
         - id
       oneOf:
@@ -145,8 +143,6 @@ components:
           type: string
           description: Unique user name
         userType:
-          type: string
-          enum: [customer, courier, admin]
-          description: Type of user (customer, courier or admin)
+          $ref: '#/components/schemas/UserType'
       required:
         - id
