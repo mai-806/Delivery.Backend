@@ -126,7 +126,6 @@ paths:
         post:
             summary: the method connects the order and the courier with each other
             description: connect order and courier
-            operationId: connectOrderAndCourier
             requestBody:
                 content:
                     application/json:
@@ -238,19 +237,16 @@ components:
                 - customerId
 
         OrderId:
-            required:
-                - orderId
             type: object
             properties:
                 orderId:
                     type: integer
                     minimum: 0
                     example: 1
-
-        ConnectOrderAndCourierRequest:
             required:
                 - orderId
-                - courierId
+
+        ConnectOrderAndCourierRequest:
             type: object
             properties:
                 orderId:
@@ -261,6 +257,9 @@ components:
                     type: integer
                     minimum: 0
                     example: 1
+            required:
+                - orderId
+                - courierId
 
         ErrorResponse:
             type: object
