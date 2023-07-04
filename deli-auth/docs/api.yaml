@@ -1,11 +1,11 @@
 openapi: 3.0.3
 info:
-  title: Authentication API
-  description:
-    API for register, login and logout users
-  version: 1.0.0
+    title: Authentication API
+    description:
+        API for register, login and logout users
+    version: 1.0.0
 #servers:
-  #- url: https://url.ru/v1/
+    #- url: https://url.ru/v1/Ф
 tags:
   - name: auth
     #description: 
