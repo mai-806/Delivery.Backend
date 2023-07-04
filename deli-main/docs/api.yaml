@@ -93,12 +93,8 @@ paths:
                         schema:
                             $ref: '#/components/schemas/OrderChangeStatus'
             responses:
-                '200':
-                    description: Successful
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/OrderId'
+                '204':
+                    description: OK
                 '400':
                     description: Invalid value
                     content:
