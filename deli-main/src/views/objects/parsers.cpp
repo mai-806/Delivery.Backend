@@ -206,7 +206,6 @@ namespace userver::formats::serialize {
     return builder.ExtractValue();
   }
 
-  //new
   json::Value Serialize(const CourierInfoResponse &value,
                         serialize::To<json::Value>) {
     json::ValueBuilder builder;

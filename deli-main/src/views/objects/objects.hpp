@@ -14,7 +14,7 @@ namespace deli_main::views {
   struct ErrorResponse {
     std::string message;
   };
-// new
+
   namespace v1::courier::get {
     struct CourierInfoRequest{
       int64_t courier_id;
@@ -25,7 +25,7 @@ namespace deli_main::views {
       std::vector<int64_t> orders_id;
     }
   }
-//
+  
   namespace v1::order::post {
     struct OrderCreationRequest {
       int64_t customer_id;
