@@ -8,7 +8,9 @@ info:
   #- url: https://url.ru/v1/
 tags:
   - name: auth
-    #description: 
+    #description:
+security:
+  - bearerAuth: []
 paths:
   /v1/auth/register:
     post:
@@ -72,6 +74,7 @@ paths:
                 $ref: '#/components/schemas/AuthResponse200'
           headers:
             tokens:
+              description: Info about access token
               schema:
                 $ref: '#/components/schemas/TokenDto'
         '400':
@@ -108,12 +111,19 @@ components:
         refresh_token:
           type: string
           description: ""
+        expires_in:
+          type: integer
+          description: access token validity period
+        token_type:
+          type: string
+          default: "bearer"
       required:
         - access_token
         - refresh_token
+        - expires_in
     RegisterRequest:
       type: object
-      description: "password on header"
+      description: password on header
       properties:
         login:
           type: string
@@ -160,3 +170,8 @@ components:
       required:
         - message
         - err_code
+  securitySchemes:
+    bearerAuth:
+      type: http  # возможно стоит использовать oauth2, но нужно ли оно нам?
+      scheme: bearer
+      bearerFormat: JWT
