@@ -75,6 +75,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1/auth/logout:
+    post:
+      tags:
+        - auth
+      summary: Logout user
+      description:  Logout user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+      responses:
+        '200':
+          description: Success logout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutResponse200'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     UserType:
@@ -147,3 +177,24 @@ components:
           $ref: '#/components/schemas/UserType'
       required:
         - id
+    LogoutRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: User ID
+      required:
+        - id
+    LogoutResponse200:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: User ID
+        login:
+          type: string
+          description: Unique user name
+        isAuth:
+          type: boolean
+          description: Is the user logged in
+          default: False
