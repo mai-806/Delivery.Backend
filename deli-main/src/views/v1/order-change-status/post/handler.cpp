@@ -18,12 +18,12 @@ namespace deli_main::views::v1::order::change_status::post {
     const auto request_data = json.As<Request>();
 
     models::Order order{
-            .id = id,
-            .status = status
+            .id = request_data.id,
+            .status = request_data.status
     };
 
-    const auto check = requester_.DoDBQuery(models::requests::UpdateOrderChangeStatus, order);
-    
+    const auto check = requester_.DoDBQuery(models::requests::UpdateOrderStatus, order);
+
     if (check == 1) {
       request.SetResponseStatus(userver::server::http::HttpStatus::kNotFound);
       return Serialize(
@@ -31,15 +31,13 @@ namespace deli_main::views::v1::order::change_status::post {
                       .message = "Order not found"
               },
               userver::formats::serialize::To<userver::formats::json::Value>());
-    }
+      }
     }
 
     request.SetResponseStatus(userver::server::http::HttpStatus::kNoContent);
 
     return Serialize(
-            Response204{
-                    .message = "OK"
-            },
+            {},
             userver::formats::serialize::To<userver::formats::json::Value>());
 
   } catch (const userver::formats::json::ParseException &exception) {

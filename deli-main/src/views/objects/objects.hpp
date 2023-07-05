@@ -14,10 +14,6 @@ namespace deli_main::views {
     std::string message;
   };
 
-  struct JustOkResponse {
-    std::string message;
-  };
-
   namespace v1::order::post {
     struct OrderCreationRequest {
       int64_t customer_id;

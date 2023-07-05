@@ -19,7 +19,6 @@ namespace deli_main::views::v1::order::change_status::post {
     using Request = OrderChangeStatusRequest;
     using Response404 = ErrorResponse;
     using Response400 = ErrorResponse;
-    using Response204 = JustOkResponse;
 
     Handler(const userver::components::ComponentConfig &config,
             const userver::components::ComponentContext &component_context);
