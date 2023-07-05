@@ -60,6 +60,7 @@ paths:
           schema:
             type: string
             format: password
+          required: true
       requestBody:
         content:
           application/json:
