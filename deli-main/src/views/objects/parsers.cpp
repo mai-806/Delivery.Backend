@@ -106,11 +106,16 @@ namespace {
   using Coordinate = deli_main::views::Coordinate;
   using OrderCreationRequest = deli_main::views::v1::order::post::OrderCreationRequest;
   using OrderCreationResponse = deli_main::views::v1::order::post::OrderCreationResponse;
+
+  using CourierInfoResponse = deli_main::views::v1::courier::get::CourierInfoResponse;
+  using CourierInfoRequest = deli_main::views::v1::courier::get::CourierInfoRequest;
+
 }
 
 namespace userver::formats::parse {
 
-  Coordinate Parse(const userver::formats::json::Value &elem,
+  Coordinate
+  Parse(const userver::formats::json::Value &elem,
                    userver::formats::parse::To<Coordinate>) {
     const Keys required_keys = {"lon", "lat"};
     const Keys optional_keys;
@@ -159,6 +164,24 @@ namespace userver::formats::parse {
     return order_creation_request;
   }
 
+  CourierInfoRequest
+  Parse(const userver::formats::json::Value &elem,
+        userver::formats::parse::To<CourierInfoRequest>) {
+    const Keys required_keys = {"id"};
+    const Keys optional_keys;
+    const Types key_types = {
+            {"id", FieldType::kInt}
+    };
+
+    CheckFields(required_keys, optional_keys, key_types, elem);
+    LOG_DEBUG() << "fields are checked";
+    // required fields:
+    CourierInfoRequest courier_info_request{
+            .courier_id = GetRequiredValue<int64_t>(elem, "id"),
+    };
+    LOG_DEBUG() << "request parsed";
+    return courier_info_requestt;
+  }
 
 } // namespace userver::formats::parse
 
@@ -182,4 +205,17 @@ namespace userver::formats::serialize {
 
     return builder.ExtractValue();
   }
+
+  //new
+  json::Value Serialize(const CourierInfoResponse &value,
+                        serialize::To<json::Value>) {
+    json::ValueBuilder builder;
+
+    builder["courier_id"] = value.courier_id;
+    builder["login"] = value.login;
+    builder["orders_id"] = value.orders_id;
+
+    return builder.ExtractValue();
+  }
+
 } // namespace userver::formats::serialize
