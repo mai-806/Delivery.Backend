@@ -13,4 +13,22 @@ namespace deli_main::models::requests {
     return result.AsSingleRow<int64_t>();
   }
 
+  int64_t SelectCourier(const userver::storages::postgres::ClusterPtr& cluster,
+                        const models::Courier &courier) {
+    const auto &result =
+            cluster->Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                             sql::kSelectCourier,
+                             courier);
+    return result.AsSingleRow<string>();
+  }
+
+  int64_t SelectOders(const userver::storages::postgres::ClusterPtr& cluster,
+                        const models::Courier &courier) {
+    const auto &result =
+            cluster->Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                             sql::kSelectOders,
+                             courier);
+    return result.AsSingleRow<int64_t>();
+  }
+
 } // namespace deli_main::models::requests

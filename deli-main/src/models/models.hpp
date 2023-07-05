@@ -3,6 +3,8 @@
 #include <userver/formats/json/value.hpp>
 #include <userver/storages/postgres/io/enum_types.hpp>
 #include <userver/storages/postgres/io/json_types.hpp>
+#include <string>
+#include <vector>
 
 
 namespace deli_main::models {
@@ -29,6 +31,12 @@ namespace deli_main::models {
     std::optional<int64_t> courier;
   };
 
+  struct Courier {
+    int64_t id;
+    std::string login;
+    std::vector<int64_t> orders_id;
+  };
+
 
 } // namespace deli_main::models
 
@@ -44,6 +52,11 @@ namespace userver::storages::postgres::io {
   template<>
   struct CppToUserPg<deli_main::models::Order> {
     static constexpr DBTypeName postgres_name = "deli_main.order_v1";
+  };
+
+  template<>
+  struct CppToUserPg<deli_main::models::Courier> {
+    static constexpr DBTypeName postgres_name = "deli_main.courier_v1";
   };
 
   template<>
