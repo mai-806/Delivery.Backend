@@ -2,148 +2,206 @@ openapi: 3.0.3
 info:
     title: Authentication API
     description:
-        API for register, login and logout users
+        "API for register, login and logout users"
     version: 1.0.0
-#servers:
-    #- url: https://url.ru/v1/Ф
+    #servers:
+    #- url: https://url.ru/v1/
+
 tags:
-  - name: auth
-    #description: 
+    -   name: auth
+    #description:
 paths:
-  /v1/auth/register:
-    post:
-      tags:
-        - auth
-      summary: Creating a new user
-      description: User registration in the service
-      parameters:
-        - in: header
-          name: password
-          schema:
-            type: string
-            format: password
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegisterRequest'
-      responses:
-        '200':
-          description: Success responce
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PostResponse200'
-        '400':
-          description: Invalid input
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
-          description: Already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /v1/user:
-    patch:
-      summary: Update user information
-      description: Change user login or type
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserUpdateRequest'
-      responses:
-        '200':
-          description: Success response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserUpdateResponse200'
-        '400':
-          description: Invalid input (wrong params)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: User not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+    /v1/auth/register:
+        post:
+            tags:
+                - auth
+            summary: Creating a new user
+            description: "Registration of new user in the service by login, user type and password (transmitted in the header)"
+            parameters:
+                -   in: header
+                    name: password
+                    schema:
+                        type: string
+                        format: password
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RegisterRequest'
+            responses:
+                '200':
+                    description: Success response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PostResponse200'
+                '400':
+                    $ref: '#/components/responses/InvalidInput'
+                '409':
+                    description: Already exists
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+    /v1/user:
+        get:
+            tags:
+                - user
+            description: Get information about User
+            parameters:
+                -   name: id
+                    in: query
+                    description: ID of user, which information we want to get
+                    schema:
+                        $ref: '#/components/schemas/UserID'
+                    required: true
+            
+            responses:
+                '200':
+                    description: Success response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetUserInfoResponse'
+                '400':
+                    $ref: '#/components/responses/InvalidInput'
+                '403':
+                    description: Access denied
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '404':
+                    $ref: '#/components/responses/UserNotFound'
+        
+        patch:
+            summary: Update user information
+            description: Change info about user by ID from query (login / user type)
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UserUpdateRequest'
+                required: true
+            
+            responses:
+                '200':
+                    description: Success response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserUpdateResponse200'
+                '400':
+                    $ref: '#/components/responses/InvalidInput'
+                '404':
+                    $ref: '#/components/responses/UserNotFound'
+
 components:
-  schemas:
-    UserType:
-      type: string
-      enum:
-        - customer
-        - courier
-        - admin
-      default: customer
-      description: "type of user: customer, courier or admin"
-    RegisterRequest:
-      type: object
-      description: "password on header"
-      properties:
-        login:
-          type: string
-          description: unique user name
-        userType:
-          $ref: '#/components/schemas/UserType'
-      required:
-        - login
-        - userType
-    PostResponse200:
-      title: RegisterSuccessResponse
-      type: object
-      properties:
-        id:
-          type: integer
-      required:
-        - id
-    ErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
-        err_code:
-          type: integer
-          minimum: 0
-      required:
-        - message
-        - err_code
-    UserUpdateRequest:
-      type: object
-      description: Object containing information for updating a user
-      properties:
-        id:
-          type: integer
-          minimum: 0
-          description: User ID
-        login:
-          type: string
-          description: Unique user name
-        userType:
-          $ref: '#/components/schemas/UserType'
-      required:
-        - id
-      anyOf:
-        - required: [login]
-        - required: [userType]
-    UserUpdateResponse200:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: User ID
-        login:
-          type: string
-          description: Unique user name
-        userType:
-          $ref: '#/components/schemas/UserType'
-      required:
-        - id
+    schemas:
+        UserID:
+            type: integer
+            description: User ID
+            minimum: 0
+        
+        UserLogin:
+            type: string
+            description: User name
+            default: Guest
+        
+        UserType:
+            type: string
+            description: "All possible types of user(customer / courier / admin)"
+            enum:
+                - customer
+                - courier
+                - admin
+            default: customer
+        
+        RegisterRequest:
+            type: object
+            description: "Struct describing the parameters passed for registration (login and type of user)"
+            properties:
+                login:
+                    $ref: '#/components/schemas/UserLogin'
+                user_type:
+                    $ref: '#/components/schemas/UserType'
+            required:
+                - login
+                - user_type
+        
+        UserUpdateRequest:
+            type: object
+            description: Object containing information for updating a user
+            properties:
+                id:
+                    $ref: '#/components/schemas/UserID'
+                login:
+                    $ref: '#/components/schemas/UserLogin'
+                user_type:
+                    $ref: '#/components/schemas/UserType'
+            required:
+                - id
+            anyOf:
+                -   required: [ login ]
+                -   required: [ user_type ]
+        
+        PostResponse200:
+            type: object
+            title: RegisterSuccessResponse
+            properties:
+                id:
+                    $ref: '#/components/schemas/UserID'
+            required:
+                - id
+        
+        GetUserInfoResponse:
+            type: object
+            title: GetUserInformationResponse
+            properties:
+                login:
+                    $ref: '#/components/schemas/UserLogin'
+                user_type:
+                    $ref: '#/components/schemas/UserType'
+            required:
+                - login
+                - user_type
+        
+        ErrorResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+                err_code:
+                    type: integer
+                    minimum: 0
+            required:
+                - message
+                - err_code
+        
+        UserUpdateResponse200:
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/UserID'
+                login:
+                    $ref: '#/components/schemas/UserLogin'
+                user_type:
+                    $ref: '#/components/schemas/UserType'
+            required:
+                - id
+    
+    responses:
+        UserNotFound:
+            description: User not found
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ErrorResponse'
+        
+        InvalidInput:
+            description: Invalid input
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ErrorResponse'
+                        
