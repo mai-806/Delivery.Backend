@@ -106,6 +106,7 @@ namespace {
   using Coordinate = deli_main::views::Coordinate;
   using OrderCreationRequest = deli_main::views::v1::order::post::OrderCreationRequest;
   using OrderCreationResponse = deli_main::views::v1::order::post::OrderCreationResponse;
+  using OrderChangeStatusRequest = deli_main::views::v1::order::change_status::post::OrderChangeStatusRequest;
 }
 
 namespace userver::formats::parse {
