@@ -257,10 +257,10 @@ components:
         OrderDto:
             type: object
             properties:
-                id:
+                order_id:
                     type: integer
                     
-                customerId:
+                customer_id:
                     type: integer
                     minimum: 0
                     example: 1
@@ -272,10 +272,10 @@ components:
                     type: string
                     enum: [ new, waiting, in_progress, done, canceled ]
             required:
-                - id
+                - order_id
                 - start
                 - finish
-                - customerId
+                - customer_id
                 - status
         
         GetOrdersResponse:
@@ -290,7 +290,7 @@ components:
         OrderCreationRequest:
             type: object
             properties:
-                customerId:
+                customer_id:
                     type: integer
                     minimum: 0
                 start:
@@ -300,41 +300,41 @@ components:
             required:
                 - start
                 - finish
-                - customerId
+                - customer_id
         
         OrderId:
             type: object
             properties:
-                orderId:
+                order_id:
                     type: integer
                     minimum: 0
             required:
-                - orderId
+                - order_id
         
         ConnectOrderAndCourierRequest:
             type: object
             properties:
-                orderId:
+                order_id:
                     type: integer
                     minimum: 0
-                courierId:
+                courier_id:
                     type: integer
                     minimum: 0
             required:
-                - orderId
-                - courierId
+                - order_id
+                - courier_id
         
         OrderChangeStatus:
             type: object
             properties:
-                orderId:
+                orderID:
                     type: integer
                     minimum: 0
                 status:
                     type: string
                     enum: [ in_progress, delivered, canceled ]
             required:
-                - orderId
+                - order_id
                 - status
         
         ErrorResponse:
