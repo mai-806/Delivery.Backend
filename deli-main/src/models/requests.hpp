@@ -3,6 +3,7 @@
 #include <models/models.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <string>
+#include <vector>
 
 namespace deli_main::models::requests {
 

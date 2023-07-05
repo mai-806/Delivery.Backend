@@ -19,7 +19,7 @@ namespace deli_main::models::requests {
             cluster->Execute(userver::storages::postgres::ClusterHostType::kMaster,
                              sql::kSelectCourier,
                              courier);
-    return result.AsSingleRow<string>();
+    return result.AsSingleRow<std::string>();
   }
 
   int64_t SelectOders(const userver::storages::postgres::ClusterPtr& cluster,
@@ -28,7 +28,7 @@ namespace deli_main::models::requests {
             cluster->Execute(userver::storages::postgres::ClusterHostType::kMaster,
                              sql::kSelectOders,
                              courier);
-    return result.AsSingleRow<int64_t>();
+    return result.AsSingleRow<std::vector<int64_t>>();
   }
 
 } // namespace deli_main::models::requests
