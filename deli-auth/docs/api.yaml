@@ -9,14 +9,15 @@ info:
 
 tags:
     -   name: auth
-    #description:
+
 paths:
     /v1/auth/register:
         post:
             tags:
                 - auth
-            summary: Creating a new user
-            description: "Registration of new user in the service by login, user type and password (transmitted in the header)"
+            summary: User registration
+            description: "Registration of new user in the service by login,
+             user type and password (transmitted in the header)"
             parameters:
                 -   in: header
                     name: password
@@ -30,15 +31,19 @@ paths:
                             $ref: '#/components/schemas/RegisterRequest'
             responses:
                 '200':
-                    description: Success response
+                    description: Returns the ID of the user who was registered
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/PostResponse200'
                 '400':
-                    $ref: '#/components/responses/InvalidInput'
+                    description: Invalid input
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
                 '409':
-                    description: Already exists
+                    description: User with this login already exists
                     content:
                         application/json:
                             schema:
@@ -49,22 +54,21 @@ paths:
                 - user
             description: Get information about User
             parameters:
-                -   name: id
-                    in: query
-                    description: ID of user, which information we want to get
-                    schema:
-                        $ref: '#/components/schemas/UserID'
-                    required: true
+                -   $ref: '#/components/parameters/id'
             
             responses:
                 '200':
-                    description: Success response
+                    description: Returns login and user type
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/GetUserInfoResponse'
                 '400':
-                    $ref: '#/components/responses/InvalidInput'
+                    description: Invalid input
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
                 '403':
                     description: Access denied
                     content:
@@ -72,11 +76,15 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
                 '404':
-                    $ref: '#/components/responses/UserNotFound'
+                    description: User not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
         
         patch:
             summary: Update user information
-            description: Change info about user by ID from query (login / user type)
+            description: Change info about user by ID (login / user type)
             requestBody:
                 content:
                     application/json:
@@ -86,31 +94,36 @@ paths:
             
             responses:
                 '200':
-                    description: Success response
+                    description: Returns the ID of the user whose info was changed
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/UserUpdateResponse200'
                 '400':
-                    $ref: '#/components/responses/InvalidInput'
+                    description: Invalid input
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
                 '404':
-                    $ref: '#/components/responses/UserNotFound'
+                    description: User not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
 
 components:
     schemas:
         UserID:
             type: integer
-            description: User ID
             minimum: 0
         
         UserLogin:
             type: string
-            description: User name
-            default: Guest
+            description: Uniq user name
         
         UserType:
             type: string
-            description: "All possible types of user(customer / courier / admin)"
             enum:
                 - customer
                 - courier
@@ -183,25 +196,15 @@ components:
             properties:
                 id:
                     $ref: '#/components/schemas/UserID'
-                login:
-                    $ref: '#/components/schemas/UserLogin'
-                user_type:
-                    $ref: '#/components/schemas/UserType'
             required:
                 - id
+
+    parameters:
+        id:
+            name: id
+            in: query
+            description: ID of user, which information we want to get
+            schema:
+                $ref: '#/components/schemas/UserID'
+            required: true
     
-    responses:
-        UserNotFound:
-            description: User not found
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/ErrorResponse'
-        
-        InvalidInput:
-            description: Invalid input
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/ErrorResponse'
-                        
