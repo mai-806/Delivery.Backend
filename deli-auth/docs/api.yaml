@@ -104,6 +104,13 @@ components:
         - admin
       default: customer
       description: "type of user: customer, courier or admin"
+    UserID:
+      type: integer
+      minimum: 0
+      description: User ID
+    UserLogin:
+      type: string
+      description: unique user name
     TokenDto:
       properties:
         access_token:
@@ -127,8 +134,7 @@ components:
       description: password on header
       properties:
         login:
-          type: string
-          description: unique user name
+          $ref: '#/components/schemas/UserLogin'
         userType:
           $ref: '#/components/schemas/UserType'
       required:
@@ -139,8 +145,7 @@ components:
       description: schema for authorization, password in header
       properties:
         login:
-          type: string
-          description: unique user name
+          $ref: '#/components/schemas/UserLogin'
       required:
         - login
     PostResponse200:
