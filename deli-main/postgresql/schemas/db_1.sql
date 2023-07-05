@@ -41,3 +41,17 @@ CREATE TYPE deli_main.order_v1 AS
     customer    BIGINT,
     courier     BIGINT
 );
+
+CREATE TABLE IF NOT EXISTS deli_main.couriers
+(
+    id          BIGSERIAL PRIMARY KEY,
+    login       TEXT,
+    created_at  TIMESTAMPTZ,
+    updated_at  TIMESTAMPTZ
+);
+
+CREATE TYPE deli_main.courier_v1 AS
+(
+    id          BIGINT,
+    login       TEXT
+);
