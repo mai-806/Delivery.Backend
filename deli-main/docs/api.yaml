@@ -18,7 +18,8 @@ paths:
                 -   name: id
                     in: query
                     schema:
-                        $ref: '#/components/schemas/UserID'
+                        type: integer
+                        minimum: 0
                     required: true
             
             responses:
@@ -196,7 +197,7 @@ paths:
             
             responses:
                 '200':
-                    description: OK
+                    description: Returns array of orders with full info about each
                     content:
                         application/json:
                             schema:
@@ -211,23 +212,17 @@ paths:
 
 components:
     schemas:
-        UserID:
-            type: integer
-            minimum: 0
-            description: User ID
-        
         CourierInfo:
             type: object
             properties:
                 login:
                     type: string
-                    description: Courier login
                 orders_id:
                     type: array
                     items:
                         type: integer
                         minimum: 0
-                    description: Courier orders
+                    description: All orders of this courier (only ID)
             required:
                 - login
                 - orders_id
@@ -264,6 +259,7 @@ components:
             properties:
                 id:
                     type: integer
+                    
                 customerId:
                     type: integer
                     minimum: 0
@@ -287,6 +283,7 @@ components:
             properties:
                 orders:
                     type: array
+                    description: Array with full info about orders
                     items:
                         $ref: '#/components/schemas/OrderDto'
         
@@ -296,7 +293,6 @@ components:
                 customerId:
                     type: integer
                     minimum: 0
-                    example: 1
                 start:
                     $ref: '#/components/schemas/Coordinate'
                 finish:
@@ -312,7 +308,6 @@ components:
                 orderId:
                     type: integer
                     minimum: 0
-                    example: 1
             required:
                 - orderId
         
@@ -322,11 +317,9 @@ components:
                 orderId:
                     type: integer
                     minimum: 0
-                    example: 1
                 courierId:
                     type: integer
                     minimum: 0
-                    example: 1
             required:
                 - orderId
                 - courierId
@@ -343,6 +336,7 @@ components:
             required:
                 - orderId
                 - status
+        
         ErrorResponse:
             type: object
             properties:

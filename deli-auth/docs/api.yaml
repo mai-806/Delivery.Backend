@@ -54,7 +54,12 @@ paths:
                 - user
             description: Get information about User
             parameters:
-                -   $ref: '#/components/parameters/id'
+                -   name: id
+                    in: query
+                    description: ID of user, which information we want to get
+                    schema:
+                        type: string
+                    required: true
             
             responses:
                 '200':
@@ -114,14 +119,6 @@ paths:
 
 components:
     schemas:
-        UserID:
-            type: integer
-            minimum: 0
-        
-        UserLogin:
-            type: string
-            description: Uniq user name
-        
         UserType:
             type: string
             enum:
@@ -132,10 +129,12 @@ components:
         
         RegisterRequest:
             type: object
-            description: "Struct describing the parameters passed for registration (login and type of user)"
+            description: "Struct describing the parameters
+            passed for registration (login and type of user)"
             properties:
                 login:
-                    $ref: '#/components/schemas/UserLogin'
+                    type: string
+                    description: Uniq user name
                 user_type:
                     $ref: '#/components/schemas/UserType'
             required:
@@ -147,9 +146,11 @@ components:
             description: Object containing information for updating a user
             properties:
                 id:
-                    $ref: '#/components/schemas/UserID'
+                    type: integer
+                    minimum: 0
                 login:
-                    $ref: '#/components/schemas/UserLogin'
+                    type: string
+                    description: Uniq user name
                 user_type:
                     $ref: '#/components/schemas/UserType'
             required:
@@ -163,7 +164,8 @@ components:
             title: RegisterSuccessResponse
             properties:
                 id:
-                    $ref: '#/components/schemas/UserID'
+                    type: integer
+                    minimum: 0
             required:
                 - id
         
@@ -172,7 +174,8 @@ components:
             title: GetUserInformationResponse
             properties:
                 login:
-                    $ref: '#/components/schemas/UserLogin'
+                    type: string
+                    description: Uniq user name
                 user_type:
                     $ref: '#/components/schemas/UserType'
             required:
@@ -195,16 +198,17 @@ components:
             type: object
             properties:
                 id:
-                    $ref: '#/components/schemas/UserID'
+                    type: integer
+                    minimum: 0
             required:
                 - id
-
+    
     parameters:
-        id:
+        UserIdParameter:
             name: id
             in: query
             description: ID of user, which information we want to get
             schema:
-                $ref: '#/components/schemas/UserID'
+                type: string
             required: true
     
