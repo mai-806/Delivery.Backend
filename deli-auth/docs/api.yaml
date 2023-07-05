@@ -211,4 +211,3 @@ components:
             schema:
                 type: string
             required: true
-    
