@@ -14,6 +14,10 @@ namespace deli_main::views {
     std::string message;
   };
 
+  struct JustOkResponse {
+    std::string message;
+  };
+
   namespace v1::order::post {
     struct OrderCreationRequest {
       int64_t customer_id;
@@ -21,9 +25,14 @@ namespace deli_main::views {
       Coordinate finish;
     };
 
-  struct OrderCreationResponse {
-    int64_t order_id;
-  };
+    struct OrderCreationResponse {
+      int64_t order_id;
+    };
   }
-
+  namespace v1::order::change_status::post {
+    struct OrderChangeStatusRequest {
+      int64_t id;
+      std::string status;
+    };
+  }
 } // namespace deli_main::views
