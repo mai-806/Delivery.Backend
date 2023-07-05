@@ -180,7 +180,7 @@ namespace userver::formats::parse {
             .courier_id = GetRequiredValue<int64_t>(elem, "id"),
     };
     LOG_DEBUG() << "request parsed";
-    return courier_info_requestt;
+    return courier_info_request;
   }
 
 } // namespace userver::formats::parse

@@ -14,7 +14,6 @@ namespace deli_main::views {
   struct ErrorResponse {
     std::string message;
   };
-
   namespace v1::courier::get {
     struct CourierInfoRequest{
       int64_t courier_id;
