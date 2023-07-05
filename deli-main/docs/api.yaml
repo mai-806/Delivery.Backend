@@ -270,7 +270,7 @@ components:
                     $ref: '#/components/schemas/Coordinate'
                 status:
                     type: string
-                    enum: [ new, waiting, in_progress, done, canceled ]
+                    enum: [new, waiting, in_progress, done, canceled]
             required:
                 - order_id
                 - start
@@ -332,7 +332,7 @@ components:
                     minimum: 0
                 status:
                     type: string
-                    enum: [ in_progress, delivered, canceled ]
+                    enum: [new, waiting, in_progress, done, canceled]
             required:
                 - order_id
                 - status
