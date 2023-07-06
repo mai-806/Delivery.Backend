@@ -23,8 +23,8 @@ set(VIEWS
 
         src/views/v1/order/post/handler.cpp
         src/views/v1/order/post/handler.hpp
-)
-
+        )
+# src/client/components/deli-main-client.hpp
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
 
