@@ -1,18 +1,15 @@
 import pytest
 from pytest_mock import *
 
-pytest_plugins = ['pytest_userver.plugins.core']
-
 
 @pytest.fixture(autouse=True)
 def mock_test(mockserver, login, user_type):
-    @mockserver.json_handler('/v1/test')
+    @mockserver.json_handler('/v1/test_client')
     def mock(request):
         return {
             'login': login,
             'type': user_type,
         }
-
     return mock
 
 
@@ -55,7 +52,7 @@ async def test_deli_main_client(service_client, request_body,
                                 mock_test,
                                 ):
     response = await service_client.get(
-        '/v1/test',
+        '/v1/test_client',
         json=request_body,
     )
     assert response.status == expected_response_code
