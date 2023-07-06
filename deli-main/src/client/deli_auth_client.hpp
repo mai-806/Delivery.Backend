@@ -5,6 +5,7 @@
 #include <userver/clients/http/client.hpp>
 #include <userver/http/url.hpp>
 
+using Args = userver::http::Args;
 
 namespace deli_auth::clients::components {
 
@@ -13,11 +14,13 @@ namespace deli_auth::clients::components {
         static constexpr auto kName = "main-client";
 
         DeliAuthClient(const userver::components::ComponentConfig &config,
-                  const userver::components::ComponentContext &context);
+                       const userver::components::ComponentContext &context);
 
-        const auto V1UserGet(const userver::formats::json::Value data){
+
+        //userver::formats::json::Value
+        const auto V1UserGet(const Args data) {
           const auto url =
-                  userver::http::MakeUrl("http://localhost:8080/v1/user", data);
+                  userver::http::MakeUrl("http://localhost:8080/v1/user", std::move(data));
           const auto response = http_client_.CreateRequest()
                   .get(url)
                   .retry(2)
@@ -27,7 +30,7 @@ namespace deli_auth::clients::components {
           return formats::json::FromString(response->body_view());
         }
 
-        const auto V1UserPatch(const userver::formats::json::Value data){
+        const auto V1UserPatch(const userver::formats::json::Value data) {
           const auto response = client_.CreateRequest()
                   .patch("http://localhost:8080/v1/user", data)
                   .perform();
