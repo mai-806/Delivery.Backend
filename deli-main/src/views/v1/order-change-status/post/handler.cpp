@@ -19,7 +19,7 @@ namespace deli_main::views::v1::order::change_status::post {
 
     models::Order order{
             .id = request_data.id,
-            .status = request_data.status
+            .status = std::move(request_data.status)
     };
 
     const auto check = requester_.DoDBQuery(models::requests::UpdateOrderStatus, order);

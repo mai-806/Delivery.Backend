@@ -168,7 +168,7 @@ namespace userver::formats::parse {
     const Keys optional_keys;
     const Types key_types = {
             {"customerId", FieldType::kInt},
-            {"status",      FieldType::kString}
+            {"status",     FieldType::kString}
     };
 
     CheckFields(required_keys, optional_keys, key_types, elem);
