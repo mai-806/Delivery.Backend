@@ -21,4 +21,18 @@ namespace deli_auth::views {
   };
   }
 
+  namespace v1::user::patch {
+    struct OrderCreationRequest {
+      int64_t id;
+      std::string login;
+      std::string user_type;
+    }
+
+    struct OrderCreationResponse {
+      int64_t id;
+      std::string login;
+      std::string user_type;
+    }
+  }
+
 } // namespace deli_auth::views
