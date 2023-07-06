@@ -94,6 +94,36 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
+    /v1/auth/logout:
+        post:
+            tags:
+               - auth
+            description:  Logout user
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LogoutRequest'
+                required: true
+            responses:
+                '200':
+                    description: "Success logout. Return id: int, login: str, is_auth: boolean"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/LogoutResponse200'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '404':
+                    description: User not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
     /v1/auth/user/reset:
         post:
             description: Change password to the user by ID
@@ -297,6 +327,31 @@ components:
                     type: boolean
             required:
                 - is_auth
+                
+        LogoutRequest:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    minimum: 0
+                    description: User ID
+            required:
+                - id
+
+        LogoutResponse200:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    minimum: 0
+                    description: User ID
+                login:
+                    type: string
+                    description: unique user name
+                is_auth:
+                    type: boolean
+                    description: Is the user logged in
+                    default: False
 
         UserUpdateResponse200:
             type: object
