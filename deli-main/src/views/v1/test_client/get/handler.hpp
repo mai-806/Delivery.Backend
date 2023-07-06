@@ -7,8 +7,6 @@
 #include <userver/server/handlers/http_handler_json_base.hpp>
 
 #include <views/objects/parsers.hpp>
-
-#include <components/requester.hpp>
 #include <client/deli_auth_client.hpp>
 
 namespace deli_main::views::v1::test_client::get {
@@ -29,7 +27,6 @@ namespace deli_main::views::v1::test_client::get {
             userver::server::request::RequestContext &) const override;
 
   private:
-    const components::Requester &requester_;
     const deli_auth::clients::components::DeliAuthClient &client_;
   };
 } // namespace deli_main::views::v1::order::post

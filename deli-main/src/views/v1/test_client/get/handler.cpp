@@ -8,17 +8,16 @@ namespace deli_main::views::v1::test_client::get {
   Handler::Handler(const userver::components::ComponentConfig &config,
                    const userver::components::ComponentContext &component_context) :
           userver::server::handlers::HttpHandlerJsonBase(config, component_context),
-          requester_(component_context.FindComponent<components::Requester>(),),
-          client_(component_context.FindComponent<deli_auth::clients::components::DeliAuthClient>(),){}
+          client_(component_context.FindComponent<deli_auth::clients::components::DeliAuthClient>()){}
 
 
   userver::formats::json::Value Handler::HandleRequestJsonThrow(
           const userver::server::http::HttpRequest &request, const userver::formats::json::Value &json,
           userver::server::request::RequestContext &) const try {
 
-    const auto request_data = json.As<Request>();
+    auto request_data = json.As<Request>();
 
-    const auto new_id= client_.V1UserGet(id);
+    auto new_id = client_.V1UserGet(request_data.id);
 
     Response200 response200{
             .id = new_id

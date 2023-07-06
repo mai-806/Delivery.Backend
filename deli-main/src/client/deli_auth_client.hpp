@@ -3,7 +3,10 @@
 #include <userver/components/loggable_component_base.hpp>
 #include <userver/dynamic_config/source.hpp>
 #include <userver/clients/http/client.hpp>
+#include <userver/clients/http/request.hpp>
 #include <userver/http/url.hpp>
+
+
 
 using Args = userver::http::Args;
 
@@ -17,24 +20,25 @@ namespace deli_auth::clients::components {
                        const userver::components::ComponentContext &context);
 
 
-        //userver::formats::json::Value
-        const auto V1UserGet(const Args data) {
+        //userver::formats::json::Value -> Args
+        auto V1UserGet(const Args &data) {
           const auto url =
                   userver::http::MakeUrl("http://localhost:8080/v1/user", std::move(data));
-          const auto response = http_client_.CreateRequest()
+          const auto response = client_.CreateRequest()
                   .get(url)
                   .retry(2)
                   .timeout(std::chrono::milliseconds{500})
                   .perform();
           response->raise_for_status();
-          return formats::json::FromString(response->body_view());
+          return userver::formats::json::FromString(response->body_view());
         }
 
-        const auto V1UserPatch(const userver::formats::json::Value data) {
+        // userver::formats::json::Value -> string
+        auto V1UserPatch(const std::string &data) {
           const auto response = client_.CreateRequest()
-                  .patch("http://localhost:8080/v1/user", data)
+                  .patch("http://localhost:8080/v1/user", std::move(data))
                   .perform();
-          return formats::json::FromString(response->body_view());
+          return userver::formats::json::FromString(response->body_view());
         }
 
     private:

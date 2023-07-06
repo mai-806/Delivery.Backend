@@ -7,6 +7,7 @@
 
 #include <common/consts.hpp>
 #include <components/requester.hpp>
+#include <views/v1/test_client/get/handler.hpp>
 #include <client/deli_auth_client.hpp>
 #include <views/v1/order/post/handler.hpp>
 
