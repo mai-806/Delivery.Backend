@@ -35,7 +35,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/PostResponse200'
+                                $ref: '#/components/schemas/RegisterResponse200'
                 '400':
                     description: Invalid input
                     content:
@@ -48,6 +48,49 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
+    /v1/auth/user/reset:
+        post:
+            description: Change password to the user by ID
+            parameters:
+                -   in: query
+                    name: id
+                    schema:
+                        type: integer
+                    required: true
+                -   in: header
+                    name: password
+                    schema:
+                        type: string
+                        format: password
+                    required: true
+            responses:
+                '204':
+                    description: Success response
+                '400':
+                    description: Invalid input
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '401':
+                    description: Not auth
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '403':
+                    description: Access denied
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '404':
+                    description: User not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+    
     /v1/user:
         get:
             tags:
@@ -159,9 +202,19 @@ components:
                 -   required: [ login ]
                 -   required: [ user_type ]
         
-        PostResponse200:
+        RegisterResponse200:
             type: object
             title: RegisterSuccessResponse
+            properties:
+                id:
+                    type: integer
+                    minimum: 0
+            required:
+                - id
+        
+        UserUpdateResponse200:
+            type: object
+            title: UserUpdateSuccessResponse
             properties:
                 id:
                     type: integer
@@ -193,15 +246,6 @@ components:
             required:
                 - message
                 - err_code
-        
-        UserUpdateResponse200:
-            type: object
-            properties:
-                id:
-                    type: integer
-                    minimum: 0
-            required:
-                - id
     
     parameters:
         UserIdParameter:
