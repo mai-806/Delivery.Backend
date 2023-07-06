@@ -46,7 +46,7 @@ namespace deli_auth::clients::components {
         }
 
     private:
-        userver::clients::http::Client client_;
+        userver::clients::http::Client &client_;
     };
 
 } // deli_main::client::components
