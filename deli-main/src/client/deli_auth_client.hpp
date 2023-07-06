@@ -13,8 +13,23 @@ namespace deli_auth::clients::components {
         DeliAuthClient(const userver::components::ComponentConfig &config,
                   const userver::components::ComponentContext &context);
 
-        const auto V1UserGet();
-        const auto V1UserPatch();
+        const auto V1UserGet(const userver::formats::json::Value data){
+          const auto url =
+                  http::MakeUrl("http://localhost:8080/v1/user", data);
+          auto response = http_client_.CreateRequest()
+                  .get(url)
+                  .retry(2)
+                  .timeout(std::chrono::milliseconds{500})
+                  .perform();
+          response->raise_for_status();
+          return formats::json::FromString(response->body_view());
+        }
+        const auto V1UserPatch(const userver::formats::json::Value data){
+          const auto response = client_.CreateRequest()
+                  .patch("http://localhost:8080/v1/user", data)
+                  .perform();
+          return formats::json::FromString(response->body_view());
+        }
 
     private:
         userver::clients::http::Client client_;
