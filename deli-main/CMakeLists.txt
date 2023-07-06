@@ -13,7 +13,12 @@ include_directories(src)
 set(SQL_REQUESTS
         src/models/sql/all.hpp
         src/models/sql/insert_order.hpp
-)
+        )
+
+set(CLIENTS
+        src/client/deli_auth_client.cpp
+        src/client/deli_auth_client.hpp
+        )
 
 set(VIEWS
 
@@ -42,8 +47,9 @@ add_library(${PROJECT_NAME}_objs OBJECT
 
         ${SQL_REQUESTS}
         ${VIEWS}
+        ${CLIENTS}
 
-)
+        )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql)
 
 
@@ -55,7 +61,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
 # Unit Tests
 add_executable(${PROJECT_NAME}_unittest
 
-)
+        )
 
 
 target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver-utest)
@@ -65,7 +71,7 @@ add_google_tests(${PROJECT_NAME}_unittest)
 # Benchmarks
 add_executable(${PROJECT_NAME}_benchmark
 
-)
+        )
 
 
 target_link_libraries(${PROJECT_NAME}_benchmark PRIVATE ${PROJECT_NAME}_objs userver-ubench)

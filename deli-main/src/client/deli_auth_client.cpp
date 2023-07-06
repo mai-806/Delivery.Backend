@@ -9,7 +9,7 @@
 
 namespace deli_auth::clients::components {
 
-    DeliAuthClient::DeliMainClient(const userver::components::ComponentConfig& config,
+    DeliAuthClient::DeliAuthClient(const userver::components::ComponentConfig& config,
                          const userver::components::ComponentContext& context) : LoggableComponentBase(config, context),
               client_(context.FindComponent<userver::components::HttpClient>().GetHttpClient()) {}
 

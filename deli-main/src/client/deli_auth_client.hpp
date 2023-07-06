@@ -5,7 +5,9 @@
 #include <userver/clients/http/client.hpp>
 #include <userver/clients/http/request.hpp>
 #include <userver/http/url.hpp>
-
+#include <userver/formats/json.hpp>
+#include <userver/formats/json/value.hpp>
+#include "userver/clients/http/component.hpp"
 
 
 using Args = userver::http::Args;
@@ -21,7 +23,8 @@ namespace deli_auth::clients::components {
 
 
         //userver::formats::json::Value -> Args
-        auto V1UserGet(const Args &data) {
+        auto V1UserGet(const userver::formats::json::Value &data) const {
+          const auto some_data = data.As<Args>();
           const auto url =
                   userver::http::MakeUrl("http://localhost:8080/v1/user", std::move(data));
           const auto response = client_.CreateRequest()

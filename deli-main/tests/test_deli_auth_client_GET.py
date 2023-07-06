@@ -1,16 +1,4 @@
 import pytest
-from pytest_mock import *
-
-
-@pytest.fixture(autouse=True)
-def mock_test(mockserver, login, user_type):
-    @mockserver.json_handler('/v1/test_client')
-    def mock(request):
-        return {
-            'login': login,
-            'type': user_type,
-        }
-    return mock
 
 
 @pytest.mark.parametrize(
@@ -49,8 +37,17 @@ def mock_test(mockserver, login, user_type):
 async def test_deli_main_client(service_client, request_body,
                                 expected_response_body,
                                 expected_response_code,
-                                mock_test,
+                                mockserver,
                                 ):
+    @mockserver.json_handler('/v1/test_client')
+    def mock(request):
+        body = request.json
+        assert body == request_body
+        return {
+            'login': 'user_login',
+            'type': 'admin',
+        }
+
     response = await service_client.get(
         '/v1/test_client',
         json=request_body,
