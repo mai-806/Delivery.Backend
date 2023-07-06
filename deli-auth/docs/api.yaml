@@ -10,7 +10,7 @@ tags:
   - name: auth
     #description:
 security:
-  - bearerAuth: []
+  - BearerAuth: []
 paths:
   /v1/auth/register:
     post:
@@ -52,7 +52,6 @@ paths:
     post:
       tags:
         - auth
-      summary: Authorization user
       description: Authorization user in the server
       parameters:
         - in: header
@@ -68,14 +67,15 @@ paths:
               $ref: '#/components/schemas/AuthRequest'
       responses:
         '200':
-          description: Success authorization
+          description:
+            "Success authorization. Return access token: str, refresh token: str, expires time: int and their type: str"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AuthResponse200'
           headers:
             tokens:
-              description: Info about access token
+              description: Info about tokens
               schema:
                 $ref: '#/components/schemas/TokenDto'
         '400':
@@ -104,13 +104,6 @@ components:
         - admin
       default: customer
       description: "type of user: customer, courier or admin"
-    UserID:
-      type: integer
-      minimum: 0
-      description: User ID
-    UserLogin:
-      type: string
-      description: unique user name
     TokenDto:
       properties:
         access_token:
@@ -134,7 +127,8 @@ components:
       description: password on header
       properties:
         login:
-          $ref: '#/components/schemas/UserLogin'
+          type: string
+          description: unique user name
         userType:
           $ref: '#/components/schemas/UserType'
       required:
@@ -145,7 +139,9 @@ components:
       description: schema for authorization, password in header
       properties:
         login:
-          $ref: '#/components/schemas/UserLogin'
+          type: integer
+          minimum: 0
+          description: User ID
       required:
         - login
     PostResponse200:
@@ -160,10 +156,10 @@ components:
       title: AuthSuccessResponse
       type: object
       properties:
-        isAuth:
+        is_auth:
           type: boolean
       required:
-        - isAuth
+        - is_auth
 
     ErrorResponse:
       type: object
@@ -177,7 +173,7 @@ components:
         - message
         - err_code
   securitySchemes:
-    bearerAuth:
-      type: http  # возможно стоит использовать oauth2, но нужно ли оно нам?
+    BearerAuth:
+      type: http
       scheme: bearer
       bearerFormat: JWT
