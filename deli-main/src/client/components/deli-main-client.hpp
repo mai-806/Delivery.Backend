@@ -3,7 +3,7 @@
 #include <userver/components/loggable_component_base.hpp>
 #include <userver/dynamic_config/source.hpp>
 #include <userver/storages/postgres/cluster.hpp>
-
+#include <userver/clients/http/client.hpp>
 
 namespace deli_main::client::components {
 
@@ -19,7 +19,7 @@ namespace deli_main::client::components {
         auto V1UserPatch();
 
     private:
-        userver::storages::postgres::ClusterPtr client_;
+        userver::clients::http::Client client_;
     };
 
 
