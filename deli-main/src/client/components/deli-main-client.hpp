@@ -12,11 +12,11 @@ namespace deli_main::client::components {
     public:
         static constexpr auto kName = "requester";
 
-        Requester(const userver::components::ComponentConfig &config,
+        DeliMainClient(const userver::components::ComponentConfig &config,
                   const userver::components::ComponentContext &context);
 
-        auto V1UserGet();
-        auto V1UserPatch();
+        const auto V1UserGet();
+        const auto V1UserPatch();
 
     private:
         userver::clients::http::Client client_;

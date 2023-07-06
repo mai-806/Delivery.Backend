@@ -9,10 +9,8 @@
 
 namespace deli_main::client::components {
 
-    Requester::Requester(const userver::components::ComponentConfig& config,
-                         const userver::components::ComponentContext& context)
-            : LoggableComponentBase(config, context),
-              cluster_(context.FindComponent<userver::components::Postgres>(common::consts::kPgClusterName)
-                               .GetCluster()) {}
+    DeliMainClient::DeliMainClient(const userver::components::ComponentConfig& config,
+                         const userver::components::ComponentContext& context) : LoggableComponentBase(config, context),
+              client_(context.FindComponent<userver::components::HttpClient>().GetHttpClient()) {}
 
 } // namespace deli_main::components
