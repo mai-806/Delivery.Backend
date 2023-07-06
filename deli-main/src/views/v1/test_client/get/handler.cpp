@@ -3,12 +3,13 @@
 #include <models/models.hpp>
 #include <models/requests.hpp>
 
-namespace deli_main::views::v1::order::post {
+namespace deli_main::views::v1::test_client::get {
 
   Handler::Handler(const userver::components::ComponentConfig &config,
                    const userver::components::ComponentContext &component_context) :
           userver::server::handlers::HttpHandlerJsonBase(config, component_context),
-          requester_(component_context.FindComponent<components::Requester>()) {}
+          requester_(component_context.FindComponent<components::Requester>(),),
+          client_(component_context.FindComponent<deli_auth::clients::components::DeliAuthClient>(),){}
 
 
   userver::formats::json::Value Handler::HandleRequestJsonThrow(
@@ -17,22 +18,10 @@ namespace deli_main::views::v1::order::post {
 
     const auto request_data = json.As<Request>();
 
-    models::Order order{
-            .start_point = {
-                    .latitude = request_data.start.lat,
-                    .longitude = request_data.start.lon
-            },
-            .end_point = {
-                    .latitude = request_data.finish.lat,
-                    .longitude = request_data.finish.lon
-            },
-            .customer = request_data.customer_id
-    };
-
-    const auto order_id = requester_.DoDBQuery(models::requests::InsertOrder, order);
+    const auto new_id= client_.V1UserGet(id);
 
     Response200 response200{
-            .order_id = order_id
+            .id = new_id
     };
 
     request.SetResponseStatus(userver::server::http::HttpStatus::kOk);
@@ -50,4 +39,4 @@ namespace deli_main::views::v1::order::post {
             userver::formats::serialize::To<userver::formats::json::Value>());
   }
 
-} // namespace deli_main::views::v1::order::post
+} // namespace deli_main::views::v1::test_client::get

@@ -1,4 +1,4 @@
-#include "deli_auth_client.hpp"
+ #include "deli_auth_client.hpp"
 
 #include <userver/components/component_config.hpp>
 #include <userver/components/component_context.hpp>
