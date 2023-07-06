@@ -17,6 +17,10 @@ namespace userver::formats::parse {
   deli_main::views::v1::order::post::OrderCreationRequest Parse(
           const userver::formats::json::Value &elem,
           userver::formats::parse::To<deli_main::views::v1::order::post::OrderCreationRequest>);
+
+  deli_main::views::v1::test_client::get::TestClientGetRequest Parse(
+          const userver::formats::json::Value &elem,
+          userver::formats::parse::To<deli_main::views::v1::test_client::get::TestClientGetRequest>);
 } // namespace userver::formats::parse
 
 namespace userver::formats::serialize {
@@ -25,6 +29,9 @@ namespace userver::formats::serialize {
                         serialize::To<json::Value>);
 
   json::Value Serialize(const deli_main::views::v1::order::post::OrderCreationResponse &value,
+                        serialize::To<json::Value>);
+
+  json::Value Serialize(const deli_main::views::v1::test_client::get::TestClientGetResponse &value,
                         serialize::To<json::Value>);
 
 } // namespace userver::formats::serialize
