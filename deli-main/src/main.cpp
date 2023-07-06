@@ -7,6 +7,7 @@
 
 #include <common/consts.hpp>
 #include <components/requester.hpp>
+#include <client/deli_auth_client.hpp>
 #include <views/v1/order/post/handler.hpp>
 
 int main(int argc, char *argv[]) {
@@ -16,7 +17,7 @@ int main(int argc, char *argv[]) {
           .Append<userver::components::HttpClient>()
           .Append<userver::server::handlers::TestsControl>()
           .Append<deli_main::components::Requester>()
-          .Append<deli_main::client::components::DeliMainClient>()
+          .Append<deli_auth::clients::components::DeliAuthClient>()
           .Append<deli_main::views::v1::order::post::Handler>()
           .Append<userver::clients::dns::Component>()
           .Append<userver::components::Postgres>(deli_main::common::consts::kPgClusterName);
