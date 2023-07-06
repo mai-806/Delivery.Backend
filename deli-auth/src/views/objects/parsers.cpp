@@ -103,60 +103,33 @@ namespace {
     return std::optional(elem[key].ConvertTo<T>());
   }
 
-  using Coordinate = deli_main::views::Coordinate;
-  using OrderCreationRequest = deli_main::views::v1::order::post::OrderCreationRequest;
-  using OrderCreationResponse = deli_main::views::v1::order::post::OrderCreationResponse;
+  using UserUpdateRequest = deli_auth::views::v1::user::patch::UserUpdateRequest;
+  using UserUpdateResponse200 = deli_auth::views::v1::user::patch::UserUpdateResponse200;
 }
 
 namespace userver::formats::parse {
 
-  Coordinate Parse(const userver::formats::json::Value &elem,
-                   userver::formats::parse::To<Coordinate>) {
-    const Keys required_keys = {"lon", "lat"};
-    const Keys optional_keys;
-    const Types key_types = {
-            {"lon", FieldType::kDouble},
-            {"lat", FieldType::kDouble}
-    };
-
-    CheckFields(required_keys, optional_keys, key_types, elem);
-
-    // required fields:
-    Coordinate coordinate{
-            .lon = GetRequiredValue<double>(elem, "lon"),
-            .lat = GetRequiredValue<double>(elem, "lat")
-    };
-    if (coordinate.lat > 90 || coordinate.lat < -90) {
-      throw userver::formats::json::ParseException("lat param out of bounds");
-    }
-    if (coordinate.lat > 180 || coordinate.lat < -180) {
-      throw userver::formats::json::ParseException("lon param out of bounds");
-    }
-
-    return coordinate;
-  }
-
-  OrderCreationRequest
+  UserUpdateRequest
   Parse(const userver::formats::json::Value &elem,
-        userver::formats::parse::To<OrderCreationRequest>) {
-    const Keys required_keys = {"customerId", "start", "finish"};
-    const Keys optional_keys;
+        userver::formats::parse::To<UserUpdateRequest>) {
+    const Keys required_keys = {"id"};
+    const Keys optional_keys = {"login", "userType"};
     const Types key_types = {
-            {"customerId", FieldType::kInt},
-            {"start",      FieldType::kObject},
-            {"finish",     FieldType::kObject}
+            {"id", FieldType::kInt},
+            {"login", FieldType::kString},
+            {"userType", FieldType::kString}
     };
 
     CheckFields(required_keys, optional_keys, key_types, elem);
     LOG_DEBUG() << "fields are checked";
-    // required fields:
-    OrderCreationRequest order_creation_request{
-            .customer_id = GetRequiredValue<int64_t>(elem, "customerId"),
-            .start = GetRequiredValue<Coordinate>(elem, "start"),
-            .finish = GetRequiredValue<Coordinate>(elem, "finish")
+
+    UserUpdateRequest user_update_request {
+            .id = GetRequiredValue<int64_t>(elem, "id"),
+            .login = GetOptionalValue<std::string>(elem, "login"),
+            .userType = GetOptionalValue<std::string>(elem, "userType")
     };
     LOG_DEBUG() << "request parsed";
-    return order_creation_request;
+    return user_update_request;
   }
 
 
@@ -174,11 +147,13 @@ namespace userver::formats::serialize {
     return builder.ExtractValue();
   }
 
-  json::Value Serialize(const OrderCreationResponse &value,
+  json::Value Serialize(const UserUpdateResponse200 &value,
                         serialize::To<json::Value>) {
     json::ValueBuilder builder;
 
-    builder["order_id"] = value.order_id;
+    builder["id"] = value.id;
+    builder["login"] = value.login;
+    builder["userType"] = value.userType;
 
     return builder.ExtractValue();
   }
