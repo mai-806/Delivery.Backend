@@ -18,6 +18,17 @@ namespace deli_auth::views::v1::user::patch {
 
     const auto request_data = json.As<Request>();
 
+    // Check if user exists
+    const auto user_exists = requester_.DoDBQuery(models::requests::CheckUserExists, request_data.id);
+
+    if (!user_exists) {
+        // User not found
+        request.SetResponseStatus(userver::server::http::HttpStatus::kNotFound);
+        return Serialize(
+                Response404{},
+                userver::formats::serialize::To<userver::formats::json::Value>());
+    }
+
     if (request_data.login.has_value()) {
 
         // Update user login
