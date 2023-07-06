@@ -8,7 +8,11 @@ info:
     #- url: https://url.ru/v1/
 
 tags:
+
     -   name: auth
+
+security:
+    -   BearerAuth: []
 
 paths:
     /v1/auth/register:
@@ -44,6 +48,48 @@ paths:
                                 $ref: '#/components/schemas/ErrorResponse'
                 '409':
                     description: User with this login already exists
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+    /v1/auth/login:
+        post:
+            tags:
+              - auth
+            description: Authorization user in the server
+            parameters:
+                -   in: header
+                    name: password
+                    schema:
+                        type: string
+                        format: password
+                    required: true
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AuthRequest'
+            responses:
+                '200':
+                    description: "Success authorization. Return access token: str, 
+                    refresh token: str, expires time: int and their type: str"
+                    content:
+                       application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthResponse200'
+                    headers:
+                        tokens:
+                            description: Info about tokens
+                            schema:
+                                $ref: '#/components/schemas/TokenDto'
+                '400':
+                    description: Invalid input
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '404':
+                    description: User not found
                     content:
                         application/json:
                             schema:
@@ -211,7 +257,47 @@ components:
                     minimum: 0
             required:
                 - id
-        
+
+        TokenDto:
+            type: object
+            properties:
+                access_token:
+                    type: string
+                    description: ""
+                refresh_token:
+                    type: string
+                    description: ""
+                expires_in:
+                    type: integer
+                    description: access token validity period
+                token_type:
+                    type: string
+                    default: "bearer"
+            required:
+                - access_token
+                - refresh_token
+                - expires_in
+
+        AuthRequest:
+            type: object
+            description: schema for authorization, password in header
+            properties:
+                login:
+                    type: integer
+                    minimum: 0
+                    description: User ID
+            required:
+              - login
+
+        AuthResponse200:
+            title: AuthSuccessResponse
+            type: object
+            properties:
+                is_auth:
+                    type: boolean
+            required:
+                - is_auth
+
         UserUpdateResponse200:
             type: object
             title: UserUpdateSuccessResponse
@@ -246,7 +332,7 @@ components:
             required:
                 - message
                 - err_code
-    
+
     parameters:
         UserIdParameter:
             name: id
@@ -255,3 +341,9 @@ components:
             schema:
                 type: string
             required: true
+
+    securitySchemes:
+        BearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
