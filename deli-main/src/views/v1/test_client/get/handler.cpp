@@ -15,10 +15,7 @@ namespace deli_main::views::v1::test_client::get {
           const userver::server::http::HttpRequest &request, const userver::formats::json::Value &json,
           userver::server::request::RequestContext &) const try {
 
-
     auto new_id = client_.V1UserGet(json);
-
-
 
     request.SetResponseStatus(userver::server::http::HttpStatus::kOk);
 
