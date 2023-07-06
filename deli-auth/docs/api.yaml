@@ -79,7 +79,6 @@ paths:
     post:
       tags:
         - auth
-      summary: Logout user
       description:  Logout user
       requestBody:
         content:
@@ -89,7 +88,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Success logout
+          description: "Success logout. Return id: int, login: str, is_auth: boolean"
           content:
             application/json:
               schema:
@@ -116,24 +115,18 @@ components:
         - admin
       default: customer
       description: "type of user: customer, courier or admin"
-    UserID:
-      type: integer
-      minimum: 0
-      description: User ID
-    UserLogin:
-      type: string
-      description: unique user name
     RegisterRequest:
       type: object
       description: "password on header"
       properties:
-        userLogin:
-          $ref: '#/components/schemas/UserLogin'
-        userType:
+        user_login:
+          type: string
+          description: unique user name
+        user_type:
           $ref: '#/components/schemas/UserType'
       required:
-        - userLogin
-        - userType
+        - user_login
+        - user_type
     PostResponse200:
       title: RegisterSuccessResponse
       type: object
@@ -158,24 +151,30 @@ components:
       description: Object containing information for updating a user
       properties:
         id:
-          $ref: '#/components/schemas/UserID'
+          type: integer
+          minimum: 0
+          description: User ID
         login:
-          $ref: '#/components/schemas/UserLogin'
-        userType:
+          type: string
+          description: unique user name
+        user_type:
           $ref: '#/components/schemas/UserType'
       required:
         - id
       anyOf:
         - required: [login]
-        - required: [userType]
+        - required: [user_type]
     UserUpdateResponse200:
       type: object
       properties:
         id:
-          $ref: '#/components/schemas/UserID'
+          type: integer
+          minimum: 0
+          description: User ID
         login:
-          $ref: '#/components/schemas/UserLogin'
-        userType:
+          type: string
+          description: unique user name
+        user_type:
           $ref: '#/components/schemas/UserType'
       required:
         - id
@@ -183,17 +182,22 @@ components:
       type: object
       properties:
         id:
-          $ref: '#/components/schemas/UserID'
+          type: integer
+          minimum: 0
+          description: User ID
       required:
         - id
     LogoutResponse200:
       type: object
       properties:
         id:
-          $ref: '#/components/schemas/UserID'
+          type: integer
+          minimum: 0
+          description: User ID
         login:
-          $ref: '#components/schemas/UserLogin'
-        isAuth:
+          type: string
+          description: unique user name
+        is_auth:
           type: boolean
           description: Is the user logged in
           default: False
