@@ -106,6 +106,7 @@ namespace {
   using Coordinate = deli_main::views::Coordinate;
   using OrderCreationRequest = deli_main::views::v1::order::post::OrderCreationRequest;
   using OrderCreationResponse = deli_main::views::v1::order::post::OrderCreationResponse;
+  usnig Test
 }
 
 namespace userver::formats::parse {
@@ -158,7 +159,24 @@ namespace userver::formats::parse {
     LOG_DEBUG() << "request parsed";
     return order_creation_request;
   }
+  TestClientGetRequest
+  Parse(const userver::formats::json::Value &elem,
+        userver::formats::parse::To<OrderCreationRequest>) {
+    const Keys required_keys = {"id"};
+    const Keys optional_keys;
+    const Types key_types = {
+            {"id", FieldType::kInt}
+    };
 
+    CheckFields(required_keys, optional_keys, key_types, elem);
+    LOG_DEBUG() << "fields are checked";
+    // required fields:
+    TestClientGetRequest test_client_get_request{
+            .id = GetRequiredValue<int64_t>(elem, "id"),
+    };
+    LOG_DEBUG() << "request parsed";
+    return order_creation_request;
+  }
 
 } // namespace userver::formats::parse
 
@@ -179,6 +197,15 @@ namespace userver::formats::serialize {
     json::ValueBuilder builder;
 
     builder["order_id"] = value.order_id;
+
+    return builder.ExtractValue();
+  }
+
+  json::Value Serialize(const TestClientGetRequest &value,
+                        serialize::To<json::Value>) {
+    json::ValueBuilder builder;
+
+    builder["id"] = value.order_id;
 
     return builder.ExtractValue();
   }

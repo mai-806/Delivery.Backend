@@ -14,6 +14,16 @@ namespace deli_main::views {
     std::string message;
   };
 
+  namespace v1::test_client::get {
+    struct TestClientGetRequest {
+      int64_t id;
+    };
+
+    struct TestClientGetResponse {
+      int64_t id;
+    };
+  }
+
   namespace v1::order::post {
     struct OrderCreationRequest {
       int64_t customer_id;
