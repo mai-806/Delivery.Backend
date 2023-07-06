@@ -16,10 +16,10 @@ namespace deli_auth::views::v1::user::patch {
   public:
     static constexpr std::string_view kName = "v1-user-patch-handler";
 
-    using Request = OrderCreationRequest;
+    using Request = UserUpdateRequest;
     using Response400 = ErrorResponse;
     using Response404 = ErrorResponse;
-    using Response200 = OrderCreationResponse;
+    using Response200 = UserUpdateResponse200;
 
     Handler(const userver::components::ComponentConfig &config,
             const userver::components::ComponentContext &component_context);

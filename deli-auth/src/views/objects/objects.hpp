@@ -22,13 +22,13 @@ namespace deli_auth::views {
   }
 
   namespace v1::user::patch {
-    struct OrderCreationRequest {
+    struct UserUpdateRequest {
       int64_t id;
       std::string login;
       std::string user_type;
     }
 
-    struct OrderCreationResponse {
+    struct UserUpdateResponse200 {
       int64_t id;
       std::string login;
       std::string user_type;

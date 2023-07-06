@@ -11,20 +11,17 @@
 
 namespace userver::formats::parse {
 
-  deli_main::views::Coordinate Parse(const userver::formats::json::Value &elem,
-                                     userver::formats::parse::To<deli_main::views::Coordinate>);
-
-  deli_main::views::v1::order::post::OrderCreationRequest Parse(
+  deli_auth::views::v1::user::patch::UserUpdateRequest Parse(
           const userver::formats::json::Value &elem,
-          userver::formats::parse::To<deli_main::views::v1::order::post::OrderCreationRequest>);
+          userver::formats::parse::To<deli_auth::views::v1::user::patch::UserUpdateRequest>);
 } // namespace userver::formats::parse
 
 namespace userver::formats::serialize {
 
-  json::Value Serialize(const deli_main::views::ErrorResponse &value,
+  json::Value Serialize(const deli_auth::views::ErrorResponse &value,
                         serialize::To<json::Value>);
 
-  json::Value Serialize(const deli_main::views::v1::order::post::OrderCreationResponse &value,
+  json::Value Serialize(const deli_auth::views::v1::user::patch::UserUpdateResponse200 &value,
                         serialize::To<json::Value>);
 
 } // namespace userver::formats::serialize
