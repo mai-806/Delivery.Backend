@@ -15,9 +15,7 @@ namespace deli_main::views::v1::test_client::get {
   public:
     static constexpr std::string_view kName = "v1-test_client-get-handler";
 
-    using Request = TestClientGetRequest;
     using Response400 = ErrorResponse;
-    using Response200 = TestClientGetResponse;
 
     Handler(const userver::components::ComponentConfig &config,
             const userver::components::ComponentContext &component_context);
@@ -27,6 +25,6 @@ namespace deli_main::views::v1::test_client::get {
             userver::server::request::RequestContext &) const override;
 
   private:
-    const deli_auth::clients::components::DeliAuthClient &client_;
+    const deli_auth::clients::DeliAuthClient &client_;
   };
 } // namespace deli_main::views::v1::order::post

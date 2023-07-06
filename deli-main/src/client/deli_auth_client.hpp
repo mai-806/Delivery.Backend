@@ -13,21 +13,21 @@
 
 using Args = userver::http::Args;
 
-namespace deli_auth::clients::components {
+namespace deli_auth::clients {
 
     class DeliAuthClient : public userver::components::LoggableComponentBase {
     public:
-        static constexpr auto kName = "main-client";
+        static constexpr auto kName = "deli-auth-client";
 
         DeliAuthClient(const userver::components::ComponentConfig &config,
                        const userver::components::ComponentContext &context);
 
 
         //userver::formats::json::Value -> Args
-        auto V1UserGet(const userver::formats::json::Value &data) const {
+        userver::formats::json::Value V1UserGet(const userver::formats::json::Value &data) const {
           const auto some_data = data.As<Args>();
           const auto url =
-                  userver::http::MakeUrl("http://localhost:8080/v1/user", some_data);
+                  userver::http::MakeUrl("http://localhost:38257/v1/user", some_data);
           const auto response = client_.CreateRequest()
                   .get(url)
                   .retry(2)
@@ -38,9 +38,9 @@ namespace deli_auth::clients::components {
         }
 
         // userver::formats::json::Value -> string
-        auto V1UserPatch(const std::string &data) {
+        userver::formats::json::Value V1UserPatch(const std::string &data) {
           const auto response = client_.CreateRequest()
-                  .patch("http://localhost:8080/v1/user", std::move(data))
+                  .patch("http://localhost:38257/v1/user", data)
                   .perform();
           return userver::formats::json::FromString(response->body_view());
         }

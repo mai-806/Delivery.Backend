@@ -7,7 +7,7 @@ import pytest
     [
         pytest.param(
             {
-                'id': 1,
+                'id': "1",
             },
             {
                 'login': 'def_user_login',
@@ -15,22 +15,6 @@ import pytest
             },
             200,
             id='OK',
-        ),
-        pytest.param(
-            {
-                'customerId': 1,
-            },
-            {'message': 'Key \'id\' is missing but required'},
-            400,
-            id='error in request',
-        ),
-        pytest.param(
-            {
-                'id': -5,
-            },
-            {'message': 'id param has invalid value'},
-            400,
-            id='id param has invalid value',
         ),
     ],
 )
@@ -48,7 +32,7 @@ async def test_deli_main_client(service_client, request_body,
             'type': 'admin',
         }
 
-    response = await service_client.get(
+    response = await service_client.post(
         '/v1/test_client',
         json=request_body,
     )

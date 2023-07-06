@@ -7,7 +7,7 @@
 #include <userver/storages/postgres/component.hpp>
 
 
-namespace deli_auth::clients::components {
+namespace deli_auth::clients {
 
     DeliAuthClient::DeliAuthClient(const userver::components::ComponentConfig& config,
                          const userver::components::ComponentContext& context) : LoggableComponentBase(config, context),
