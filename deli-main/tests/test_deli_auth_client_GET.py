@@ -1,7 +1,8 @@
 import pytest
 from pytest_mock import *
 
-#from testsuite.databases import pgsql
+from testsuite.databases import pgsql
+
 
 @pytest.mark.parametrize(
     'request_body, expected_response_body,'

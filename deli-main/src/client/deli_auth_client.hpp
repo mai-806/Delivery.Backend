@@ -4,13 +4,13 @@
 #include <userver/dynamic_config/source.hpp>
 #include <userver/clients/http/client.hpp>
 
-namespace deli_main::client::components {
+namespace deli_auth::clients::components {
 
-    class DeliMainClient : public userver::components::LoggableComponentBase {
+    class DeliAuthClient : public userver::components::LoggableComponentBase {
     public:
         static constexpr auto kName = "main-client";
 
-        DeliMainClient(const userver::components::ComponentConfig &config,
+        DeliAuthClient(const userver::components::ComponentConfig &config,
                   const userver::components::ComponentContext &context);
 
         const auto V1UserGet();

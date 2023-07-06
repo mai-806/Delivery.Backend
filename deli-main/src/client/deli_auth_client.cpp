@@ -1,4 +1,4 @@
-#include "deli-main-client.hpp"
+#include "deli_auth_client.hpp"
 
 #include <userver/components/component_config.hpp>
 #include <userver/components/component_context.hpp>
@@ -7,9 +7,9 @@
 #include <userver/storages/postgres/component.hpp>
 
 
-namespace deli_main::client::components {
+namespace deli_auth::clients::components {
 
-    DeliMainClient::DeliMainClient(const userver::components::ComponentConfig& config,
+    DeliAuthClient::DeliMainClient(const userver::components::ComponentConfig& config,
                          const userver::components::ComponentContext& context) : LoggableComponentBase(config, context),
               client_(context.FindComponent<userver::components::HttpClient>().GetHttpClient()) {}
 
