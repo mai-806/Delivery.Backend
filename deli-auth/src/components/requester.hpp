@@ -5,7 +5,7 @@
 #include <userver/storages/postgres/cluster.hpp>
 
 
-namespace deli_main::components {
+namespace deli_auth::components {
 
 
   class Requester : public userver::components::LoggableComponentBase {
@@ -25,4 +25,4 @@ namespace deli_main::components {
   };
 
 
-} // deli_main::components
+} // deli_auth::components
