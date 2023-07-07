@@ -4,13 +4,36 @@
 
 namespace deli_auth::models::requests {
 
-  int64_t InsertUser(const userver::storages::postgres::ClusterPtr& cluster,
-                      const models::UserRegisterRequest &user) {
+  bool CheckUserExists(const userver::storages::postgres::ClusterPtr& cluster,
+                       int64_t user_id) {
     const auto &result =
-            cluster->Execute(userver::storages::postgres::ClusterHostType::kMaster,
-                             sql::kInsertUser,
-                             order);
-    return result.AsSingleRow<int64_t>();
+            cluster->Execute(userver::storages::postgres::ClusterHostType::kSlave,
+                             sql::kCheckUserExists,
+                             user_id);
+    return result.AsSingleRow<bool>();
+  }
+
+  void UpdateUserLogin(const userver::storages::postgres::ClusterPtr& cluster,
+                       int64_t user_id, const std::string &login) {
+    cluster->Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                     sql::kUpdateUserLogin,
+                     user_id, login);
+  }
+
+  void UpdateUserType(const userver::storages::postgres::ClusterPtr& cluster,
+                      int64_t user_id, models::UserType user_type) {
+    cluster->Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                     sql::kUpdateUserType,
+                     user_id, user_type);
+  }
+
+  models::UserUpdateRequest GetUserById(const userver::storages::postgres::ClusterPtr& cluster,
+                             int64_t user_id) {
+    const auto &result =
+            cluster->Execute(userver::storages::postgres::ClusterHostType::kSlave,
+                             sql::kGetUserById,
+                             user_id);
+    return result.AsSingleRow<models::UserUpdateRequest>();
   }
 
 } // namespace deli_auth::models::requests
