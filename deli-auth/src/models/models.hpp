@@ -27,6 +27,11 @@ namespace deli_auth::models {
 namespace userver::storages::postgres::io {
 
   template<>
+  struct CppToUserPg<deli_auth::models::User> {
+    static constexpr DBTypeName postgres_name = "deli_main.user_v1";
+  };
+
+  template<>
   struct CppToUserPg<deli_auth::models::UserType>
           : EnumMappingBase<deli_auth::models::UserType> {
     static constexpr DBTypeName postgres_name = "deli_auth.user_type";
