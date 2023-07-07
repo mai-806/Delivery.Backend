@@ -14,11 +14,13 @@ int main(int argc, char* argv[]) {
                             .Append<userver::server::handlers::Ping>()
                             .Append<userver::components::TestsuiteSupport>()
                             .Append<userver::components::HttpClient>()
+                            .Append<userver::server::handlers::TestsControl>()
                             .Append<deli_auth::components::Requester>()
                             .Append<deli_auth::views::v1::auth::user::reset::post::Handler>()
-                            .Append<userver::server::handlers::TestsControl>();
+                            .Append<userver::clients::dns::Component>()
+                            .Append<userver::components::Postgres>(deli_auth::common::consts::kPgClusterName);
 
-  deli_auth::AppendHello(component_list);
+
 
   return userver::utils::DaemonMain(argc, argv, component_list);
 }
