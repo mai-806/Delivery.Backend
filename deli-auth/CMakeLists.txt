@@ -10,6 +10,7 @@ include_directories(src)
 
 set(SQL_REQUESTS
 		src/models/sql/all.hpp
+		src/models/sql/update_user_password.hpp
 		)
 
 set(VIEWS

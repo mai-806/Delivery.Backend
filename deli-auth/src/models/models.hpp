@@ -14,10 +14,10 @@ namespace deli_auth::models {
   };
 
   struct User {
-    int64_t id,
-    str::string login,
-    str::string password,
-    UserType user_type
+    int64_t id;
+    std::string login;
+    std::string password;
+    UserType user_type;
   };
 
 } // namespace deli_auth::models
@@ -38,7 +38,7 @@ namespace userver::storages::postgres::io {
     static constexpr EnumeratorList enumerators{
       {EnumType::kUserTypeCustomer, "customer"},
       {EnumType::kUserTypeCourier,  "courier"},
-      {EnumType::kUserTypeAdmin,    "admin"};
+      {EnumType::kUserTypeAdmin,    "admin"}};
   };
 
 } // namespace userver::storages::postgres::io
