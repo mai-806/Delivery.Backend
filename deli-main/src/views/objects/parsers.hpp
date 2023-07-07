@@ -17,6 +17,10 @@ namespace userver::formats::parse {
   deli_main::views::v1::order::post::OrderCreationRequest Parse(
           const userver::formats::json::Value &elem,
           userver::formats::parse::To<deli_main::views::v1::order::post::OrderCreationRequest>);
+
+  deli_main::views::v1::order::change_status::post::OrderChangeStatusRequest Parse(
+          const userver::formats::json::Value &elem,
+          userver::formats::parse::To<deli_main::views::v1::order::change_status::post::OrderChangeStatusRequest>);
 } // namespace userver::formats::parse
 
 namespace userver::formats::serialize {

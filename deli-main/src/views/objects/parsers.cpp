@@ -106,11 +106,13 @@ namespace {
   using Coordinate = deli_main::views::Coordinate;
   using OrderCreationRequest = deli_main::views::v1::order::post::OrderCreationRequest;
   using OrderCreationResponse = deli_main::views::v1::order::post::OrderCreationResponse;
+  using OrderChangeStatusRequest = deli_main::views::v1::order::change_status::post::OrderChangeStatusRequest;
 }
 
 namespace userver::formats::parse {
 
-  Coordinate Parse(const userver::formats::json::Value &elem,
+  Coordinate
+  Parse(const userver::formats::json::Value &elem,
                    userver::formats::parse::To<Coordinate>) {
     const Keys required_keys = {"lon", "lat"};
     const Keys optional_keys;
@@ -159,6 +161,26 @@ namespace userver::formats::parse {
     return order_creation_request;
   }
 
+  OrderChangeStatusRequest
+  Parse(const userver::formats::json::Value &elem,
+        userver::formats::parse::To<OrderChangeStatusRequest>) {
+    const Keys required_keys = {"id", "status"};
+    const Keys optional_keys;
+    const Types key_types = {
+            {"customerId", FieldType::kInt},
+            {"status",     FieldType::kString}
+    };
+
+    CheckFields(required_keys, optional_keys, key_types, elem);
+    LOG_DEBUG() << "fields are checked";
+    // required fields:
+    OrderChangeStatusRequest order_change_status_request{
+            .id = GetRequiredValue<int64_t>(elem, "id"),
+            .status = GetRequiredValue<std::string>(elem, "status")
+    };
+    LOG_DEBUG() << "request parsed";
+    return order_change_status_request;
+  }
 
 } // namespace userver::formats::parse
 

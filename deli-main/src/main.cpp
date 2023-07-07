@@ -17,6 +17,7 @@ int main(int argc, char *argv[]) {
           .Append<userver::server::handlers::TestsControl>()
           .Append<deli_main::components::Requester>()
           .Append<deli_main::views::v1::order::post::Handler>()
+          .Append<deli_main::views::v1::order::change_status::post::Handler>()
           .Append<userver::clients::dns::Component>()
           .Append<userver::components::Postgres>(deli_main::common::consts::kPgClusterName);
 

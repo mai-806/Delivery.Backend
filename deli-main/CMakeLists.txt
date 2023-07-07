@@ -13,6 +13,7 @@ include_directories(src)
 set(SQL_REQUESTS
         src/models/sql/all.hpp
         src/models/sql/insert_order.hpp
+        src/models/sql/update_order_status.hpp
 )
 
 set(VIEWS
@@ -20,7 +21,8 @@ set(VIEWS
         src/views/objects/objects.hpp
         src/views/objects/parsers.cpp
         src/views/objects/parsers.hpp
-
+        src/views/v1/order-change-status/post/handler.cpp
+        src/views/v1/order-change-status/post/handler.hpp
         src/views/v1/order/post/handler.cpp
         src/views/v1/order/post/handler.hpp
 )
