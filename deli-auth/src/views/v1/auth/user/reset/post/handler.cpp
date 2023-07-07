@@ -3,7 +3,7 @@
 #include <models/models.hpp>
 #include <models/requests.hpp>
 
-namespace deli_main::views::v1::order::post {
+namespace deli_auth::views::v1::auth::user::reset::post {
 
   Handler::Handler(const userver::components::ComponentConfig &config,
                    const userver::components::ComponentContext &component_context) :
@@ -16,31 +16,25 @@ namespace deli_main::views::v1::order::post {
           userver::server::request::RequestContext &) const try {
 
     const auto request_data = json.As<Request>();
+    const auto new_password = request.GetHeader("new_pass");
 
-    models::Order order{
-            .start_point = {
-                    .latitude = request_data.start.lat,
-                    .longitude = request_data.start.lon
-            },
-            .end_point = {
-                    .latitude = request_data.finish.lat,
-                    .longitude = request_data.finish.lon
-            },
-            .customer = request_data.customer_id
+    models::User user {
+      .id = request_data.id,
+      .password = new_password
     };
 
-    const auto order_id = requester_.DoDBQuery(models::requests::InsertOrder, order);
+    const auto result = requester_.DoDBQuery(models::requests::UpdateUserPassword, user);
 
-    Response200 response200{
-            .order_id = order_id
-    };
 
-    request.SetResponseStatus(userver::server::http::HttpStatus::kOk);
+    if (result == 1) {
+      request.SetResponseStatus(userver::server::http::HttpStatus::kNoContent);
 
-    return Serialize(
-            response200,
-            userver::formats::serialize::To<userver::formats::json::Value>());
-
+      return Serialize(
+              {},
+              userver::formats::serialize::To<userver::formats::json::Value>());
+    } else {
+      request.SetResponseStatus(userver::server::http::HttpStatus::kOk)
+    }
   } catch (const userver::formats::json::ParseException &exception) {
     request.SetResponseStatus(userver::server::http::HttpStatus::kBadRequest);
     return Serialize(
@@ -50,4 +44,4 @@ namespace deli_main::views::v1::order::post {
             userver::formats::serialize::To<userver::formats::json::Value>());
   }
 
-} // namespace deli_main::views::v1::order::post
+} // namespace deli_auth::views::v1::auth::user::reset::post
