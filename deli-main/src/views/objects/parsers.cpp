@@ -130,7 +130,7 @@ namespace userver::formats::parse {
     if (coordinate.lat > 90 || coordinate.lat < -90) {
       throw userver::formats::json::ParseException("lat param out of bounds");
     }
-    if (coordinate.lat > 180 || coordinate.lat < -180) {
+    if (coordinate.lon > 180 || coordinate.lon < -180) {
       throw userver::formats::json::ParseException("lon param out of bounds");
     }
 
