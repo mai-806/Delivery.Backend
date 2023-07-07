@@ -29,9 +29,7 @@ namespace deli_auth::views::v1::auth::user::reset::post {
     if (result == 1) {
       request.SetResponseStatus(userver::server::http::HttpStatus::kNoContent);
 
-      return Serialize(
-              {},
-              userver::formats::serialize::To<userver::formats::json::Value>());
+      return userver::formats::json::FromString(R"({})");
     } else {
       request.SetResponseStatus(userver::server::http::HttpStatus::kNotFound);
       return Serialize(
