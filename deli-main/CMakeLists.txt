@@ -12,6 +12,7 @@ include_directories(src)
 
 set(SQL_REQUESTS
         src/models/sql/all.hpp
+        src/models/sql/insert_order.hpp
 )
 
 set(VIEWS
@@ -20,8 +21,9 @@ set(VIEWS
         src/views/objects/parsers.cpp
         src/views/objects/parsers.hpp
 
-        src/views/v1/auth/user/reset/post/handler.cpp
-        src/views/v1/auth/user/reset/post/handler.hpp
+        src/views/v1/order/post/handler.cpp
+        src/views/v1/order/post/handler.hpp
+
 )
 
 # Common sources
