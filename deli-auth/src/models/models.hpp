@@ -19,6 +19,12 @@ namespace deli_auth::models {
     UserType user_type;
   }
 
+  struct UserUpdateRequest {
+    int64_t id;
+    std::string login;
+    UserType user_type;
+  }
+
 } // namespace deli_auth::models
 
 
@@ -33,6 +39,11 @@ namespace userver::storages::postgres::io {
             {EnumType::kUserTypeCustomer, "customer"},
             {EnumType::kUserTypeCourier,  "courier"},
             {EnumType::kUserTypeAdmin,    "admin"}};
+  };
+
+  template<>
+  struct CppToUserPg<deli_auth::models::UserUpdateRequest> {
+    static constexpr DBTypeName postgres_name = "deli_auth.v1_user";
   };
 
 } // namespace userver::storages::postgres::io
