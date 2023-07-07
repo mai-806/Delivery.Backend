@@ -138,7 +138,7 @@ namespace userver::formats::parse {
 
 namespace userver::formats::serialize {
 
-  json::Value Serialize(const deli_main::views::ErrorResponse &value,
+  json::Value Serialize(const deli_auth::views::ErrorResponse &value,
                         serialize::To<json::Value>) {
     json::ValueBuilder builder;
 
