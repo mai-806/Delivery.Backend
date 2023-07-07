@@ -33,7 +33,12 @@ namespace deli_auth::views::v1::auth::user::reset::post {
               {},
               userver::formats::serialize::To<userver::formats::json::Value>());
     } else {
-      request.SetResponseStatus(userver::server::http::HttpStatus::kOk)
+      request.SetResponseStatus(userver::server::http::HttpStatus::kNotFound);
+      return Serialize(
+              Response404{
+                      .message = "not found"
+              },
+              userver::formats::serialize::To<userver::formats::json::Value>());
     }
   } catch (const userver::formats::json::ParseException &exception) {
     request.SetResponseStatus(userver::server::http::HttpStatus::kBadRequest);
