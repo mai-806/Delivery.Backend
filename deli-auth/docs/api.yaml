@@ -395,7 +395,7 @@ components:
                     type: string
             required:
                 - message
-    
+
     parameters:
         UserIdParameter:
             name: id
