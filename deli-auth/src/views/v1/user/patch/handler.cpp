@@ -3,6 +3,23 @@
 #include <models/models.hpp>
 #include <models/requests.hpp>
 
+namespace {
+
+std::string UserTypeToString(deli_auth::models::UserType user_type) {
+    switch (user_type) {
+        case deli_auth::models::UserType::kUserTypeCustomer:
+            return "customer";
+        case deli_auth::models::UserType::kUserTypeCourier:
+            return "courier";
+        case deli_auth::models::UserType::kUserTypeAdmin:
+            return "admin";
+        default:
+            throw std::invalid_argument("Invalid user type");
+    }
+}
+
+} // namespace
+
 namespace deli_auth::views::v1::user::patch {
 
   Handler::Handler(const userver::components::ComponentConfig &config,
@@ -47,7 +64,7 @@ namespace deli_auth::views::v1::user::patch {
     Response200 response200 {
             .id = user.id,
             .login = user.login,
-            .userType = user.user_type
+            .user_type = UserTypeToString(user.user_type)
     };
 
     request.SetResponseStatus(userver::server::http::HttpStatus::kOk);
