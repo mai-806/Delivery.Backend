@@ -18,6 +18,18 @@ std::string UserTypeToString(deli_auth::models::UserType user_type) {
     }
 }
 
+deli_auth::models::UserType StringToUserType(const std::string& str) {
+    if (str == "customer") {
+        return deli_auth::models::UserType::kUserTypeCustomer;
+    } else if (str == "courier") {
+        return deli_auth::models::UserType::kUserTypeCourier;
+    } else if (str == "admin") {
+        return deli_auth::models::UserType::kUserTypeAdmin;
+    } else {
+        throw std::invalid_argument("Invalid user type string");
+    }
+}
+
 } // namespace
 
 namespace deli_auth::views::v1::user::patch {
@@ -46,15 +58,15 @@ namespace deli_auth::views::v1::user::patch {
                 userver::formats::serialize::To<userver::formats::json::Value>());
     }
 
-    if (request_data.login.has_value()) {
+    if (!request_data.login.empty()) {
 
         // Update user login
-        requester_.DoDBQuery(models::requests::UpdateUserLogin, request_data.id, request_data.login.value());
+        requester_.DoDBQuery(models::requests::UpdateUserLogin, request_data.id, request_data.login);
 
-    } else if (request_data.user_type.has_value()) {
+    } else if (request_data.userType.has_value()) {
 
         // Update user type
-        requester_.DoDBQuery(models::requests::UpdateUserType, request_data.id, request_data.user_type.value());
+        requester_.DoDBQuery(models::requests::UpdateUserType, request_data.id, StringToUserType(request_data.userType.value()));
 
     }
 
