@@ -58,10 +58,10 @@ namespace deli_auth::views::v1::user::patch {
                 userver::formats::serialize::To<userver::formats::json::Value>());
     }
 
-    if (!request_data.login.empty()) {
+    if (request_data.login.has_value()) {
 
         // Update user login
-        requester_.DoDBQuery(models::requests::UpdateUserLogin, request_data.id, request_data.login);
+        requester_.DoDBQuery(models::requests::UpdateUserLogin, request_data.id, request_data.login.value());
 
     } else if (request_data.userType.has_value()) {
 
