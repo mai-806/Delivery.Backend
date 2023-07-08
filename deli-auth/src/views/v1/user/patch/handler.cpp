@@ -58,15 +58,15 @@ namespace deli_auth::views::v1::user::patch {
                 userver::formats::serialize::To<userver::formats::json::Value>());
     }
 
-    if (request_data.login.has_value()) {
+    if (std::holds_alternative<std::string>(request_data.login)) {
 
         // Update user login
-        requester_.DoDBQuery(models::requests::UpdateUserLogin, request_data.id, request_data.login.value());
+        requester_.DoDBQuery(models::requests::UpdateUserLogin, request_data.id, std::get<std::string>(request_data.login));
 
-    } else if (request_data.userType.has_value()) {
+    } else if (std::holds_alternative<std::string>(request_data.userType)) {
 
         // Update user type
-        requester_.DoDBQuery(models::requests::UpdateUserType, request_data.id, StringToUserType(request_data.userType.value()));
+        requester_.DoDBQuery(models::requests::UpdateUserType, request_data.id, StringToUserType(std::get<std::string>(request_data.userType)));
 
     }
 
