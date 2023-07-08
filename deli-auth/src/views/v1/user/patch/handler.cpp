@@ -34,10 +34,10 @@ namespace deli_auth::views::v1::user::patch {
         // Update user login
         requester_.DoDBQuery(models::requests::UpdateUserLogin, request_data.id, request_data.login.value());
 
-    } else if (request_data.userType.has_value()) {
+    } else if (request_data.user_type.has_value()) {
 
         // Update user type
-        requester_.DoDBQuery(models::requests::UpdateUserType, request_data.id, request_data.userType.value());
+        requester_.DoDBQuery(models::requests::UpdateUserType, request_data.id, request_data.user_type.value());
 
     }
 
