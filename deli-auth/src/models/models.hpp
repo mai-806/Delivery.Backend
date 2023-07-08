@@ -17,13 +17,13 @@ namespace deli_auth::models {
     std::string login;
     std::string password;
     UserType user_type;
-  }
+  };
 
   struct UserUpdateRequest {
     int64_t id;
     std::string login;
     UserType user_type;
-  }
+  };
 
 } // namespace deli_auth::models
 
