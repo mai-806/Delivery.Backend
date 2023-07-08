@@ -24,8 +24,8 @@ namespace deli_auth::views {
   namespace v1::user::patch {
     struct UserUpdateRequest {
       int64_t id;
-      std::string login;
-      std::string user_type;
+      std::optional<std::string> login;
+      std::optional<std::string> userType;
     };
 
     struct UserUpdateResponse200 {
