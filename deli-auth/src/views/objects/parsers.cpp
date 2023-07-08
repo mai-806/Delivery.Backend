@@ -153,7 +153,7 @@ namespace userver::formats::serialize {
 
     builder["id"] = value.id;
     builder["login"] = value.login;
-    builder["userType"] = value.userType;
+    builder["userType"] = value.user_type;
 
     return builder.ExtractValue();
   }
