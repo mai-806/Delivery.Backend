@@ -1,9 +1,8 @@
 
 #include "parsers.hpp"
 
-#include <vector>
-
 #include <userver/logging/log.hpp>
+#include <userver/formats/serialize/common_containers.hpp>
 
 namespace {
   enum class FieldType {
@@ -106,6 +105,8 @@ namespace {
   using Coordinate = deli_main::views::Coordinate;
   using OrderCreationRequest = deli_main::views::v1::order::post::OrderCreationRequest;
   using OrderCreationResponse = deli_main::views::v1::order::post::OrderCreationResponse;
+  using OrderDto = deli_main::views::OrderDto;
+  using OrderStatus = deli_main::views::OrderStatus;
 }
 
 namespace userver::formats::parse {
@@ -129,7 +130,7 @@ namespace userver::formats::parse {
     if (coordinate.lat > 90 || coordinate.lat < -90) {
       throw userver::formats::json::ParseException("lat param out of bounds");
     }
-    if (coordinate.lat > 180 || coordinate.lat < -180) {
+    if (coordinate.lon > 180 || coordinate.lon < -180) {
       throw userver::formats::json::ParseException("lon param out of bounds");
     }
 
@@ -182,4 +183,53 @@ namespace userver::formats::serialize {
 
     return builder.ExtractValue();
   }
+
+  json::Value Serialize(const Coordinate &value,
+                        serialize::To<json::Value>) {
+    json::ValueBuilder builder;
+
+    builder["lon"] = value.lon;
+    builder["lat"] = value.lat;
+
+    return builder.ExtractValue();
+  }
+
+  json::Value Serialize(const OrderDto& value, serialize::To<json::Value>) {
+    json::ValueBuilder builder;
+
+    builder["order_id"] = value.order_id;
+    builder["customer_id"] = value.customer_id;
+    builder["start_point"] = value.start_point;
+    builder["end_point"] = value.end_point;
+    builder["courier_id"] = value.courier_id;
+
+    switch (value.status) {
+      case OrderStatus::kOrderStatusNew:
+        builder["status"] = "new";
+        break;
+      case OrderStatus::kOrderStatusWaiting:
+        builder["status"] = "waiting";
+        break;
+      case OrderStatus::kOrderStatusInProgress:
+        builder["status"] = "in_progress";
+        break;
+      case OrderStatus::kOrderStatusDelivered:
+        builder["status"] = "delivered";
+        break;
+      case OrderStatus::kOrderStatusCanceled:
+        builder["status"] = "canceled";
+    }
+
+    return builder.ExtractValue();
+  }
+
+  json::Value Serialize(const deli_main::views::v1::orders::get::GetOrdersResponse &value,
+                        serialize::To<json::Value>) {
+    json::ValueBuilder builder;
+
+    builder["orders"] = Serialize<std::vector<OrderDto>, json::Value>(value.orders, serialize::To<json::Value>());
+
+    return builder.ExtractValue();
+  }
+
 } // namespace userver::formats::serialize

@@ -8,6 +8,7 @@
 #include <common/consts.hpp>
 #include <components/requester.hpp>
 #include <views/v1/order/post/handler.hpp>
+#include <views/v1/orders/get/handler.hpp>
 
 int main(int argc, char *argv[]) {
   auto component_list = userver::components::MinimalServerComponentList()
@@ -17,6 +18,7 @@ int main(int argc, char *argv[]) {
           .Append<userver::server::handlers::TestsControl>()
           .Append<deli_main::components::Requester>()
           .Append<deli_main::views::v1::order::post::Handler>()
+          .Append<deli_main::views::v1::orders::get::Handler>()
           .Append<userver::clients::dns::Component>()
           .Append<userver::components::Postgres>(deli_main::common::consts::kPgClusterName);
 
