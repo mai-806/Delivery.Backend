@@ -125,8 +125,8 @@ namespace userver::formats::parse {
 
     UserUpdateRequest user_update_request {
             .id = GetRequiredValue<int64_t>(elem, "id"),
-            .login = GetOptionalValue<std::string>(elem, "login"),
-            .userType = GetOptionalValue<std::string>(elem, "userType")
+            .login = GetOptionalValue<std::string>(elem, "login").value_or(""),
+            .user_type = GetOptionalValue<std::string>(elem, "userType").value_or("")
     };
     LOG_DEBUG() << "request parsed";
     return user_update_request;
