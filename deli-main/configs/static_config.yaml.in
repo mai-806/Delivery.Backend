@@ -67,6 +67,11 @@ components_manager:
             method: GET
             task_processor: main-task-processor
 
+        v1-couriers-available-get-handler:
+            path: /v1/couriers/available
+            method: GET
+            task_processor: main-task-processor
+
         testing-clients-deli-auth-v1-user-get-post:
             path: /testing/clients/deli-auth-v1-user-get
             method: POST

@@ -232,4 +232,13 @@ namespace userver::formats::serialize {
     return builder.ExtractValue();
   }
 
+  json::Value Serialize(const deli_main::views::v1::couriers::available::get::GetAvailableCouriersResponse &value,
+                        serialize::To<json::Value>) {
+    json::ValueBuilder builder;
+
+    builder["courier_ids"] = Serialize<std::vector<int64_t>, json::Value>(value.courier_ids, serialize::To<json::Value>());
+
+    return builder.ExtractValue();
+  }
+
 } // namespace userver::formats::serialize
