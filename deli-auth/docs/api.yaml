@@ -140,6 +140,13 @@ paths:
                         type: string
                         format: password
                     required: true
+
+                -   name: token
+                    in: header
+                    schema:
+                        type: string
+                    required: true
+
             responses:
                 '204':
                     description: "Success response"

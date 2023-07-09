@@ -14,4 +14,15 @@ namespace deli_auth::models::requests {
             return -1;
         return result.AsSingleRow<int64_t>();
     }
+
+    int64_t SelectIdByToken(const userver::storages::postgres::ClusterPtr& cluster,
+                               const std::string &token) {
+        const auto &result =
+                cluster->Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                                 sql::kSelectIdByToken,
+                                 token);
+        if (result.IsEmpty())
+            return -1;
+        return result.AsSingleRow<int64_t>();
+    }
 } // namespace deli_auth::models::requests

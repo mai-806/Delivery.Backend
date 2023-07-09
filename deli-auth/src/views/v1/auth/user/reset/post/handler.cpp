@@ -16,7 +16,45 @@ namespace deli_auth::views::v1::auth::user::reset::post {
             userver::server::request::RequestContext &) const try {
 
         const auto request_data = json.As<Request>();
+        const auto token = request.GetHeader("token");
+        if (token.empty()){
+            request.SetResponseStatus(userver::server::http::HttpStatus::kBadRequest);
+            return Serialize(
+                    Response400{
+                            .message = "bad request(token)"
+                    },
+                    userver::formats::serialize::To<userver::formats::json::Value>());
+        }
+
+        const auto res = requester_.DoDBQuery(models::requests::SelectIdByToken, token);
+
+        if (res == -1) {
+            request.SetResponseStatus(userver::server::http::HttpStatus::kUnauthorized);
+
+            return Serialize(
+                    Response401{
+                            .message = "not auth"
+                    },
+                    userver::formats::serialize::To<userver::formats::json::Value>());
+        } else if (res != request_data.id) {
+            request.SetResponseStatus(userver::server::http::HttpStatus::kForbidden);
+
+            return Serialize(
+                    Response403{
+                            .message = "No access"
+                    },
+                    userver::formats::serialize::To<userver::formats::json::Value>());
+        }
+
         const auto new_password = request.GetHeader("password");
+        if (new_password.empty()) {
+            request.SetResponseStatus(userver::server::http::HttpStatus::kBadRequest);
+            return Serialize(
+                    Response400{
+                            .message = "bad request(password)"
+                    },
+                    userver::formats::serialize::To<userver::formats::json::Value>());
+        }
 
         models::User user {
                 .id = request_data.id,
@@ -44,9 +82,8 @@ namespace deli_auth::views::v1::auth::user::reset::post {
         request.SetResponseStatus(userver::server::http::HttpStatus::kBadRequest);
         return Serialize(
                 Response400{
-                        .message = "bad request"
+                        .message = "bad request(id)"
                 },
                 userver::formats::serialize::To<userver::formats::json::Value>());
     }
-
 } // namespace deli_auth::views::v1::auth::user::reset::post

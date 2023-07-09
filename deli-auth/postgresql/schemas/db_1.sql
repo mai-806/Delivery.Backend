@@ -2,6 +2,13 @@ DROP SCHEMA IF EXISTS deli_auth CASCADE;
 
 CREATE SCHEMA IF NOT EXISTS deli_auth;
 
+CREATE TABLE IF NOT EXISTS deli_auth.bearer_tokens
+(
+    id          BIGSERIAL PRIMARY KEY,
+    user_id     BIGINT NOT NULL,
+    token       TEXT NOT NULL
+);
+
 CREATE TYPE deli_auth.user_type AS ENUM (
     'customer',
     'courier',
