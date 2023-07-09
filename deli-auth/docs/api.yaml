@@ -134,7 +134,7 @@ paths:
                         type: integer
                         minimum: 0
                     required: true
-                    
+
                 -   name: password
                     in: header
                     schema:

@@ -16,12 +16,12 @@ namespace deli_auth::views::v1::auth::user::reset::post {
             userver::server::request::RequestContext &) const try {
 
         const auto request_data = json.As<Request>();
-        const auto token = request.GetHeader("token");
+        const auto token = request.GetHeader("access_token");
         if (token.empty()){
             request.SetResponseStatus(userver::server::http::HttpStatus::kBadRequest);
             return Serialize(
                     Response400{
-                            .message = "bad request(token)"
+                            .message = "bad request(access_token)"
                     },
                     userver::formats::serialize::To<userver::formats::json::Value>());
         }

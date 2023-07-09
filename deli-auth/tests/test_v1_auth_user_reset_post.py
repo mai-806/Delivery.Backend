@@ -13,7 +13,7 @@ from testsuite.databases import pgsql
             },
             {
                 'password': "4054345345",
-                'token': "12345",
+                'access_token': "12345",
             },
             204,
             id='OK',
@@ -24,7 +24,7 @@ from testsuite.databases import pgsql
             },
             {
                 'password': "4054345345",
-                'token': "12345",
+                'access_token': "12345",
             },
             403,
             id='not found',
@@ -35,7 +35,7 @@ from testsuite.databases import pgsql
             },
             {
                 'password': "4054345345",
-                'token': "12345",
+                'access_token': "12345",
             },
             400,
             id='bad request',
@@ -47,7 +47,7 @@ from testsuite.databases import pgsql
             },
             {
                 'pasword': "4054345345",
-                'token': "12345",
+                'access_token': "12345",
             },
             400,
             id='bad request',
@@ -58,7 +58,7 @@ from testsuite.databases import pgsql
             },
             {
                 'password': "4054345345",
-                'token': "12345699",
+                'access_token': "12345699",
             },
             401,
             id='not auth',
@@ -69,7 +69,7 @@ from testsuite.databases import pgsql
             },
             {
                 'password': "4054345345",
-                'token': "123456",
+                'access_token': "123456",
             },
             403,
             id='no access',
@@ -84,11 +84,9 @@ async def test_deli_auth_user_reset_post(service_client, request_body, header,
     cursor.execute("INSERT INTO deli_auth.users (login, "
                    "password) VALUES ('32', '1234567890');")
     cursor.execute("INSERT INTO deli_auth.bearer_tokens (user_id,"
-                   " token) VALUES (1, '12345');")
+                   " access_token, refresh_token, expires_in) VALUES (1, '12345', '12345', 100);")
     cursor.execute("INSERT INTO deli_auth.bearer_tokens (user_id,"
-                   " token) VALUES (0, '123456');")
-    cursor.execute("INSERT INTO deli_auth.bearer_tokens (user_id,"
-                   " token) VALUES (3, '123457');")
+                   " access_token, refresh_token, expires_in) VALUES (2, '123456', '123456', 100);")
 
     response = await service_client.post(
         '/v1/auth/user/reset',
