@@ -1,26 +1,19 @@
 #include "handler.hpp"
 
+#include <common/exceptions.hpp>
+
 #include <models/models.hpp>
 #include <models/requests.hpp>
 
 #include <views/objects/objects.hpp>
 
 namespace {
-class ParseArgException : public std::exception {
- public:
-  explicit ParseArgException(std::string msg) : msg_(std::move(msg)) {}
-
-  const char* what() const noexcept final { return msg_.c_str(); }
-
- private:
-  std::string msg_;
-};
-
 using ModelsOrderStatus = deli_main::models::OrderStatus;
 using ViewsOrderStatus = deli_main::views::OrderStatus;
 using ModelsCoordinate = deli_main::models::Coordinate;
 using ViewsCoordinate = deli_main::views::Coordinate;
 using OrderDto = deli_main::views::OrderDto;
+using ParseArgException = deli_main::common::exceptions::ParseArgException;
 
 ViewsOrderStatus ParseOrderStatus(const ModelsOrderStatus status) {
   switch (status) {
