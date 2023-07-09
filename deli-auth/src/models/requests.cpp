@@ -15,11 +15,11 @@ namespace deli_auth::models::requests {
         return result.AsSingleRow<int64_t>();
     }
 
-    int64_t SelectIdByToken(const userver::storages::postgres::ClusterPtr& cluster,
+    int64_t SelectUserIdByToken(const userver::storages::postgres::ClusterPtr& cluster,
                                const std::string &token) {
         const auto &result =
                 cluster->Execute(userver::storages::postgres::ClusterHostType::kMaster,
-                                 sql::kSelectIdByToken,
+                                 sql::kSelectUserIdByToken,
                                  token);
         if (result.IsEmpty())
             return -1;

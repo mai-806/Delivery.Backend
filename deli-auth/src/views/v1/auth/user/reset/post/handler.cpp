@@ -2,6 +2,7 @@
 
 #include <models/models.hpp>
 #include <models/requests.hpp>
+#include <userver/crypto/hash.hpp>
 
 namespace deli_auth::views::v1::auth::user::reset::post {
 
@@ -26,7 +27,7 @@ namespace deli_auth::views::v1::auth::user::reset::post {
                     userver::formats::serialize::To<userver::formats::json::Value>());
         }
 
-        const auto res = requester_.DoDBQuery(models::requests::SelectIdByToken, token);
+        const auto res = requester_.DoDBQuery(models::requests::SelectUserIdByToken, token);
 
         if (res == -1) {
             request.SetResponseStatus(userver::server::http::HttpStatus::kUnauthorized);
@@ -58,7 +59,7 @@ namespace deli_auth::views::v1::auth::user::reset::post {
 
         models::User user {
                 .id = request_data.id,
-                .password = new_password
+                .password = userver::crypto::hash::Sha256(new_password)
         };
 
         const auto result = requester_.DoDBQuery(models::requests::UpdateUserPassword, user);
