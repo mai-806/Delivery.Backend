@@ -22,14 +22,12 @@ namespace deli_auth::views::v1::auth::login::post {
 
     const auto request_data = json.As<Request>();
 
-    // получаем логин
     models::User user{
       .login = request_data.login
     };
-    // получаем пароль из хедера
-    const auto& password_header = request.GetHeader("password"); //http::headers::kAuthorization);
 
-    // сравниваем с данными из бд. по логину ищем юзера и получаем его пароль. Далее сравниваем пароли
+    const auto& password_header = request.GetHeader("password");
+
     // Todo: понять, что возвращает DoDBQuery, если введенного логина не существует
     const auto password_bd = requester_.DoDBQuery(models::requests::SelectPassword, user);
 
@@ -38,11 +36,6 @@ namespace deli_auth::views::v1::auth::login::post {
     }
 
     // если все ок, генерируем токен, добавляем в бд и возвращаем в хедере
-//    const auto user_id = requester_.DoDBQuery(models::requests::SelectUserID, user);
-//    models::BearerTokens bearer_tokens{
-//        .user_id = user_id
-//    };
-//    const std::vector<models::BearerTokens> tokens_obj = requester_.DoDBQuery(models::requests::SelectBearerTokens, bearer_tokens);
 
     Response200 response200{
       .is_auth = true

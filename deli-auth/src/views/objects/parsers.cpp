@@ -112,17 +112,6 @@ namespace {
 }
 
 namespace userver::formats::parse {
-  // ХУЙ ЗНАЕТ КАК ПАРСИТЬ ENUM БЛЯТЬ ПОШЕЛ НАХУЙ
-//  UserType Parse(const userver::formats::json::Value &elem,
-//                 userver::formats::parse::To<UserType>) {
-//    UserType user_type{
-//      .customer = "customer",
-//      .courier = "courier",
-//      .admin = "admin"
-//    };
-//
-//    return user_type;
-//  }
 
   ErrorResponse Parse(const userver::formats::json::Value &elem,
                       userver::formats::parse::To<ErrorResponse>) {
