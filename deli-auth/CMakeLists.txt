@@ -14,35 +14,37 @@ set(SQL_REQUESTS
 		src/models/sql/all.hpp
 		src/models/sql/update_user_password.hpp
 		src/models/sql/select_user_id_by_token.hpp
+    src/models/sql/insert_user.hpp
 		)
 
 set(VIEWS
 
-		src/views/objects/objects.hpp
-		src/views/objects/parsers.cpp
-		src/views/objects/parsers.hpp
-
-		src/views/v1/auth/user/reset/post/handler.cpp
-		src/views/v1/auth/user/reset/post/handler.hpp
-		)
-
+        src/views/objects/objects.hpp
+        src/views/objects/parsers.cpp
+        src/views/objects/parsers.hpp
+        
+        src/views/v1/auth/user/reset/post/handler.cpp
+		    src/views/v1/auth/user/reset/post/handler.hpp
+        src/views/v1/auth/user/post/handler.cpp
+        src/views/v1/auth/user/post/handler.hpp
+)
 
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
 
-		src/common/consts.hpp
+        src/common/consts.hpp
 
-		src/components/requester.cpp
-		src/components/requester.hpp
+        src/components/requester.cpp
+        src/components/requester.hpp
 
-		src/models/models.hpp
-		src/models/requests.cpp
-		src/models/requests.hpp
+        src/models/models.hpp
+        src/models/requests.cpp
+        src/models/requests.hpp
 
-		${SQL_REQUESTS}
-		${VIEWS}
+        ${SQL_REQUESTS}
+        ${VIEWS}
 
-		)
+)
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql)
 
 
@@ -55,6 +57,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
 add_executable(${PROJECT_NAME}_unittest
 
 )
+
+
 target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver-utest)
 add_google_tests(${PROJECT_NAME}_unittest)
 
@@ -63,17 +67,19 @@ add_google_tests(${PROJECT_NAME}_unittest)
 add_executable(${PROJECT_NAME}_benchmark
 
 )
+
+
 target_link_libraries(${PROJECT_NAME}_benchmark PRIVATE ${PROJECT_NAME}_objs userver-ubench)
 add_google_benchmark_tests(${PROJECT_NAME}_benchmark)
 
 # Functional Tests
 add_subdirectory(tests)
 
-if(DEFINED ENV{PREFIX})
-	message(STATUS "Set install prefix: $ENV{PREFIX}")
-	file(TO_CMAKE_PATH "$ENV{PREFIX}" PREFIX_PATH)
-	set(CMAKE_INSTALL_PREFIX ${PREFIX_PATH})
-endif()
+if (DEFINED ENV{PREFIX})
+    message(STATUS "Set install prefix: $ENV{PREFIX}")
+    file(TO_CMAKE_PATH "$ENV{PREFIX}" PREFIX_PATH)
+    set(CMAKE_INSTALL_PREFIX ${PREFIX_PATH})
+endif ()
 
 set(CONFIG_VAR_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}/${PROJECT_NAME}/config_vars.yaml)
 set(CONFIG_FALLBACK_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}/${PROJECT_NAME}/dynamic_config_fallback.json)

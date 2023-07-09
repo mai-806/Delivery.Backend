@@ -15,10 +15,8 @@ security:
     -   BearerAuth: [ ]
 
 paths:
-    /v1/auth/register:
+    /v1/auth/user:
         post:
-            tags:
-                - auth
             summary: User registration
             description: "Registration of new user in the service by login,
              user type and password (transmitted in the header)"

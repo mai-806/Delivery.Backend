@@ -12,9 +12,8 @@
 namespace deli_auth::components {
 
     Requester::Requester(const userver::components::ComponentConfig& config,
-                         const userver::components::ComponentContext& context)
+                             const userver::components::ComponentContext& context)
             : LoggableComponentBase(config, context),
               cluster_(context.FindComponent<userver::components::Postgres>(common::consts::kPgClusterName)
                                .GetCluster()) {}
-
 } // namespace deli_auth::components
