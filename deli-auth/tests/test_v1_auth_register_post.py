@@ -2,6 +2,7 @@ import pytest
 
 from testsuite.databases import pgsql
 
+
 @pytest.mark.pgsql(
     'db_1',
     queries=[
@@ -12,7 +13,6 @@ from testsuite.databases import pgsql
         """,
         ],
 )
-
 @pytest.mark.parametrize(
     'header, request_body, expected_response_body, '
     'expected_response_code, expected_db_data',
@@ -40,7 +40,7 @@ from testsuite.databases import pgsql
                 'login': "test",
                 'use_type': "customer"
             },
-            {"message":"Key 'user_type' is missing but required"},
+            {"message": "Key 'user_type' is missing but required"},
             400,
             None,
             id='error in request',
@@ -53,7 +53,7 @@ from testsuite.databases import pgsql
                 'login': "anton",
                 'user_type': "admin"
             },
-            {"message":"login already exists"},
+            {"message": "login already exists"},
             409,
             None,
             id='error in unique login',
@@ -61,9 +61,9 @@ from testsuite.databases import pgsql
     ],
 )
 async def test_v1_auth_register_post(service_client, request_body,
-                             expected_response_body,
-                             expected_response_code,
-                             expected_db_data, pgsql, header,):
+                            expected_response_body,
+                            expected_response_code,
+                            expected_db_data, pgsql, header,):
     response = await service_client.post(
         '/v1/auth/user',
         json=request_body,
