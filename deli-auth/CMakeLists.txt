@@ -13,6 +13,7 @@ include_directories(src)
 set(SQL_REQUESTS
 		src/models/sql/all.hpp
 		src/models/sql/update_user_password.hpp
+		src/models/sql/select_user_id_by_token.hpp
 		)
 
 set(VIEWS
