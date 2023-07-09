@@ -51,7 +51,7 @@
     "statement_timeout_ms": 500
   },
   "POSTGRES_HANDLERS_COMMAND_CONTROL": {
-    "/v1/hello": {
+    "/v1/auth/logout": {
       "POST": {
         "network_timeout_ms": 500,
         "statement_timeout_ms": 250
