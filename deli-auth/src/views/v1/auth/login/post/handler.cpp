@@ -6,7 +6,7 @@
 #include <models/requests.hpp>
 
 namespace {
-    using ParseArgException = deli_auth::common::exceptions::ParseArgException;
+  using ParseArgException = deli_auth::common::exceptions::ParseArgException;
 }
 
 namespace deli_auth::views::v1::auth::login::post {
@@ -22,17 +22,32 @@ namespace deli_auth::views::v1::auth::login::post {
 
     const auto request_data = json.As<Request>();
 
+    // Todo: придумать проверку на наличие поля login
     models::User user{
       .login = request_data.login
     };
 
+    if (!request.HasHeader("password")) {
+      throw ParseArgException("Wrong request: request must contain password field");
+    }
+
     const auto& password_header = request.GetHeader("password");
 
     // Todo: понять, что возвращает DoDBQuery, если введенного логина не существует
-    const auto password_bd = requester_.DoDBQuery(models::requests::SelectPassword, user);
+    // возможно userver::storages::postgres::NonSingleRowResultSet
 
-    if (password_header != password_bd){
-      throw ParseArgException("Password is wrong");
+    try {
+      const auto password_bd = requester_.DoDBQuery(models::requests::SelectPassword, user);
+      if (password_header != password_bd){
+        throw ParseArgException("Password is wrong");
+      }
+    } catch (...) { // я знаю, что это плохая практика, но предложите что-нибудь получше тогда
+      request.SetResponseStatus(userver::server::http::HttpStatus::kNotFound);
+      return Serialize(
+          Response404{
+              .message = "User not found"
+          },
+          userver::formats::serialize::To<userver::formats::json::Value>());
     }
 
     // если все ок, генерируем токен, добавляем в бд и возвращаем в хедере
@@ -48,21 +63,13 @@ namespace deli_auth::views::v1::auth::login::post {
       response200,
       userver::formats::serialize::To<userver::formats::json::Value>());
 
-  } catch (const userver::formats::json::ParseException &exception) {
+  } catch (const ParseArgException &exception) {
     request.SetResponseStatus(userver::server::http::HttpStatus::kBadRequest);
     return Serialize(
       Response400{
         .message = exception.what()
       },
       userver::formats::serialize::To<userver::formats::json::Value>());
-  } catch (std::string err_message) {
-    request.SetResponseStatus(userver::server::http::HttpStatus::kBadRequest);
-    return Serialize(
-        Response400{
-          .message = err_message
-        },
-        userver::formats::serialize::To<userver::formats::json::Value>()
-            );
   }
 
 

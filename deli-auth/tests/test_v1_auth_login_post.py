@@ -53,3 +53,39 @@ class TestV1AuthLoginPost:
         assert response.status == 200
         response = response.json()
         assert response['is_auth'] is True
+
+    async def test_v1_auth_login_404(self, service_client):
+        data = self.generate_user()
+
+        response = await service_client.post(
+            '/v1/auth/login',
+            json={
+                "login": data[0]
+            },
+            headers={
+                "password": data[1]
+            }
+        )
+        print(10*"_" + "\nRESPONSE 404")
+        print(response.status)
+        assert response.status == 404
+        response = response.json()
+        print(response)
+        assert response['message'] == 'User not found'
+
+    async def test_v1_auth_login_400(self, service_client):
+        data = self.generate_user()
+
+        response = await service_client.post(
+            '/v1/auth/login',
+            json={
+                'login': data[0]
+            }
+        )
+        print(10*"_" + "\nRESPONSE 400")
+        print(response.status)
+        assert response.status == 400
+        response = response.json()
+        print(response)
+        assert response['message'] == "Wrong request: " \
+                                      "request must contain password field"

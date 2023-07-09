@@ -18,6 +18,7 @@ namespace deli_auth::views::v1::auth::login::post {
 
     using Request = AuthRequest;
     using Response400 = ErrorResponse;
+    using Response404 = ErrorResponse;
     using Response200 = AuthResponse200;
 
     Handler(const userver::components::ComponentConfig &config,
