@@ -10,6 +10,10 @@
 
 #include <components/requester.hpp>
 
+namespace {
+  std::string GenerationToken(int64_t user_id, int64_t expires_in);
+}
+
 namespace deli_auth::views::v1::auth::login::post {
 
   class Handler : public userver::server::handlers::HttpHandlerJsonBase {

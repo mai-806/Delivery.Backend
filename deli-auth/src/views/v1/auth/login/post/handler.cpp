@@ -1,3 +1,7 @@
+#include <time.h>
+#include <userver/crypto/base64.hpp>
+#include <userver/crypto/hash.hpp>
+
 #include "handler.hpp"
 
 #include <common/exceptions.hpp>
@@ -10,6 +14,29 @@ namespace {
 }
 
 namespace deli_auth::views::v1::auth::login::post {
+
+  std::string GenerationToken(int64_t user_id, int64_t expires_in){
+
+    const std::string header = "{\"alg\":\"HS256\",\"typ\":\"JWT\"}";
+    const std::string payload = "{\"user_id\": "
+                                + std::to_string(user_id)
+                                + ", \"exp\":"
+                                + std::to_string(expires_in)
+                                + "}";
+
+    const auto headerBase64 = userver::crypto::base64::Base64UrlEncode(header);
+    const auto payloadBase64 = userver::crypto::base64::Base64UrlEncode(payload);
+
+    const auto data = headerBase64 + '.' + payloadBase64;
+
+    const auto secret = "123456";
+    const auto sig = userver::crypto::hash::Sha256(data);
+
+    const auto jwt = data + '.' + sig;
+
+    return jwt;
+  }
+
 
   Handler::Handler(const userver::components::ComponentConfig &config,
                    const userver::components::ComponentContext &component_context) :
@@ -41,7 +68,7 @@ namespace deli_auth::views::v1::auth::login::post {
       if (password_header != password_bd){
         throw ParseArgException("Password is wrong");
       }
-    } catch (...) { // я знаю, что это плохая практика, но предложите что-нибудь получше тогда
+    } catch (...) {
       request.SetResponseStatus(userver::server::http::HttpStatus::kNotFound);
       return Serialize(
           Response404{
@@ -50,7 +77,23 @@ namespace deli_auth::views::v1::auth::login::post {
           userver::formats::serialize::To<userver::formats::json::Value>());
     }
 
-    // если все ок, генерируем токен, добавляем в бд и возвращаем в хедере
+    std::time_t time_now = std::time(nullptr);
+    int64_t expires_in = static_cast<int64_t> (time_now) + 600;  // токен на 10 минут
+
+    const auto user_id = requester_.DoDBQuery(models::requests::SelectUserID, user);
+    std::string access_token = GenerationToken(user_id, expires_in);
+
+    std::string refresh_token;
+    for(int i = 0; i < 10; ++i) refresh_token = refresh_token + char('A'+ rand()%26);
+
+    models::BearerTokens bearer_token {
+      .user_id = user_id,
+      .access_token = access_token,
+      .refresh_token = refresh_token,
+      .expires_in = expires_in
+    };
+
+    const auto bearer_token_id = requester_.DoDBQuery(models::requests::InsertToken, bearer_token);
 
     Response200 response200{
       .is_auth = true
