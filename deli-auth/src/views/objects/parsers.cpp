@@ -157,14 +157,16 @@ namespace userver::formats::parse {
     const Keys required_keys = {"is_auth"};
     const Keys optional_keys;
     const Types key_types = {
-      {"is_auth", FieldType:: kBool}
+      {"is_auth", FieldType:: kBool},
+      {"access_token", FieldType:: kString}
     };
 
     CheckFields(required_keys, optional_keys, key_types, elem);
     LOG_DEBUG() << "fields are checked";
 
     AuthResponse200 auth_response_200{
-      .is_auth = GetRequiredValue<bool>(elem, "is_auth")
+      .is_auth = GetRequiredValue<bool>(elem, "is_auth"),
+      .access_token = GetRequiredValue<std::string>(elem, "access_token")
     };
     if (!auth_response_200.is_auth){
       throw userver::formats::json::ParseException("is_auth must be true");
@@ -200,6 +202,7 @@ namespace userver::formats::serialize {
     json::ValueBuilder builder;
 
     builder["is_auth"] = value.is_auth;
+    builder["access_token"] = value.access_token;
 
     return builder.ExtractValue();
   }

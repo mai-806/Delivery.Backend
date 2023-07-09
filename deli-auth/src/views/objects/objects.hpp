@@ -27,6 +27,7 @@ namespace deli_auth::views {
 
     struct AuthResponse200{
       bool is_auth;
+      std::string access_token;
     };
   }
 

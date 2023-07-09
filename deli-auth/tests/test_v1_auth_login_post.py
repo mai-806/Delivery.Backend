@@ -53,6 +53,7 @@ class TestV1AuthLoginPost:
         assert response.status == 200
         response = response.json()
         assert response['is_auth'] is True
+        assert isinstance(response['access_token'], str)
 
     async def test_v1_auth_login_404(self, service_client):
         data = self.generate_user()

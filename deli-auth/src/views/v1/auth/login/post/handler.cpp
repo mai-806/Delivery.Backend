@@ -95,12 +95,13 @@ namespace deli_auth::views::v1::auth::login::post {
 
     const auto bearer_token_id = requester_.DoDBQuery(models::requests::InsertToken, bearer_token);
 
+    // Todo: вернуть токен через хедер
     Response200 response200{
-      .is_auth = true
+      .is_auth = true,
+      .access_token = access_token
     };
 
     request.SetResponseStatus(userver::server::http::HttpStatus::kOk);
-    // Todo: вернуть токен через хедер
 
     return Serialize(
       response200,
