@@ -31,6 +31,7 @@ set(VIEWS
 add_library(${PROJECT_NAME}_objs OBJECT
 
 		src/common/consts.hpp
+		src/common/exceptions.hpp
 
 		src/components/requester.cpp
 		src/components/requester.hpp

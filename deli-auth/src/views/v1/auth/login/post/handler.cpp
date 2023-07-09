@@ -1,20 +1,12 @@
 #include "handler.hpp"
 
+#include <common/exceptions.hpp>
+
 #include <models/models.hpp>
 #include <models/requests.hpp>
 
 namespace {
-    class ParseArgException : public std::exception {
-    public:
-        explicit ParseArgException(std::string msg) : msg_(std::move(msg)) {}
-
-        const char *what() const
-
-        noexcept final{return msg_.c_str();}
-
-    private:
-        std::string msg_;
-    };
+    using ParseArgException = deli_auth::common::exceptions::ParseArgException;
 }
 
 namespace deli_auth::views::v1::auth::login::post {
