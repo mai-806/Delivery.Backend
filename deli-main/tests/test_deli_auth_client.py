@@ -53,9 +53,11 @@ async def test_deli_auth_client(service_client,
         if expected_status == 200:
             return {'login': login, 'user_type': user_type}
         elif expected_status == 400:
-            return mockserver.make_response(status=400, json={"message": "400"})
+            return mockserver.make_response(status=400,
+            								  json={"message": "400"})
         else:
-            return mockserver.make_response(status=404, json={"message": "404"})
+            return mockserver.make_response(status=404,
+            								  json={"message": "404"})
 
     response = await service_client.post(
         '/testing/clients/deli-auth-v1-user-get',
