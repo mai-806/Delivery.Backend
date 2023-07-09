@@ -16,6 +16,11 @@ set(SQL_REQUESTS
         src/models/sql/get_orders.hpp
 )
 
+set(CLIENTS
+        src/clients/deli-auth/client.cpp
+        src/clients/deli-auth/client.hpp
+)
+
 set(VIEWS
 
         src/views/objects/objects.hpp
@@ -27,6 +32,9 @@ set(VIEWS
 
         src/views/v1/orders/get/handler.cpp
         src/views/v1/orders/get/handler.hpp
+
+        src/views/testing/clients/deli-auth-v1-user-get/post/handler.cpp
+        src/views/testing/clients/deli-auth-v1-user-get/post/handler.hpp
 )
 
 # Common sources
@@ -43,6 +51,7 @@ add_library(${PROJECT_NAME}_objs OBJECT
 
         ${SQL_REQUESTS}
         ${VIEWS}
+        ${CLIENTS}
 
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql)
