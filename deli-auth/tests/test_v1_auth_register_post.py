@@ -61,9 +61,9 @@ from testsuite.databases import pgsql
     ],
 )
 async def test_v1_auth_register_post(service_client, request_body,
-                            expected_response_body,
-                            expected_response_code,
-                            expected_db_data, pgsql, header,):
+                                     expected_response_body,
+                                     expected_response_code,
+                                     expected_db_data, pgsql, header,):
     response = await service_client.post(
         '/v1/auth/user',
         json=request_body,
