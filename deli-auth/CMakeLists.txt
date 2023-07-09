@@ -25,6 +25,7 @@ set(VIEWS
 		src/views/v1/auth/user/reset/post/handler.hpp
 		)
 
+
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
 
@@ -52,9 +53,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
 # Unit Tests
 add_executable(${PROJECT_NAME}_unittest
 
-		)
-
-
+)
 target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver-utest)
 add_google_tests(${PROJECT_NAME}_unittest)
 
@@ -62,20 +61,18 @@ add_google_tests(${PROJECT_NAME}_unittest)
 # Benchmarks
 add_executable(${PROJECT_NAME}_benchmark
 
-		)
-
-
+)
 target_link_libraries(${PROJECT_NAME}_benchmark PRIVATE ${PROJECT_NAME}_objs userver-ubench)
 add_google_benchmark_tests(${PROJECT_NAME}_benchmark)
 
 # Functional Tests
 add_subdirectory(tests)
 
-if (DEFINED ENV{PREFIX})
+if(DEFINED ENV{PREFIX})
 	message(STATUS "Set install prefix: $ENV{PREFIX}")
 	file(TO_CMAKE_PATH "$ENV{PREFIX}" PREFIX_PATH)
 	set(CMAKE_INSTALL_PREFIX ${PREFIX_PATH})
-endif ()
+endif()
 
 set(CONFIG_VAR_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}/${PROJECT_NAME}/config_vars.yaml)
 set(CONFIG_FALLBACK_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}/${PROJECT_NAME}/dynamic_config_fallback.json)

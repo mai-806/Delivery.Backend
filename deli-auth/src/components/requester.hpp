@@ -7,22 +7,21 @@
 
 namespace deli_auth::components {
 
+    class Requester : public userver::components::LoggableComponentBase {
+    public:
+        static constexpr auto kName = "requester";
 
-  class Requester : public userver::components::LoggableComponentBase {
-  public:
-    static constexpr auto kName = "requester";
+        Requester(const userver::components::ComponentConfig &config,
+                  const userver::components::ComponentContext &context);
 
-    Requester(const userver::components::ComponentConfig &config,
-              const userver::components::ComponentContext &context);
+        template<class ReturnType, class... Args, class... QueryArgs>
+        ReturnType DoDBQuery(ReturnType (*query)(Args...), QueryArgs... args) const {
+            return query(cluster_, args...);
+        }
 
-    template<class ReturnType, class... Args, class... QueryArgs>
-    ReturnType DoDBQuery(ReturnType (*query)(Args...), QueryArgs... args) const {
-      return query(cluster_, args...);
-    }
-
-  private:
-    userver::storages::postgres::ClusterPtr cluster_;
-  };
+    private:
+        userver::storages::postgres::ClusterPtr cluster_;
+    };
 
 
 } // deli_auth::components

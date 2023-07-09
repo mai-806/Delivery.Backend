@@ -20,9 +20,9 @@ CREATE INDEX IF NOT EXISTS ix_deli_auth_users_login ON deli_auth.users (login);
 
 
 CREATE TYPE deli_auth.user_v1 AS
-(
+    (
     id          BIGINT,
     login       TEXT,
     password    TEXT,
     user_type   deli_auth.user_type
-);
+    );
