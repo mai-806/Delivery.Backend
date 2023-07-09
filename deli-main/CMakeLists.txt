@@ -13,6 +13,12 @@ include_directories(src)
 set(SQL_REQUESTS
         src/models/sql/all.hpp
         src/models/sql/insert_order.hpp
+        src/models/sql/get_orders.hpp
+)
+
+set(CLIENTS
+        src/clients/deli-auth/client.cpp
+        src/clients/deli-auth/client.hpp
 )
 
 set(VIEWS
@@ -24,12 +30,18 @@ set(VIEWS
         src/views/v1/order/post/handler.cpp
         src/views/v1/order/post/handler.hpp
 
+        src/views/v1/orders/get/handler.cpp
+        src/views/v1/orders/get/handler.hpp
+
+        src/views/testing/clients/deli-auth-v1-user-get/post/handler.cpp
+        src/views/testing/clients/deli-auth-v1-user-get/post/handler.hpp
 )
 
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
 
         src/common/consts.hpp
+        src/common/exceptions.hpp
 
         src/components/requester.cpp
         src/components/requester.hpp
@@ -40,6 +52,7 @@ add_library(${PROJECT_NAME}_objs OBJECT
 
         ${SQL_REQUESTS}
         ${VIEWS}
+        ${CLIENTS}
 
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql)
@@ -57,6 +70,7 @@ add_executable(${PROJECT_NAME}_unittest
 
 
 target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver-utest)
+add_google_tests(${PROJECT_NAME}_unittest)
 
 
 # Benchmarks

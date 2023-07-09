@@ -8,7 +8,7 @@ info:
     #- url: https://url.ru/v1/
 
 tags:
-    
+
     -   name: auth
 
 security:
@@ -134,6 +134,7 @@ paths:
                         type: integer
                         minimum: 0
                     required: true
+                    
                 -   name: password
                     in: header
                     schema:
@@ -146,7 +147,6 @@ paths:
                     schema:
                         type: string
                     required: true
-
             responses:
                 '204':
                     description: "Success response"
@@ -174,7 +174,7 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
-    
+
     /v1/user:
         get:
             tags:
@@ -201,19 +201,13 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
-                '403':
-                    description: "Access denied"
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ErrorResponse'
                 '404':
                     description: "User not found"
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
-        
+
         patch:
             summary: "Update user information"
             description: "Change info about user by ID (login / user type)"
@@ -252,7 +246,7 @@ components:
                 - courier
                 - admin
             default: customer
-        
+
         UserGetInfoRequest:
             type: object
             description: "A request that receives either a login or an id to get user information"
@@ -266,7 +260,7 @@ components:
             oneOf:
                 -   required: [ login ]
                 -   required: [ id ]
-        
+
         RegisterRequest:
             type: object
             description: "Struct describing the parameters
@@ -280,7 +274,7 @@ components:
             required:
                 - login
                 - user_type
-        
+
         UserUpdateRequest:
             type: object
             description: "Object containing information for updating a user"
@@ -298,7 +292,7 @@ components:
             anyOf:
                 -   required: [ login ]
                 -   required: [ user_type ]
-        
+
         RegisterResponse200:
             type: object
             title: "RegisterSuccessResponse"
@@ -308,7 +302,7 @@ components:
                     minimum: 0
             required:
                 - id
-        
+
         TokenDto:
             type: object
             properties:
@@ -328,7 +322,7 @@ components:
                 - access_token
                 - refresh_token
                 - expires_in
-        
+
         AuthRequest:
             type: object
             description: "Schema for authorization, password in header"
@@ -337,7 +331,7 @@ components:
                     type: string
             required:
                 - login
-        
+
         AuthResponse200:
             title: "AuthSuccessResponse"
             type: object
@@ -346,7 +340,7 @@ components:
                     type: boolean
             required:
                 - is_auth
-        
+
         LogoutRequest:
             type: object
             properties:
@@ -356,7 +350,7 @@ components:
                     minimum: 0
             required:
                 - id
-        
+
         LogoutResponse200:
             type: object
             properties:
@@ -371,7 +365,7 @@ components:
                     type: boolean
                     description: "Is the user logged in"
                     default: False
-        
+
         UserUpdateResponse200:
             type: object
             title: "UserUpdateSuccessResponse"
@@ -381,7 +375,7 @@ components:
                     minimum: 0
             required:
                 - id
-        
+
         GetUserInfoResponse:
             type: object
             title: "GetUserInformationResponse"
@@ -394,7 +388,7 @@ components:
             required:
                 - login
                 - user_type
-        
+
         ErrorResponse:
             type: object
             properties:
@@ -402,7 +396,7 @@ components:
                     type: string
             required:
                 - message
-    
+
     parameters:
         UserIdParameter:
             name: id
@@ -411,7 +405,7 @@ components:
             schema:
                 type: string
             required: true
-    
+
     securitySchemes:
         BearerAuth:
             type: http
