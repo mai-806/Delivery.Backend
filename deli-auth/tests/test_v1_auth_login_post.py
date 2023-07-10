@@ -10,7 +10,7 @@ from testsuite.databases import pgsql
 
 class TestV1AuthLoginPost:
     @staticmethod
-    def generate_user() -> Tuple[str, str, Any]:
+    def generate_user() -> Tuple[str, str, Any, str]:
         generated_login = ""
         for i in range(4):
             generated_login += random.choice(list(ascii_letters))
@@ -70,11 +70,8 @@ class TestV1AuthLoginPost:
                 "password": data[1]
             }
         )
-        print(10*"_" + "\nRESPONSE 404")
-        print(response.status)
         assert response.status == 404
         response = response.json()
-        print(response)
         assert response['message'] == 'User not found'
 
     async def test_v1_auth_login_400(self, service_client):
@@ -86,10 +83,7 @@ class TestV1AuthLoginPost:
                 'login': data[0]
             }
         )
-        print(10*"_" + "\nRESPONSE 400")
-        print(response.status)
         assert response.status == 400
         response = response.json()
-        print(response)
         assert response['message'] == "Wrong request: " \
                                       "request must contain password field"
