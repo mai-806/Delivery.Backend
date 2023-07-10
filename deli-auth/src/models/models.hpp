@@ -13,15 +13,10 @@ namespace deli_auth::models {
     kUserTypeAdmin
   };
 
-  struct UserRegisterRequest{
-    std::string login;
-    std::string password;
-    UserType user_type;
-  };
-
-  struct UserUpdateRequest {
+  struct User {
     int64_t id;
     std::string login;
+    std::string password;
     UserType user_type;
   };
 
@@ -42,7 +37,7 @@ namespace userver::storages::postgres::io {
   };
 
   template<>
-  struct CppToUserPg<deli_auth::models::UserUpdateRequest> {
+  struct CppToUserPg<deli_auth::models::User> {
     static constexpr DBTypeName postgres_name = "deli_auth.v1_user";
   };
 
