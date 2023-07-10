@@ -11,12 +11,6 @@
 
 namespace userver::formats::parse {
 
-    deli_auth::views::v1::user::get::UserGetRequest Parse(const userver::formats::json::Value &elem,
-                                       userver::formats::parse::To<deli_auth::views::v1::user::get::UserGetRequest>);
-
-    deli_auth::views::UserType Parse(
-            const userver::formats::json::Value &elem,
-            userver::formats::parse::To<deli_auth::views::UserType>);
 } // namespace userver::formats::parse
 
 namespace userver::formats::serialize {

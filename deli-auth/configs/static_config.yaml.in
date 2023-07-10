@@ -59,7 +59,7 @@ components_manager:
 
         v1-user-get-handler:
             path: /v1/user
-            method: get
+            method: GET
             task_processor: main-task-processor
 
         postgres-deli-auth:

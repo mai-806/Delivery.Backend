@@ -30,6 +30,8 @@ namespace {
             case FieldType::kObject:
                 return "object";
         }
+
+
     }
 
     FieldType GetFieldType(const userver::formats::json::Value &elem) {
@@ -64,9 +66,8 @@ namespace {
 
     using Types = std::unordered_map<std::string, FieldType>;
     using Keys = std::vector<std::string>;
-    bool one_element_met = true;
 
-    void CheckFields(const Keys &required_keys, const Keys  &one_of_keys, const Keys &optional_keys, const Types &key_types,
+    void CheckFields(const Keys &required_keys, const Keys &optional_keys, const Types &key_types,
                      const userver::formats::json::Value &elem) {
         for (const auto &key: required_keys) {
             if (!elem.HasMember(key)) {
@@ -77,19 +78,6 @@ namespace {
                 throw userver::formats::json::ParseException(
                         fmt::format("Wrong type of key '{}', expected: '{}', got: '{}'",
                                     key, ToString(key_types.at(key)), ToString(GetFieldType(elem[key]))));
-            }
-        }
-        for (const auto &key: one_of_keys) {
-            if (elem.HasMember(key)) {
-                if (!IsEqual(GetFieldType(elem[key]), key_types.at(key))) {
-                    throw userver::formats::json::ParseException(
-                            fmt::format("Wrong type of key '{}', expected: '{}', got: '{}'",
-                                        key, ToString(GetFieldType(elem[key])), ToString(key_types.at(key))));
-                }
-                one_element_met = true;
-            }
-            if(!one_element_met){
-                throw userver::formats::json::ParseException("None of the required keys were found");
             }
         }
         for (const auto &key: optional_keys) {
@@ -122,30 +110,41 @@ namespace {
 }
 
 namespace userver::formats::parse {
-
+/*
     UserGetRequest
     Parse(const userver::formats::json::Value &elem,
-                     userver::formats::parse::To<UserGetRequest>) {
+          userver::formats::parse::To<UserGetRequest>) {
         const Keys required_keys;
-        const Keys  one_of_keys = {"id", "login"};// oneOf
-        const Keys optional_keys;
+        const Keys optional_keys= {"id","login"};;
         const Types key_types = {
                 {"id", FieldType::kInt},
                 {"login", FieldType::kString}
         };
 
-        CheckFields(required_keys, one_of_keys,optional_keys, key_types, elem);
+        std::optional<int64_t> id  = GetOptionalValue<int64_t>(elem,"id");
+        std::optional<std::string> login = GetOptionalValue<std::string>(elem, "longin");
+        CheckFields(required_keys,optional_keys, key_types, elem);
 
-        UserGetRequest user_get_request {
-                .id = GetRequiredValue<int64_t>(elem,"id"),
-                .login = GetRequiredValue<std::string>(elem,"login")
-        };
+        // проверить что либо login либо id exist{
+        if (id.has_value()){
+            LOG_INFO() << "in id";
+           UserGetRequest user_get_request{
+                    .id = id;
+            };
+            return user_get_request;
+        }
+        else if(login.has_value()){
+            UserGetRequest user_get_request{
+                    .login = GetOptionalValue<std::string>(elem,"login")
+            };
+            return user_get_request;
+        }
+        else throw userver::formats::json::ParseException("The necessary parameters are not passed");
+
         // required fields:
         LOG_DEBUG() << "request parsed";
-        return user_get_request;
     }
-
-
+*/
 
 } // namespace userver::formats::parse
 

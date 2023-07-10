@@ -16,9 +16,10 @@ namespace deli_auth::views {
     };
 
     namespace v1::user::get {
-        struct UserGetRequest {
-            int64_t id;
-            std::string login;
+
+        struct  UserGetRequest{
+            std::optional<int64_t> id;
+            std::optional<std::string> login;
         };
 
         struct UserGetResponse {

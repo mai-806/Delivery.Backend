@@ -12,7 +12,7 @@ include_directories(src)
 
 set(SQL_REQUESTS
 		src/models/sql/all.hpp
-		src/models/sql/insert_order.hpp
+		src/models/sql/get_user.hpp
 		)
 
 set(VIEWS
@@ -21,14 +21,15 @@ set(VIEWS
 		src/views/objects/parsers.cpp
 		src/views/objects/parsers.hpp
 
-		src/views/v1/order/post/handler.cpp
-		src/views/v1/order/post/handler.hpp
+		src/views/v1/user/get/handler.cpp
+		src/views/v1/user/get/handler.hpp
 		)
 
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
 
 		src/common/consts.hpp
+		src/common/exeption.hpp
 
 		src/components/requester.cpp
 		src/components/requester.hpp

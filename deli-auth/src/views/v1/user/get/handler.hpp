@@ -14,9 +14,8 @@ namespace deli_auth::views::v1::user::get {
 
     class Handler : public userver::server::handlers::HttpHandlerJsonBase {
     public:
-        static constexpr std::string_view kName = "v1-order-post-handler";
+        static constexpr std::string_view kName = "v1-user-get-handler";
 
-        using Request = UserGetRequest;
         using Response400 = ErrorResponse;
         using Response403 = ErrorResponse;
         using Response404 = ErrorResponse;

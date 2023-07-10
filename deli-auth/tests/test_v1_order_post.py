@@ -3,84 +3,69 @@ import pytest
 from testsuite.databases import pgsql
 
 
+@pytest.mark.pgsql(
+    'db_1',
+    queries=[
+        """INSERT INTO deli_auth.users VALUES (1,'hands10','1231aedq','customer');
+           INSERT INTO deli_auth.users VALUES (2,'ada12love','adaOneLove','courier');
+           INSERT INTO deli_auth.users VALUES (3,'admin','admin123','admin');
+        """,
+    ],
+)
+
 @pytest.mark.parametrize(
-    'request_body, expected_response_body, '
-    'expected_response_code, expected_db_data',
+    'request_query, expected_response_body, '
+    'expected_response_code',
     [
         pytest.param(
             {
                 'id': 1,
-                'start': {
-                    'lon': 22,
-                    'lat': 11,
-                },
-                'finish': {
-                    'lon': 23,
-                    'lat': 12,
-                },
             },
             {
-                'order_id': 1,
+                'login': 'hands10',
+                'user_type': 'customer',
             },
             200,
-            [(1, 1, 'new', '(11,22)', '(12,23)')],
             id='OK',
         ),
         pytest.param(
             {
-                'customerId': 1,
-                'start': {
-                    'lon': 22,
-                    'lat': 11,
-                },
-                'finidsh': {
-                    'lon': 23,
-                    'lat': 12,
-                },
+                'login': 'hands10',
             },
-            {'message': 'Key \'finish\' is missing but required'},
-            400,
-            None,
-            id='error in request',
+            {
+                'login': 'hands10',
+                'user_type': 'customer',
+            },
+            200,
+            id='OK',
         ),
         pytest.param(
             {
-                'customerId': 1,
-                'start': {
-                    'lon': 22,
-                    'lat': 11,
-                },
-                'finish': {
-                    'lon': 23,
-                    'lat': 91,
-                },
+                'id': 13,
             },
-            {'message': 'lat param out of bounds'},
+            {'message': 'User not found!'},
+            404,
+            id='Not found',
+        ),
+        pytest.param(
+            {
+                'id': 1,
+                'login': "hands10",
+            },
+            {'message': 'Wrong request: Invalid parameters were passed, you need to pass id or login'},
             400,
-            None,
-            id='lat param out of bounds',
+            id='Invalid value',
         ),
     ],
 )
 
-async def test_v1_user_get(service_client, request_body,
+async def test_v1_user_get(service_client, request_query,
                              expected_response_body,
                              expected_response_code,
-                             expected_db_data, pgsql, ):
+                            ):
     response = await service_client.get(
         '/v1/user',
-        json=request_body,
+        params=request_query
     )
     assert response.status == expected_response_code
     assert response.json() == expected_response_body
-
-    if expected_response_code == 200:
-        cursor = pgsql['db_1'].cursor()
-        cursor.execute(
-            """
-            select id, customer, status, start_point, end_point
-            from deli_auth.users
-            """,
-        )
-        data = list(cursor)
-        assert data == expected_db_data
