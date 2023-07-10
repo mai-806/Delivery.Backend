@@ -113,20 +113,33 @@ namespace userver::formats::parse {
   Parse(const userver::formats::json::Value &elem,
         userver::formats::parse::To<UserUpdateRequest>) {
     const Keys required_keys = {"id"};
-    const Keys optional_keys = {"login", "userType"};
+    const Keys optional_keys = {"login", "user_type",};
     const Types key_types = {
             {"id", FieldType::kInt},
             {"login", FieldType::kString},
-            {"userType", FieldType::kString}
+            {"user_type", FieldType::kString}
     };
 
     CheckFields(required_keys, optional_keys, key_types, elem);
     LOG_DEBUG() << "fields are checked";
 
+    std::string user_type = GetRequiredValue<std::string>(elem, "user_type");
+    deli_auth::views::UserType enum_user_type;
+    if (user_type == "customer") {
+        enum_user_type = deli_auth::views::UserType::kUserTypeCustomer;
+    } else if (user_type == "courier") {
+        enum_user_type = deli_auth::views::UserType::kUserTypeCourier;
+    } else if (user_type == "admin") {
+        enum_user_type = deli_auth::views::UserType::kUserTypeAdmin;
+    } else {
+        throw userver::formats::json::ParseException(
+                fmt::format("user_type is invalid"));
+    }
+
     UserUpdateRequest user_update_request {
             .id = GetRequiredValue<int64_t>(elem, "id"),
-            .login = GetOptionalValue<std::string>(elem, "login").value_or(""),
-            .userType = GetOptionalValue<std::string>(elem, "userType").value_or("")
+            .login = GetOptionalValue<std::string>(elem, "login"),
+            .user_type = enum_user_type
     };
     LOG_DEBUG() << "request parsed";
     return user_update_request;
@@ -153,7 +166,7 @@ namespace userver::formats::serialize {
 
     builder["id"] = value.id;
     builder["login"] = value.login;
-    builder["userType"] = value.user_type;
+    builder["user_type"] = value.user_type;
 
     return builder.ExtractValue();
   }
