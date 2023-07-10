@@ -231,15 +231,6 @@ namespace userver::formats::parse {
 
 namespace userver::formats::serialize {
 
-    json::Value Serialize(const deli_auth::views::ErrorResponse &value,
-                          serialize::To<json::Value>) {
-        json::ValueBuilder builder;
-
-        builder["message"] = value.message;
-
-        return builder.ExtractValue();
-    }
-
     json::Value Serialize(const RegisterResponse &value,
                           serialize::To<json::Value>) {
         json::ValueBuilder builder;
