@@ -17,6 +17,8 @@ namespace deli_auth::models::requests {
 
   std::vector<models::BearerTokens> SelectBearerTokens(const userver::storages::postgres::ClusterPtr& cluster,
                             const models::BearerTokens &bearer_token);
+  std::vector<models::BearerTokens> SelectBearerTokensByID(const userver::storages::postgres::ClusterPtr& cluster,
+                                                           const models::User &user);
 
   std::string SelectPassword(const userver::storages::postgres::ClusterPtr& cluster,
                             const models::User &user);

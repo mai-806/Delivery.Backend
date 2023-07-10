@@ -41,6 +41,17 @@ namespace deli_auth::models::requests {
     (userver::storages::postgres::kRowTag);
   }
 
+  std::vector<models::BearerTokens> SelectBearerTokensByID(const userver::storages::postgres::ClusterPtr& cluster,
+                                                           const models::User &user) {
+    const auto &result =
+      cluster->Execute(userver::storages::postgres::ClusterHostType::kSlave,
+                       sql::kSelectTokensByID,
+                       user);
+    return result.AsContainer<std::vector<models::BearerTokens>>
+    (userver::storages::postgres::kRowTag);
+  }
+
+
   std::string SelectPassword(const userver::storages::postgres::ClusterPtr& cluster,
                             const models::User &user) {
     const auto &result =
