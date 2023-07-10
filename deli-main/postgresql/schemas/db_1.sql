@@ -10,6 +10,11 @@ CREATE TYPE deli_main.order_status AS ENUM (
     'canceled'
     );
 
+CREATE TYPE deli_main.courier_status AS ENUM (
+    'busy',
+    'free'
+    );
+
 CREATE TYPE deli_main.coordinate_v1 AS
 (
     latitude  FLOAT,
@@ -28,8 +33,17 @@ CREATE TABLE IF NOT EXISTS deli_main.orders
     updated_at  TIMESTAMPTZ
 );
 
+CREATE TABLE IF NOT EXISTS deli_main.couriers
+(
+    id          BIGSERIAL UNIQUE,
+    status      deli_main.courier_status DEFAULT 'free',
+    created_at  TIMESTAMPTZ,
+    updated_at  TIMESTAMPTZ
+);
+
 CREATE INDEX IF NOT EXISTS ix_deli_main_orders_customer ON deli_main.orders (customer);
 CREATE INDEX IF NOT EXISTS ix_deli_main_orders_courier ON deli_main.orders (courier);
+CREATE INDEX IF NOT EXISTS ix_deli_main_couriers_status ON deli_main.couriers (status);
 
 
 CREATE TYPE deli_main.order_v1 AS
@@ -41,3 +55,10 @@ CREATE TYPE deli_main.order_v1 AS
     customer    BIGINT,
     courier     BIGINT
 );
+
+CREATE TYPE deli_main.courier_v1 AS
+(
+    id          BIGINT,
+    status      deli_main.courier_status
+);
+

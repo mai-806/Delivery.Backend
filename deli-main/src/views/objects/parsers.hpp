@@ -30,4 +30,7 @@ namespace userver::formats::serialize {
   json::Value Serialize(const deli_main::views::v1::orders::get::GetOrdersResponse &value,
                         serialize::To<json::Value>);
 
+  json::Value Serialize(const deli_main::views::v1::couriers::available::get::GetAvailableCouriersResponse &value,
+                        serialize::To<json::Value>);
+
 } // namespace userver::formats::serialize

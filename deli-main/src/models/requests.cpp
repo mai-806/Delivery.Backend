@@ -21,4 +21,13 @@ namespace deli_main::models::requests {
                        limit, offset);
     return result.AsContainer<std::vector<models::Order>>(userver::storages::postgres::kRowTag);
   }
+
+  std::vector<int64_t> GetFreeCourierIds(const userver::storages::postgres::ClusterPtr& cluster,
+                                         int64_t limit, int64_t offset) {
+    const auto &result =
+        cluster->Execute(userver::storages::postgres::ClusterHostType::kSlave,
+                         sql::kGetFreeCourierIds,
+                         limit, offset);
+    return result.AsContainer<std::vector<int64_t>>();
+  }
 } // namespace deli_main::models::requests

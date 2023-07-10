@@ -14,6 +14,7 @@ set(SQL_REQUESTS
         src/models/sql/all.hpp
         src/models/sql/insert_order.hpp
         src/models/sql/get_orders.hpp
+        src/models/sql/get_free_courier_ids.hpp
 )
 
 set(CLIENTS
@@ -35,6 +36,9 @@ set(VIEWS
 
         src/views/testing/clients/deli-auth-v1-user-get/post/handler.cpp
         src/views/testing/clients/deli-auth-v1-user-get/post/handler.hpp
+
+        src/views/v1/couriers/available/get/handler.cpp
+        src/views/v1/couriers/available/get/handler.hpp
 )
 
 # Common sources
