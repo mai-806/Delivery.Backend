@@ -31,12 +31,13 @@ class TestV1AuthLoginPost:
     def insert_user(user_data: Tuple, pgsql) -> int:
 
         cursor = pgsql['db_1'].cursor()
-        user_id = cursor.execute("INSERT INTO deli_auth.users "
-                       "(login, password, user_type) VALUES "
-                       "(%s, %s, %s)"
-                       "RETURNING id",
-                       user_data
-                       )
+        user_id = cursor.execute(
+            "INSERT INTO deli_auth.users "
+            "(login, password, user_type) VALUES "
+            "(%s, %s, %s)"
+            "RETURNING id",
+            user_data
+        )
         return user_id
     #
     # @staticmethod
