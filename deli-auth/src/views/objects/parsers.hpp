@@ -58,6 +58,13 @@ namespace userver::formats::serialize {
   json::Value Serialize(const deli_auth::views::v1::auth::logout::post::LogoutResponse200 &value,
                         serialize::To<json::Value>);
   
-    json::Value Serialize(const deli_auth::views::v1::auth::user::post::RegisterResponse &value,
+  json::Value Serialize(const deli_auth::views::v1::auth::user::post::RegisterResponse &value,
                         serialize::To<json::Value>);
+
+  json::Value Serialize(const deli_auth::views::ErrorResponse &value,
+                        serialize::To<json::Value>);
+
+json::Value Serialize(const deli_auth::views::v1::user::get::UserGetResponse &value,
+                      serialize::To<json::Value>);
+
 } // namespace userver::formats::serialize

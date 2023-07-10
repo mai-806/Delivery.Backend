@@ -35,5 +35,10 @@ namespace deli_auth::models::requests {
   int64_t InsertUser(const userver::storages::postgres::ClusterPtr& cluster,
                       const models::UserRegisterRequest &user);
 
+  User GetUserById(const userver::storages::postgres::ClusterPtr& cluster,
+                   const int64_t& id);
+
+  User GetUserByLogin(const userver::storages::postgres::ClusterPtr& cluster,
+                      const std::string& login);
 
 } // namespace deli_auth::models::requests

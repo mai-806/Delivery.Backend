@@ -332,4 +332,24 @@ namespace userver::formats::serialize {
     return builder.ExtractValue();
   }
 
+
+    json::Value Serialize(const UserGetResponse &value,
+                          serialize::To<json::Value>) {
+        json::ValueBuilder builder;
+
+        builder["login"] = value.login;
+        switch (value.user_type) {
+            case UserType::kCustomer:
+                builder["user_type"] = "customer";
+                break;
+            case UserType::kCourier:
+                builder["user_type"] = "courier";
+                break;
+            case UserType::kAdmin:
+                builder["user_type"] = "admin";
+                break;
+        }
+        return builder.ExtractValue();
+    }
+
 } // namespace userver::formats::serialize

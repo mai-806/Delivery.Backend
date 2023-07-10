@@ -17,22 +17,30 @@ set(SQL_REQUESTS
 		src/models/sql/select_user_id.hpp
 		src/models/sql/update_user_password.hpp
 		src/models/sql/select_user_id_by_token.hpp
-    src/models/sql/insert_user.hpp
+    	src/models/sql/insert_user.hpp
+		src/models/sql/get_user.hpp
 		)
 
 set(VIEWS
 		src/views/objects/objects.hpp
 		src/views/objects/parsers.cpp
+
 		src/views/objects/parsers.hpp
 
 		src/views/v1/auth/login/post/handler.cpp
-		src/views/v1/auth/login/post/handler.hpp  
+		src/views/v1/auth/login/post/handler.hpp
+
 		src/views/v1/auth/logout/post/handler.cpp
 		src/views/v1/auth/logout/post/handler.hpp
-    src/views/v1/auth/user/reset/post/handler.cpp
-    src/views/v1/auth/user/reset/post/handler.hpp
-    src/views/v1/auth/user/post/handler.cpp
-    src/views/v1/auth/user/post/handler.hpp
+
+		src/views/v1/auth/user/reset/post/handler.cpp
+		src/views/v1/auth/user/reset/post/handler.hpp
+
+		src/views/v1/auth/user/post/handler.cpp
+		src/views/v1/auth/user/post/handler.hpp
+
+		src/views/v1/user/get/handler.cpp
+		src/views/v1/user/get/handler.hpp
 )
 
 # Common sources
