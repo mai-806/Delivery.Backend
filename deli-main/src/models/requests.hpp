@@ -13,5 +13,6 @@ namespace deli_main::models::requests {
   std::vector<models::Order> GetOrders(const userver::storages::postgres::ClusterPtr& cluster,
                       int64_t limit, int64_t offset);
 
-
+  std::vector<int64_t> GetFreeCourierIds(const userver::storages::postgres::ClusterPtr& cluster,
+                                         int64_t limit, int64_t offset);
 } // namespace deli_main::models::requests
