@@ -5,6 +5,12 @@
 
 namespace deli_auth::views {
 
+  enum class UserType {
+    kUserTypeCustomer,
+    kUserTypeCourier,
+    kUserTypeAdmin
+  };
+
   struct ErrorResponse {
     std::string message;
   };
@@ -12,8 +18,8 @@ namespace deli_auth::views {
   namespace v1::user::patch {
     struct UserUpdateRequest {
       int64_t id;
-      std::variant<std::monostate, std::string> login;
-      std::variant<std::monostate, std::string> userType;
+      std::optional<std::string> login;
+      std::optional<UserType> user_type;
     };
 
     struct UserUpdateResponse200 {
