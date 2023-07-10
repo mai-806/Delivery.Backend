@@ -23,5 +23,4 @@ namespace deli_auth::components {
         userver::storages::postgres::ClusterPtr cluster_;
     };
 
-
 } // deli_auth::components
