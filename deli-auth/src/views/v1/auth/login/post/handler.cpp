@@ -58,14 +58,15 @@ namespace deli_auth::views::v1::auth::login::post {
       throw ParseArgException("Wrong request: request must contain password field");
     }
 
-    const auto& password_header = request.GetHeader("password");
+    const auto header = request.GetHeader("password");
+    const auto hash_password = std::move(userver::crypto::hash::Sha256(header.data()));
 
     // Todo: понять, что возвращает DoDBQuery, если введенного логина не существует
     // возможно userver::storages::postgres::NonSingleRowResultSet
 
     try {
       const auto password_bd = requester_.DoDBQuery(models::requests::SelectPassword, user);
-      if (password_header != password_bd){
+      if (hash_password != password_bd){
         throw ParseArgException("Password is wrong");
       }
     } catch (...) {
