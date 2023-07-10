@@ -6,9 +6,12 @@ from testsuite.databases import pgsql
 @pytest.mark.pgsql(
     'db_1',
     queries=[
-        """INSERT INTO deli_auth.users VALUES (1,'hands10','1231aedq','customer');
-           INSERT INTO deli_auth.users VALUES (2,'ada12love','adaOneLove','courier');
-           INSERT INTO deli_auth.users VALUES (3,'admin','admin123','admin');
+        """
+        INSERT INTO deli_auth.users 
+        VALUES (1,'hands10','1231aedq','customer');
+        INSERT INTO deli_auth.users 
+        VALUES (2,'ada12love','adaOneLove','courier');
+        INSERT INTO deli_auth.users VALUES (3,'admin','admin123','admin');
         """,
     ],
 )
@@ -51,7 +54,8 @@ from testsuite.databases import pgsql
                 'id': 1,
                 'login': "hands10",
             },
-            {'message': 'Wrong request: Invalid parameters were passed, you need to pass id or login'},
+            {'message': 'Wrong request: Invalid parameters were passed,'
+                        ' you need to pass id or login'},
             400,
             id='Invalid value',
         ),
