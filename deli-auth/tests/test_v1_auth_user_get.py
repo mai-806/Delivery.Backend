@@ -7,9 +7,9 @@ from testsuite.databases import pgsql
     'db_1',
     queries=[
         """
-        INSERT INTO deli_auth.users 
+        INSERT INTO deli_auth.users
         VALUES (1,'hands10','1231aedq','customer');
-        INSERT INTO deli_auth.users 
+        INSERT INTO deli_auth.users
         VALUES (2,'ada12love','adaOneLove','courier');
         INSERT INTO deli_auth.users VALUES (3,'admin','admin123','admin');
         """,
