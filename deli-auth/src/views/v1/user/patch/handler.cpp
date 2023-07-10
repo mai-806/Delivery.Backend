@@ -5,30 +5,32 @@
 
 namespace {
 
-std::string UserTypeToString(deli_auth::models::UserType user_type) {
-    switch (user_type) {
-        case deli_auth::models::UserType::kUserTypeCustomer:
-            return "customer";
-        case deli_auth::models::UserType::kUserTypeCourier:
-            return "courier";
-        case deli_auth::models::UserType::kUserTypeAdmin:
-            return "admin";
-        default:
-            throw std::invalid_argument("Invalid user type");
-    }
-}
+    using UserTypeModels = deli_auth::models::UserType;
+    using UserTypeViews = deli_auth::views::UserType;
 
-deli_auth::models::UserType StringToUserType(const std::string& str) {
-    if (str == "customer") {
-        return deli_auth::models::UserType::kUserTypeCustomer;
-    } else if (str == "courier") {
-        return deli_auth::models::UserType::kUserTypeCourier;
-    } else if (str == "admin") {
-        return deli_auth::models::UserType::kUserTypeAdmin;
-    } else {
-        throw std::invalid_argument("Invalid user type string");
+    std::string UserTypeToString(UserTypeModels user_type) {
+        switch (user_type) {
+            case UserTypeModels::kUserTypeCustomer:
+                return "customer";
+            case UserTypeModels::kUserTypeCourier:
+                return "courier";
+            case UserTypeModels::kUserTypeAdmin:
+                return "admin";
+            default:
+                throw std::invalid_argument("Invalid user_type");
+        }
     }
-}
+
+    UserTypeModels Parser(UserTypeViews user_type) {
+        switch (user_type) {
+            case UserTypeViews::kUserTypeCustomer:
+                return UserTypeModels::kUserTypeCustomer;
+            case UserTypeViews::kUserTypeCourier:
+                return UserTypeModels::kUserTypeCourier;
+            case UserTypeViews::kUserTypeAdmin:
+                return UserTypeModels::kUserTypeAdmin;
+        }
+    }
 
 } // namespace
 
@@ -54,19 +56,32 @@ namespace deli_auth::views::v1::user::patch {
         // User not found
         request.SetResponseStatus(userver::server::http::HttpStatus::kNotFound);
         return Serialize(
-                Response404{},
+                Response404{
+                    .message = "user not found"
+                },
                 userver::formats::serialize::To<userver::formats::json::Value>());
     }
 
-    if (std::holds_alternative<std::string>(request_data.login)) {
+    bool login_exist = request_data.login.has_value();
+    bool user_type_exist = request_data.user_type.has_value();
+
+    if (!login_exist && !user_type_exist) {
+
+        throw userver::formats::json::ParseException("login and user_type are missing, but they are required");
+
+    }
+
+    if (login_exist) {
 
         // Update user login
-        requester_.DoDBQuery(models::requests::UpdateUserLogin, request_data.id, std::get<std::string>(request_data.login));
+        requester_.DoDBQuery(models::requests::UpdateUserLogin, request_data.id, request_data.login.value());
 
-    } else if (std::holds_alternative<std::string>(request_data.userType)) {
+    }
+    
+    if (user_type_exist) {
 
         // Update user type
-        requester_.DoDBQuery(models::requests::UpdateUserType, request_data.id, StringToUserType(std::get<std::string>(request_data.userType)));
+        requester_.DoDBQuery(models::requests::UpdateUserType, request_data.id, Parser(request_data.user_type.value()));
 
     }
 
@@ -76,7 +91,7 @@ namespace deli_auth::views::v1::user::patch {
     Response200 response200 {
             .id = user.id,
             .login = user.login,
-            .user_type = UserTypeToString(user.user_type)
+            .user_type = std::move(UserTypeToString(user.user_type))
     };
 
     request.SetResponseStatus(userver::server::http::HttpStatus::kOk);
