@@ -27,13 +27,13 @@ namespace deli_auth::models::requests {
                      user_id, user_type);
   }
 
-  models::UserUpdateRequest GetUserById(const userver::storages::postgres::ClusterPtr& cluster,
+  models::User GetUserById(const userver::storages::postgres::ClusterPtr& cluster,
                              int64_t user_id) {
     const auto &result =
             cluster->Execute(userver::storages::postgres::ClusterHostType::kSlave,
                              sql::kGetUserById,
                              user_id);
-    return result.AsSingleRow<models::UserUpdateRequest>();
+    return result.AsSingleRow<models::User>(userver::storages::postgres::kRowTag);
   }
 
 } // namespace deli_auth::models::requests

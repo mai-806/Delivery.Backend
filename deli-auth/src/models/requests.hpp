@@ -15,8 +15,8 @@ namespace deli_auth::models::requests {
   void UpdateUserType(const userver::storages::postgres::ClusterPtr& cluster,
                       int64_t user_id, models::UserType user_type);
 
-  models::UserUpdateRequest GetUserById(const userver::storages::postgres::ClusterPtr& cluster,
-                             int64_t user_id);
+  models::User GetUserById(const userver::storages::postgres::ClusterPtr& cluster,
+                                        int64_t user_id);
 
 
 } // namespace deli_auth::models::requests
