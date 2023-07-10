@@ -18,6 +18,9 @@ namespace deli_auth::models::requests {
     const auto &result =
         cluster->Execute(userver::storages::postgres::ClusterHostType::kSlave,
                          sql::kSelectLogin,
+                         user);
+    return result.AsSingleRow<std::string>();
+  }
 
   int64_t SelectUserID(const userver::storages::postgres::ClusterPtr& cluster,
                      const models::User &user) {
