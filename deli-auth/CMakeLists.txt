@@ -11,16 +11,20 @@ add_subdirectory(third_party/userver)
 include_directories(src)
 
 set(SQL_REQUESTS
-        src/models/sql/all.hpp
-        src/models/sql/insert_user.hpp
-)
+		src/models/sql/all.hpp
+		src/models/sql/update_user_password.hpp
+		src/models/sql/select_user_id_by_token.hpp
+    src/models/sql/insert_user.hpp
+		)
 
 set(VIEWS
 
         src/views/objects/objects.hpp
         src/views/objects/parsers.cpp
         src/views/objects/parsers.hpp
-
+        
+        src/views/v1/auth/user/reset/post/handler.cpp
+		    src/views/v1/auth/user/reset/post/handler.hpp
         src/views/v1/auth/user/post/handler.cpp
         src/views/v1/auth/user/post/handler.hpp
 )

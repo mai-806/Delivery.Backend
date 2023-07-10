@@ -4,17 +4,23 @@
 #include <string>
 
 namespace deli_auth::views {
-
+    
   enum class UserType {
     kUserTypeCustomer,
     kUserTypeCourier,
     kUserTypeAdmin
   };
-
+    
   struct ErrorResponse {
     std::string message;
   };
 
+  namespace v1::auth::user::reset::post {
+    struct UserResetRequest {
+      int64_t id;
+    };
+  }
+  
   namespace v1::auth::user::post {
     struct RegisterRequest {
       std::string login;
@@ -27,3 +33,4 @@ namespace deli_auth::views {
   } // namespace v1::auth::user::post
 
 } // namespace deli_auth::views
+

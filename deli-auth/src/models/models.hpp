@@ -7,7 +7,7 @@
 
 namespace deli_auth::models {
 
-  enum class UserType {
+    enum class UserType {
     kUserTypeCustomer,
     kUserTypeCourier,
     kUserTypeAdmin
@@ -33,7 +33,6 @@ namespace deli_auth::models {
     std::string refresh_token;
     int64_t expires_in;
   };
-
 } // namespace deli_auth::models
 
 
