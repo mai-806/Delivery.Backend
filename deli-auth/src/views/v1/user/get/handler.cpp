@@ -2,7 +2,7 @@
 
 #include <models/models.hpp>
 #include <models/requests.hpp>
-#include <common/exeption.hpp>
+#include <common/exceptions.hpp>
 
 namespace {
     using ParseArgException = deli_auth::common::exceptions::ParseArgException;
@@ -11,12 +11,12 @@ namespace {
 
     UserTypeViews ParseUserType (const UserTypeModels type){
         switch(type){
-            case UserTypeModels::kCustomer:
-                return UserTypeViews::kCustomer;
-            case UserTypeModels::kCourier:
-                return UserTypeViews::kCourier;
-            case UserTypeModels::kAdmin:
-                return UserTypeViews::kAdmin;
+            case UserTypeModels::kUserTypeCustomer:
+                return UserTypeViews::kUserTypeCustomer;
+            case UserTypeModels::kUserTypeCourier:
+                return UserTypeViews::kUserTypeCourier;
+            case UserTypeModels::kUserTypeAdmin:
+                return UserTypeViews::kUserTypeAdmin;
         }
     }
 
@@ -89,7 +89,7 @@ namespace deli_auth::views::v1::user::get {
         }
         Response200 response200{
                 .login = user_response.login,
-                .user_type = ParseUserType(user_response.type),
+                .user_type = ParseUserType(user_response.user_type),
         };
         LOG_DEBUG() << "RESPONSE DONE";
         request.SetResponseStatus(userver::server::http::HttpStatus::kOk);

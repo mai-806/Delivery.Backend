@@ -1,6 +1,7 @@
 #include "requests.hpp"
 
 #include <models/sql/all.hpp>
+#include <common/exceptions.hpp>
 
 namespace deli_auth::models::requests {
 

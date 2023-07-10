@@ -12,7 +12,7 @@
 #include <views/v1/auth/user/post/handler.hpp>
 #include <views/v1/auth/login/post/handler.hpp>
 #include <views/v1/auth/logout/post/handler.hpp>
-#include <view/v1/auth/user/get/handler.hpp>
+#include <views/v1/user/get/handler.hpp>
 
 
 int main(int argc, char *argv[]) {
@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
             .Append<deli_auth::views::v1::auth::user::post::Handler>()
             .Append<deli_auth::views::v1::auth::login::post::Handler>()
             .Append<deli_auth::views::v1::auth::logout::post::Handler>()
-            .Append<deli_auth::views::v1::auth::user::get::Handler>()
+            .Append<deli_auth::views::v1::user::get::Handler>()
             .Append<userver::clients::dns::Component>()
             .Append<userver::components::Postgres>(deli_auth::common::consts::kPgClusterName);
 

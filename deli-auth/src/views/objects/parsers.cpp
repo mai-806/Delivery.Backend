@@ -111,6 +111,8 @@ namespace {
   using LogoutResponse200 = deli_auth::views::v1::auth::logout::post::LogoutResponse200;
   using UserType = deli_auth::views::UserType;
   using UserResetRequest = deli_auth::views::v1::auth::user::reset::post::UserResetRequest;
+  using UserGetResponse = deli_auth::views::v1::user::get::UserGetResponse;
+
 }
 
 namespace userver::formats::parse {
@@ -339,13 +341,13 @@ namespace userver::formats::serialize {
 
         builder["login"] = value.login;
         switch (value.user_type) {
-            case UserType::kCustomer:
+            case UserType::kUserTypeCustomer:
                 builder["user_type"] = "customer";
                 break;
-            case UserType::kCourier:
+            case UserType::kUserTypeCourier:
                 builder["user_type"] = "courier";
                 break;
-            case UserType::kAdmin:
+            case UserType::kUserTypeAdmin:
                 builder["user_type"] = "admin";
                 break;
         }
