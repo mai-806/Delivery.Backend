@@ -19,7 +19,9 @@ class TestV1AuthLoginPost:
         for i in range(8):
             generated_password += random.choice(list(ascii_letters))
 
-        hash_generated_password = hashlib.sha256(bytes(generated_password, 'utf-8')).hexdigest()
+        hash_generated_password = hashlib.sha256(
+            bytes(generated_password, 'utf-8')
+        ).hexdigest()
 
         data_sql = (
             generated_login,
