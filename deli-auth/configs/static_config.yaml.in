@@ -58,11 +58,11 @@ components_manager:
             url_trailing_slash: strict-match
 
         v1-user-patch-handler:
-            path:/v1/user
+            path: /v1/user
             method: PATCH
             task_processor: main-task-processor
 
-        postgres-db-1:
+        postgres-deli-auth:
             dbconnection: $dbconnection
             blocking_task_processor: fs-task-processor
             dns_resolver: async
@@ -70,3 +70,6 @@ components_manager:
 
         dns-client:
             fs-task-processor: fs-task-processor
+
+        requester:
+            
