@@ -2,6 +2,7 @@ import pytest
 
 from testsuite.databases import pgsql
 
+
 @pytest.mark.pgsql(
     'db_1',
     queries=[
@@ -11,7 +12,6 @@ from testsuite.databases import pgsql
         """,
     ],
 )
-
 @pytest.mark.parametrize(
     'request_query, expected_response_body, '
     'expected_response_code',
@@ -57,7 +57,6 @@ from testsuite.databases import pgsql
         ),
     ],
 )
-
 async def test_v1_user_get(service_client, request_query,
                            expected_response_body,
                            expected_response_code,
