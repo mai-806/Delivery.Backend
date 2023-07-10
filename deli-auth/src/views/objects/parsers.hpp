@@ -23,6 +23,14 @@ namespace userver::formats::parse {
   Parse(const userver::formats::json::Value &elem,
         userver::formats::parse::To<deli_auth::views::v1::auth::login::post::AuthResponse200>);
 
+    deli_auth::views::v1::auth::user::reset::post::UserResetRequest Parse(
+            const userver::formats::json::Value &elem,
+            userver::formats::parse::To<deli_auth::views::v1::auth::user::reset::post::UserResetRequest>);
+  
+    deli_auth::views::v1::auth::user::post::RegisterRequest Parse(
+            const userver::formats::json::Value &elem,
+            userver::formats::parse::To<deli_auth::views::v1::auth::user::post::RegisterRequest>);
+
 } // namespace userver::formats::parse
 
 namespace userver::formats::serialize {
@@ -36,4 +44,9 @@ namespace userver::formats::serialize {
   json::Value Serialize(const deli_auth::views::v1::auth::login::post::AuthResponse200 &value,
                         serialize::To<json::Value>);
 
+    json::Value Serialize(const deli_auth::views::ErrorResponse &value,
+                          serialize::To<json::Value>);
+  
+    json::Value Serialize(const deli_auth::views::v1::auth::user::post::RegisterResponse &value,
+                        serialize::To<json::Value>);
 } // namespace userver::formats::serialize

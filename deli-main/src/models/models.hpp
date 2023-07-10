@@ -20,6 +20,11 @@ namespace deli_main::models {
     kOrderStatusCanceled
   };
 
+  enum class CourierStatus {
+    kCourierStatusFree,
+    kCourierStatusBusy
+  };
+
   struct Order {
     int64_t id;
     Coordinate start_point;
@@ -29,6 +34,10 @@ namespace deli_main::models {
     std::optional<int64_t> courier;
   };
 
+  struct Courier {
+    int64_t id;
+    CourierStatus status;
+  };
 
 } // namespace deli_main::models
 
@@ -47,6 +56,11 @@ namespace userver::storages::postgres::io {
   };
 
   template<>
+  struct CppToUserPg<deli_main::models::Courier> {
+    static constexpr DBTypeName postgres_name = "deli_main.courier_v1";
+  };
+
+  template<>
   struct CppToUserPg<deli_main::models::OrderStatus>
           : EnumMappingBase<deli_main::models::OrderStatus> {
     static constexpr DBTypeName postgres_name = "deli_main.order_status";
@@ -56,6 +70,15 @@ namespace userver::storages::postgres::io {
             {EnumType::kOrderStatusInProgress, "in_progress"},
             {EnumType::kOrderStatusDelivered,  "delivered"},
             {EnumType::kOrderStatusCanceled,   "canceled"}};
+  };
+
+  template<>
+  struct CppToUserPg<deli_main::models::CourierStatus>
+      : EnumMappingBase<deli_main::models::CourierStatus> {
+    static constexpr DBTypeName postgres_name = "deli_main.courier_status";
+    static constexpr EnumeratorList enumerators{
+        {EnumType::kCourierStatusFree,    "free"},
+        {EnumType::kCourierStatusBusy,    "busy"}};
   };
 
 } // namespace userver::storages::postgres::io
