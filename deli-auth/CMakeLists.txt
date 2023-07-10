@@ -27,6 +27,8 @@ set(VIEWS
 
 		src/views/v1/auth/login/post/handler.cpp
 		src/views/v1/auth/login/post/handler.hpp  
+		src/views/v1/auth/logout/post/handler.cpp
+		src/views/v1/auth/logout/post/handler.hpp
     src/views/v1/auth/user/reset/post/handler.cpp
     src/views/v1/auth/user/reset/post/handler.hpp
     src/views/v1/auth/user/post/handler.cpp
@@ -35,7 +37,6 @@ set(VIEWS
 
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
-
 
 		src/common/consts.hpp
 		src/common/exceptions.hpp
@@ -64,7 +65,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
 add_executable(${PROJECT_NAME}_unittest
 
 )
-
 
 
 target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver-utest)

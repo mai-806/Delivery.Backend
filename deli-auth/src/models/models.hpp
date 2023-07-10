@@ -33,7 +33,7 @@ namespace deli_auth::models {
     std::string refresh_token;
     int64_t expires_in;
   };
-  
+
 } // namespace deli_auth::models
 
 

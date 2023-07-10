@@ -4,6 +4,7 @@
 #include <string>
 
 namespace deli_auth::views {
+
   enum class UserType {
     kUserTypeCustomer,
     kUserTypeCourier,
@@ -13,15 +14,15 @@ namespace deli_auth::views {
   struct ErrorResponse {
     std::string message;
   };
-
-  namespace v1::auth::login::post {
-    struct TokenDto {
+  
+  struct TokenDto {
       std::string access_token;
       std::string refresh_token;
       int64_t expires_in;
       std::string token_type = "bearer";
-    };
-
+  };
+    
+  namespace v1::auth::login::post {
     struct AuthRequest{
       std::string login;
     };
@@ -29,6 +30,18 @@ namespace deli_auth::views {
     struct AuthResponse200{
       bool is_auth;
       std::string access_token;
+    };
+  }
+
+  namespace v1::auth::logout::post {
+    struct LogoutRequest{
+      int64_t id;
+    };
+
+    struct LogoutResponse200{
+      int64_t id;
+      std::string login;
+      bool is_auth;
     };
   }
 

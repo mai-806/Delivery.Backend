@@ -22,6 +22,14 @@ namespace userver::formats::parse {
   deli_auth::views::v1::auth::login::post::AuthResponse200
   Parse(const userver::formats::json::Value &elem,
         userver::formats::parse::To<deli_auth::views::v1::auth::login::post::AuthResponse200>);
+  
+  deli_auth::views::v1::auth::logout::post::LogoutRequest
+  Parse(const userver::formats::json::Value &elem,
+                      userver::formats::parse::To<deli_auth::views::v1::auth::logout::post::LogoutRequest>);
+
+  deli_auth::views::v1::auth::logout::post::LogoutResponse200
+  Parse(const userver::formats::json::Value &elem,
+                          userver::formats::parse::To<deli_auth::views::v1::auth::logout::post::LogoutResponse200>);
 
     deli_auth::views::v1::auth::user::reset::post::UserResetRequest Parse(
             const userver::formats::json::Value &elem,
@@ -44,8 +52,11 @@ namespace userver::formats::serialize {
   json::Value Serialize(const deli_auth::views::v1::auth::login::post::AuthResponse200 &value,
                         serialize::To<json::Value>);
 
-    json::Value Serialize(const deli_auth::views::ErrorResponse &value,
-                          serialize::To<json::Value>);
+  json::Value Serialize(const deli_auth::views::v1::auth::logout::post::LogoutRequest &value,
+                        serialize::To<json::Value>);
+
+  json::Value Serialize(const deli_auth::views::v1::auth::logout::post::LogoutResponse200 &value,
+                        serialize::To<json::Value>);
   
     json::Value Serialize(const deli_auth::views::v1::auth::user::post::RegisterResponse &value,
                         serialize::To<json::Value>);

@@ -4,7 +4,6 @@
 #include <userver/logging/log.hpp>
 #include <vector>
 
-
 namespace {
   enum class FieldType {
     kInt,
@@ -108,6 +107,8 @@ namespace {
   using AuthResponse200 = deli_auth::views::v1::auth::login::post::AuthResponse200;
   using RegisterRequest = deli_auth::views::v1::auth::user::post::RegisterRequest;
   using RegisterResponse = deli_auth::views::v1::auth::user::post::RegisterResponse;
+  using LogoutRequest = deli_auth::views::v1::auth::logout::post::LogoutRequest;
+  using LogoutResponse200 = deli_auth::views::v1::auth::logout::post::LogoutResponse200;
   using UserType = deli_auth::views::UserType;
   using UserResetRequest = deli_auth::views::v1::auth::user::reset::post::UserResetRequest;
 }
@@ -142,7 +143,7 @@ namespace userver::formats::parse {
 
     CheckFields(required_keys, optional_keys, key_types, elem);
     LOG_DEBUG() << "fields are checked";
-
+  
     AuthRequest auth_request{
       .login = GetRequiredValue<std::string>(elem, "login")
     };
@@ -174,6 +175,49 @@ namespace userver::formats::parse {
     }
     LOG_DEBUG() << "request parsed";
     return auth_response_200;
+  }
+  LogoutRequest Parse(const userver::formats::json::Value &elem,
+                    userver::formats::parse::To<LogoutRequest>) {
+    const Keys required_keys = {"id"};
+    const Keys optional_keys;
+    const Types key_types = {
+        {"id", FieldType::kInt}
+    };
+
+    CheckFields(required_keys, optional_keys, key_types, elem);
+    LOG_DEBUG() << "fields are checked";
+    
+    LogoutRequest logout_request{
+        .id = GetRequiredValue<int64_t>(elem, "id")
+    };
+
+    LOG_DEBUG() << "request parsed";
+    return logout_request;
+  }
+
+  LogoutResponse200 Parse(const userver::formats::json::Value &elem,
+                        userver::formats::parse::To<LogoutResponse200>) {
+    const Keys required_keys = {"id", "login", "is_auth"};
+    const Keys optional_keys;
+    const Types key_types = {
+        {"id", FieldType:: kInt},
+        {"login", FieldType:: kString},
+        {"is_auth", FieldType:: kBool}
+    };
+
+    CheckFields(required_keys, optional_keys, key_types, elem);
+    LOG_DEBUG() << "fields are checked";
+    
+    LogoutResponse200 logout_response_200{
+        .id = GetRequiredValue<int64_t>(elem, "id"),
+        .login = GetRequiredValue<std::string>(elem, "login"),
+        .is_auth = GetRequiredValue<bool>(elem, "is_auth")
+    };
+    if (logout_response_200.is_auth){
+      throw userver::formats::json::ParseException("is_auth must be false");
+    }
+    LOG_DEBUG() << "request parsed";
+    return logout_response_200;
   }
 
     RegisterRequest Parse(const userver::formats::json::Value &elem,
@@ -240,7 +284,6 @@ namespace userver::formats::serialize {
         return builder.ExtractValue();
     }
   
-  
   json::Value Serialize(const ErrorResponse &value,
                         serialize::To<json::Value>) {
     json::ValueBuilder builder;
@@ -258,6 +301,15 @@ namespace userver::formats::serialize {
 
     return builder.ExtractValue();
   }
+  
+  json::Value Serialize(const LogoutRequest &value,
+                        serialize::To<json::Value>) {
+    json::ValueBuilder builder;
+
+    builder["id"] = value.id;
+      
+    return builder.ExtractValue();
+  }
 
   json::Value Serialize(const AuthResponse200 &value,
                         serialize::To<json::Value>) {
@@ -268,4 +320,16 @@ namespace userver::formats::serialize {
 
     return builder.ExtractValue();
   }
+  
+  json::Value Serialize(const LogoutResponse200 &value,
+                        serialize::To<json::Value>) {
+    json::ValueBuilder builder;
+
+    builder["id"] = value.id;
+    builder["login"] = value.login;
+    builder["is_auth"] = value.is_auth;
+
+    return builder.ExtractValue();
+  }
+
 } // namespace userver::formats::serialize

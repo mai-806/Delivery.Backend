@@ -6,11 +6,19 @@
 
 namespace deli_auth::models::requests {
 
+  std::string DeleteAccessTokenWhereUserID(const userver::storages::postgres::ClusterPtr& cluster,
+                                           const models::User &user);
+
+  std::string SelectLogin(const userver::storages::postgres::ClusterPtr& cluster,
+                          const models::User &user);
+
   int64_t SelectUserID(const userver::storages::postgres::ClusterPtr& cluster,
                        const models::User &user);
 
   std::vector<models::BearerTokens> SelectBearerTokens(const userver::storages::postgres::ClusterPtr& cluster,
                             const models::BearerTokens &bearer_token);
+  std::vector<models::BearerTokens> SelectBearerTokensByID(const userver::storages::postgres::ClusterPtr& cluster,
+                                                           const models::User &user);
 
   std::string SelectPassword(const userver::storages::postgres::ClusterPtr& cluster,
                             const models::User &user);
