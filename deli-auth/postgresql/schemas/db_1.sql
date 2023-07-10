@@ -6,7 +6,7 @@ CREATE TYPE deli_auth.user_type AS ENUM (
     'customer',
     'courier',
     'admin'
-    );
+);
 
 CREATE TABLE IF NOT EXISTS deli_auth.users
 (
@@ -27,6 +27,13 @@ CREATE TABLE IF NOT EXISTS deli_auth.bearer_tokens
     expires_in    BIGINT NOT NULL,
     updated       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     FOREIGN KEY (user_id) REFERENCES deli_auth.users (id) ON DELETE CASCADE
+);
+
+
+CREATE TYPE deli_auth.user_register_request AS (
+    login      TEXT,
+    password   TEXT,
+    user_type  deli_auth.user_type
 );
 
 CREATE INDEX IF NOT EXISTS ix_deli_auth_bearer_tokens_user_id ON deli_auth.bearer_tokens (user_id);

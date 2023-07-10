@@ -7,10 +7,16 @@
 
 namespace deli_auth::models {
 
-  enum class UserType {
-    kCustomer,
-    kCourier,
-    kAdmin
+    enum class UserType {
+    kUserTypeCustomer,
+    kUserTypeCourier,
+    kUserTypeAdmin
+  };
+
+  struct UserRegisterRequest{
+    std::string login;
+    std::string password;
+    UserType user_type;
   };
 
   struct User {
@@ -28,7 +34,6 @@ namespace deli_auth::models {
     int64_t expires_in;
   };
 
-
 } // namespace deli_auth::models
 
 
@@ -36,12 +41,13 @@ namespace deli_auth::models {
 namespace userver::storages::postgres::io {
 
   template<>
-  struct CppToUserPg<deli_auth::models::UserType> : EnumMappingBase<deli_auth::models::UserType>  {
+  struct CppToUserPg<deli_auth::models::UserType>
+          : EnumMappingBase<deli_auth::models::UserType> {
     static constexpr DBTypeName postgres_name = "deli_auth.user_type";
-    static constexpr Enumerator enumerators[] {
-      {EnumType::kAdmin,    "admin"},
-      {EnumType::kCustomer, "customer"},
-      {EnumType::kCourier, "courier"},};
+    static constexpr EnumeratorList enumerators{
+            {EnumType::kUserTypeCustomer, "customer"},
+            {EnumType::kUserTypeCourier,  "courier"},
+            {EnumType::kUserTypeAdmin,    "admin"}};
   };
 
   template<>
@@ -52,6 +58,11 @@ namespace userver::storages::postgres::io {
   template<>
   struct CppToUserPg<deli_auth::models::BearerTokens> {
     static constexpr DBTypeName postgres_name = "deli_auth.bearer_token_v1";
+  };
+
+  template<>
+  struct CppToUserPg<deli_auth::models::UserRegisterRequest> {
+    static constexpr DBTypeName postgres_name = "deli_auth.user_register_request";
   };
 
 } // namespace userver::storages::postgres::io

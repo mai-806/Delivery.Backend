@@ -12,17 +12,28 @@ include_directories(src)
 
 set(SQL_REQUESTS
 		src/models/sql/all.hpp
+		src/models/sql/select_access_token_where_user_id.hpp
+		src/models/sql/select_password_where_login.hpp
+		src/models/sql/select_user_id.hpp
+		src/models/sql/update_user_password.hpp
+		src/models/sql/select_user_id_by_token.hpp
+    src/models/sql/insert_user.hpp
 		)
 
 set(VIEWS
-
 		src/views/objects/objects.hpp
 		src/views/objects/parsers.cpp
 		src/views/objects/parsers.hpp
 
+		src/views/v1/auth/login/post/handler.cpp
+		src/views/v1/auth/login/post/handler.hpp  
 		src/views/v1/auth/logout/post/handler.cpp
 		src/views/v1/auth/logout/post/handler.hpp
-		)
+    src/views/v1/auth/user/reset/post/handler.cpp
+    src/views/v1/auth/user/reset/post/handler.hpp
+    src/views/v1/auth/user/post/handler.cpp
+    src/views/v1/auth/user/post/handler.hpp
+)
 
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
@@ -40,7 +51,8 @@ add_library(${PROJECT_NAME}_objs OBJECT
 		${SQL_REQUESTS}
 		${VIEWS}
 
-		)
+)
+    
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql)
 
 
@@ -52,7 +64,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
 # Unit Tests
 add_executable(${PROJECT_NAME}_unittest
 
-		)
+)
 
 
 target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver-utest)
@@ -62,7 +74,7 @@ add_google_tests(${PROJECT_NAME}_unittest)
 # Benchmarks
 add_executable(${PROJECT_NAME}_benchmark
 
-		)
+)
 
 
 target_link_libraries(${PROJECT_NAME}_benchmark PRIVATE ${PROJECT_NAME}_objs userver-ubench)

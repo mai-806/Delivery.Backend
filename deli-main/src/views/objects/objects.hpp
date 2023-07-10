@@ -49,4 +49,10 @@ namespace deli_main::views {
       };
   }
 
+  namespace v1::couriers::available::get {
+    struct GetAvailableCouriersResponse {
+      std::vector<int64_t> courier_ids;
+    };
+  }
+
 } // namespace deli_main::views
