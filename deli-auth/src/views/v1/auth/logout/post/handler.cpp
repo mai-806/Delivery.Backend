@@ -43,7 +43,7 @@ namespace deli_auth::views::v1::auth::logout::post {
     }
 
     try {
-      requester_.DoDBQuery(models::requests::SelectAccessTokenWhereUserID, user);
+      requester_.DoDBQuery(models::requests::SelectBearerTokens, user);
     } catch (...) {
       request.SetResponseStatus(userver::server::http::HttpStatus::kUnauthorized);
       return Serialize(
