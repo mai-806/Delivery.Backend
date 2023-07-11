@@ -15,12 +15,12 @@ data_sql = f"""
             },
             {
                 'start_point': {
-                    'lon': 22,
-                    'lat': 11,
+                    'lat': 22.0,
+                    'lon': 11.0,
                 },
                 'end_point': {
-                    'lon': 23,
-                    'lat': 91,
+                    'lat': 23.0,
+                    'lon': 91.0,
                 },
                 'status': 'in_progress',
                 'customer_id': 5,
