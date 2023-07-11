@@ -38,15 +38,21 @@ namespace deli_main::views {
       Coordinate finish;
     };
 
-  struct OrderCreationResponse {
-    int64_t order_id;
-  };
+    struct OrderCreationResponse {
+      int64_t order_id;
+    };
+  }
+
+  namespace v1::order::get {
+    struct OrderGetRequest {
+      int64_t order_id;
+    };
   }
 
   namespace v1::orders::get {
-      struct GetOrdersResponse {
-        std::vector<OrderDto> orders;
-      };
+    struct GetOrdersResponse {
+      std::vector<OrderDto> orders;
+    };
   }
 
   namespace v1::couriers::available::get {

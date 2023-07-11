@@ -95,7 +95,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/GetAvailableCouriersResponse'
                 '400':
-                    description: Invalid Input
+                    description: "Invalid input"
                     content:
                         application/json:
                             schema:
@@ -104,7 +104,7 @@ paths:
     /v1/order:
         get:
             parameters:
-                -   name: id
+                -   name: order_id
                     in: query
                     schema:
                         type: integer
@@ -118,6 +118,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/OrderDto'
+                '400':
+                    description: "Invalid input"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
                 '404':
                     description: "Order not found"
                     content:

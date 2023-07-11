@@ -107,6 +107,7 @@ namespace {
   using OrderCreationResponse = deli_main::views::v1::order::post::OrderCreationResponse;
   using OrderDto = deli_main::views::OrderDto;
   using OrderStatus = deli_main::views::OrderStatus;
+  using OrderGetRequest = deli_main::views::v1::order::get::OrderGetRequest;
 }
 
 namespace userver::formats::parse {
@@ -160,7 +161,27 @@ namespace userver::formats::parse {
     return order_creation_request;
   }
 
+  OrderGetRequest
+  Parse(const userver::formats::json::Value &elem,
+        userver::formats::parse::To<deli_main::views::v1::order::get::OrderGetRequest>) {
+    const Keys required_keys = {"order_id"};
+    const Keys optional_keys;
+    const Types key_types = {
+            {"order_id", FieldType::kInt}
+    };
+    CheckFields(required_keys, optional_keys, key_types, elem);
+    LOG_DEBUG() << "fields are checked";
+    OrderGetRequest order_get_request{
+            .order_id = GetRequiredValue<int64_t>(elem, "order_id")
+    };
 
+    if (order_get_request.order_id < 0) {
+      throw userver::formats::json::ParseException("id param should be above 0");
+    }
+    LOG_DEBUG() << "request parsed";
+
+    return order_get_request;
+  }
 } // namespace userver::formats::parse
 
 
@@ -194,7 +215,7 @@ namespace userver::formats::serialize {
     return builder.ExtractValue();
   }
 
-  json::Value Serialize(const OrderDto& value, serialize::To<json::Value>) {
+  json::Value Serialize(const OrderDto &value, serialize::To<json::Value>) {
     json::ValueBuilder builder;
 
     builder["order_id"] = value.order_id;
@@ -236,9 +257,9 @@ namespace userver::formats::serialize {
                         serialize::To<json::Value>) {
     json::ValueBuilder builder;
 
-    builder["courier_ids"] = Serialize<std::vector<int64_t>, json::Value>(value.courier_ids, serialize::To<json::Value>());
+    builder["courier_ids"] = Serialize<std::vector<int64_t>, json::Value>(value.courier_ids,
+                                                                          serialize::To<json::Value>());
 
     return builder.ExtractValue();
   }
-
 } // namespace userver::formats::serialize

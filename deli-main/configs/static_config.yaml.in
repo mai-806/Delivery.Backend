@@ -57,6 +57,11 @@ components_manager:
             throttling_enabled: false
             url_trailing_slash: strict-match
 
+        v1-order-get-handler:
+            path: /v1/order
+            method: GET
+            task_processor: main-task-processor
+
         v1-order-post-handler:
             path: /v1/order
             method: POST
