@@ -15,9 +15,6 @@ namespace deli_auth::models::requests {
   void UpdateUserType(const userver::storages::postgres::ClusterPtr& cluster,
                       int64_t user_id, models::UserType user_type);
 
-  models::User GetUserById(const userver::storages::postgres::ClusterPtr& cluster,
-                                        int64_t user_id);
-
   std::string DeleteAccessTokenWhereUserID(const userver::storages::postgres::ClusterPtr& cluster,
                                            const models::User &user);
 
