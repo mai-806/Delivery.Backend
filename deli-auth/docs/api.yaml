@@ -103,6 +103,12 @@ paths:
                         schema:
                             $ref: '#/components/schemas/LogoutRequest'
                 required: true
+            parameters:
+                -   name: token
+                    in: header
+                    schema:
+                        $ref: '#/components/schemas/TokenDto'
+                    required: true
             responses:
                 '200':
                     description: "Success logout. Return id: int, login: str, is_auth: boolean"
@@ -139,11 +145,10 @@ paths:
                         type: string
                         format: password
                     required: true
-
                 -   name: token
                     in: header
                     schema:
-                        type: string
+                        $ref: '#/components/schemas/TokenDto'
                     required: true
             responses:
                 '204':

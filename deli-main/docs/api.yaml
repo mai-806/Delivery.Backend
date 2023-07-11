@@ -13,13 +13,14 @@ tags:
 paths:
     /v1/courier:
         get:
-            summary: "Get all information about a courier"
+            summary: "Get all information about a courier by his ID or Login"
             parameters:
-                -   name: id
+                -   name: user
                     in: query
+                    style: form
+                    explode: true
                     schema:
-                        type: integer
-                        minimum: 0
+                        $ref: '#/components/schemas/UserGetInfoRequest'
                     required: true
             responses:
                 '200':
@@ -107,8 +108,8 @@ paths:
                     in: query
                     schema:
                         type: integer
-                        minimum: 0
                         description: "Identifier for order"
+                        minimum: 0
                     required: true
             responses:
                 '200':
@@ -337,3 +338,17 @@ components:
                     type: string
             required:
                 - message
+        
+        UserGetInfoRequest:
+            type: object
+            description: "A request that receives either a login or an id to get user information"
+            properties:
+                login:
+                    type: string
+                    description: "Uniq user name"
+                id:
+                    type: integer
+                    minimum: 0
+            oneOf:
+                -   required: [ login ]
+                -   required: [ id ]
