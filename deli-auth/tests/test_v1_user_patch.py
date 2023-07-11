@@ -72,11 +72,10 @@ from testsuite.databases import pgsql
         ),
     ],
 )
-
-async def test_patch_user(service_client, request_body, expected_response_body, expected_response_code):
-        user_id = request_body["id"]
-        response = await service_client.patch("/v1/user", json=request_body)
-        assert response.status == expected_response_code
-        response_data = response.json()
-        assert response_data == expected_response_body
-        
+async def test_patch_user(service_client, request_body,
+                          expected_response_body, expected_response_code):
+    user_id = request_body["id"]
+    response = await service_client.patch("/v1/user", json=request_body)
+    assert response.status == expected_response_code
+    response_data = response.json()
+    assert response_data == expected_response_body
