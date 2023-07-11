@@ -12,10 +12,9 @@ include_directories(src)
 
 set(SQL_REQUESTS
 		src/models/sql/all.hpp
-    src/models/sql/check_user_exist.hpp
-    src/models/sql/get_user_by_id.hpp
-    src/models/sql/update_user_login.hpp
-    src/models/sql/update_user_type.hpp
+		src/models/sql/check_user_exist.hpp
+		src/models/sql/update_user_login.hpp
+		src/models/sql/update_user_type.hpp
 		src/models/sql/select_access_token_where_user_id.hpp
 		src/models/sql/select_password_where_login.hpp
 		src/models/sql/select_user_id.hpp
