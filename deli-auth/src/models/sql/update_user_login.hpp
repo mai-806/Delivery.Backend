@@ -3,6 +3,6 @@
 
 namespace deli_auth::models::sql {
     
-    const constexpr char *kUpdateUserType = "UPDATE deli_auth.users SET user_type = $2 WHERE id = $1;";
+    const constexpr char *kUpdateUserLogin = "UPDATE deli_auth.users SET login = $2 WHERE id = $1;";
 
 } // namespace deli_auth::models::sql
