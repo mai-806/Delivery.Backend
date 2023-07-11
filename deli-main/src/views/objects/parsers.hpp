@@ -11,12 +11,17 @@
 
 namespace userver::formats::parse {
 
-  deli_main::views::Coordinate Parse(const userver::formats::json::Value &elem,
-                                     userver::formats::parse::To<deli_main::views::Coordinate>);
+  deli_main::views::Coordinate Parse(
+          const userver::formats::json::Value &elem,
+          userver::formats::parse::To<deli_main::views::Coordinate>);
 
   deli_main::views::v1::order::post::OrderCreationRequest Parse(
           const userver::formats::json::Value &elem,
           userver::formats::parse::To<deli_main::views::v1::order::post::OrderCreationRequest>);
+
+  deli_main::views::v1::order::get::OrderGetRequest Parse(
+          const userver::formats::json::Value &elem,
+          userver::formats::parse::To<deli_main::views::v1::order::get::OrderGetRequest>);
 } // namespace userver::formats::parse
 
 namespace userver::formats::serialize {
@@ -31,6 +36,9 @@ namespace userver::formats::serialize {
                         serialize::To<json::Value>);
 
   json::Value Serialize(const deli_main::views::v1::couriers::available::get::GetAvailableCouriersResponse &value,
+                        serialize::To<json::Value>);
+
+  json::Value Serialize(const deli_main::views::OrderDto &value,
                         serialize::To<json::Value>);
 
 } // namespace userver::formats::serialize

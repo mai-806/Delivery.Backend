@@ -6,6 +6,7 @@
 
 namespace deli_main::models::requests {
 
+  models::Order GetOrder(const userver::storages::postgres::ClusterPtr& cluster, int64_t order_id);
 
   int64_t InsertOrder(const userver::storages::postgres::ClusterPtr& cluster,
                       const models::Order &order);

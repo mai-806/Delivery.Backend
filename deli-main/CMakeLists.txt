@@ -14,6 +14,7 @@ set(SQL_REQUESTS
         src/models/sql/all.hpp
         src/models/sql/insert_order.hpp
         src/models/sql/get_orders.hpp
+        src/models/sql/get_order_info.hpp
         src/models/sql/get_free_courier_ids.hpp
 )
 
@@ -39,6 +40,9 @@ set(VIEWS
 
         src/views/v1/couriers/available/get/handler.cpp
         src/views/v1/couriers/available/get/handler.hpp
+
+        src/views/v1/order/get/handler.cpp
+        src/views/v1/order/get/handler.hpp
 )
 
 # Common sources
