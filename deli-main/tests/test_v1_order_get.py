@@ -14,6 +14,7 @@ data_sql = f"""
                 'order_id': 1,
             },
             {
+                'order_id': 1,
                 'start_point': {
                     'lat': 22.0,
                     'lon': 11.0,
@@ -24,6 +25,7 @@ data_sql = f"""
                 },
                 'status': 'in_progress',
                 'customer_id': 5,
+                'courier_id': None,
             },
             200,
             id='OK',
