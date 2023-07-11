@@ -1,7 +1,7 @@
 import pytest
 
 data_sql = f"""
-((22, 11), (23, 91), 'in_progress', 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+(1, (22, 11), (23, 91), 'in_progress', 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 """
 
 
@@ -40,7 +40,7 @@ data_sql = f"""
             {
                 'order_id': -3,
             },
-            {'message': 'id parameter should be above 0'},
+            {'message': 'id param should be above 0'},
             400,
             id='id parameter should be above 0',
         ),
@@ -48,9 +48,9 @@ data_sql = f"""
             {
                 'order_id': 4,
             },
-            {'message': 'order not found'},
+            {'message': 'Order not found'},
             404,
-            id='order not found',
+            id='Order not found',
         ),
     ],
 )
