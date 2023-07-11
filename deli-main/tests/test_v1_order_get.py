@@ -61,11 +61,11 @@ async def test_v1_order_post(service_client, request_body,
                              expected_response_code, pgsql):
     cursor = pgsql['db_1'].cursor()
     cursor.execute(
-        f"""INSERT INTO deli_main.orders 
+        f"""INSERT INTO deli_main.orders
         (id, start_point, end_point, status, customer, created_at, updated_at)
            VALUES {data_sql}
         """
-)
+    )
 
     response = await service_client.get(
         '/v1/order',
