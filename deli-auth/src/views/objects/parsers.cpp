@@ -111,6 +111,8 @@ namespace {
   using LogoutResponse200 = deli_auth::views::v1::auth::logout::post::LogoutResponse200;
   using UserType = deli_auth::views::UserType;
   using UserResetRequest = deli_auth::views::v1::auth::user::reset::post::UserResetRequest;
+  using UserGetResponse = deli_auth::views::v1::user::get::UserGetResponse;
+
 }
 
 namespace userver::formats::parse {
@@ -331,5 +333,25 @@ namespace userver::formats::serialize {
 
     return builder.ExtractValue();
   }
+
+
+    json::Value Serialize(const UserGetResponse &value,
+                          serialize::To<json::Value>) {
+        json::ValueBuilder builder;
+
+        builder["login"] = value.login;
+        switch (value.user_type) {
+            case UserType::kUserTypeCustomer:
+                builder["user_type"] = "customer";
+                break;
+            case UserType::kUserTypeCourier:
+                builder["user_type"] = "courier";
+                break;
+            case UserType::kUserTypeAdmin:
+                builder["user_type"] = "admin";
+                break;
+        }
+        return builder.ExtractValue();
+    }
 
 } // namespace userver::formats::serialize

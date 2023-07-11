@@ -62,4 +62,18 @@ namespace deli_auth::views {
     };
   } // namespace v1::auth::user::post
 
+
+    namespace v1::user::get {
+
+        struct  UserGetRequest{
+            std::optional<int64_t> id;
+            std::optional<std::string> login;
+        };
+
+        struct UserGetResponse {
+            std::string login;
+            UserType user_type;
+        };
+    }
+
 } // namespace deli_auth::views

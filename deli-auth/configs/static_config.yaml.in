@@ -78,6 +78,11 @@ components_manager:
             method: POST
             task_processor: main-task-processor
 
+        v1-user-get-handler:
+            path: /v1/user
+            method: GET
+            task_processor: main-task-processor
+
         postgres-deli-auth:
             dbconnection: $dbconnection
             blocking_task_processor: fs-task-processor

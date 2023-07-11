@@ -10,4 +10,8 @@ namespace deli_auth::common::exceptions {
   private:
     std::string msg_;
   };
+
+  class UserNotFound : public std::runtime_error {
+        using runtime_error::runtime_error;
+    };
 } // namespace deli_auth::common::exceptions
