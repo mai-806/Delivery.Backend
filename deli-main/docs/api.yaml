@@ -1,94 +1,161 @@
 openapi: 3.0.3
-
 info:
+    title: MAIN API
+    description:
+        "API for make and setup orders"
     version: 1.0.0
-    title: Delivery API
-    description: API to interact with delivery orders
-
     #servers:
-    # - url: https://url.ru/
+    #- url: https://url.ru/v1/
+
+tags:
+    -   name: main
 
 paths:
     /v1/courier:
         get:
-            summary: Get all information about a courier
+            summary: "Get all information about a courier by his ID or Login"
             parameters:
-                -   name: id
+                -   name: user
                     in: query
-                    required: true
+                    style: form
+                    explode: true
                     schema:
-                        type: integer
-                        minimum: 0
-                        description: Identifier for order
-
+                        $ref: '#/components/schemas/UserGetInfoRequest'
+                    required: true
             responses:
                 '200':
-                    description: Successful response
+                    description: "Returns login of the courier and id of orders which he accepted"
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/CourierInfo'
-                '404':
-                    description: Courier not found
+                '400':
+                    description: "Invalid input"
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
-
-    /v1/order:
+                '404':
+                    description: "Courier not found"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+    
+    /v1/courier/assign:
+        post:
+            description: "This method connects the order and the courier with each other"
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ConnectOrderAndCourierRequest'
+                required: true
+            responses:
+                '204':
+                    description: "Successful operation"
+                '400':
+                    description: "Invalid input"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '404':
+                    description: "No found order or courier"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+    
+    /v1/couriers/available:
         get:
+            description: "Get array of IDs of all available couriers"
             parameters:
-                -   name: id
+                -   name: limit
                     in: query
-                    required: true
+                    description: "Maximum number of couriers in response"
                     schema:
                         type: integer
                         minimum: 0
-                        description: Identifier for order
-
+                        default: 10
+                    required: false
+                -   name: offset
+                    in: query
+                    description: "Number of couriers to skip"
+                    schema:
+                        type: integer
+                        minimum: 0
+                        default: 0
+                    required: false
             responses:
                 '200':
-                    description: Success. Information about order route.
+                    description: "Returns array with couriers ID who are available"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetAvailableCouriersResponse'
+                '400':
+                    description: "Invalid input"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+    
+    /v1/order:
+        get:
+            parameters:
+                -   name: order_id
+                    in: query
+                    schema:
+                        type: integer
+                        description: "Identifier for order"
+                        minimum: 0
+                    required: true
+            responses:
+                '200':
+                    description: "Success. Information about order route"
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/OrderDto'
-
-                '404':
-                    description: Order not found
+                '400':
+                    description: "Invalid input"
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
-
+                '404':
+                    description: "Order not found"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+        
         post:
-            tags:
-                - order
-            summary: Add a new order
-            description: Add a new order
-            operationId: addOrder
+            description: "Adding a new order by courier ID and start-finish points"
             requestBody:
                 content:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/OrderCreationRequest'
+                required: true
             responses:
                 '200':
-                    description: Successful operation
+                    description: "Returns ID of new order"
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/OrderId'
                 '400':
-                    description: Invalid value
+                    description: "Invalid input"
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
-
+    
     /v1/order/change-status:
         post:
-            description: Change order status
+            description: "Change order status"
             requestBody:
                 content:
                     application/json:
@@ -96,111 +163,49 @@ paths:
                             $ref: '#/components/schemas/OrderChangeStatus'
             responses:
                 '204':
-                    description: OK
+                    description: "Successful operation"
                 '400':
-                    description: Invalid value
+                    description: "Invalid value"
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
                 '404':
-                    description: Order not found
+                    description: "Order not found"
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
-
-
+    
     /v1/orders:
         get:
-            operationId: getCouriers
-            description: Get order ids.
+            description: "Get order ids"
             parameters:
                 -   name: limit
                     in: query
-                    required: false
-                    description: Maximum number of orders in response.
+                    description: "Maximum number of orders in response"
                     schema:
                         type: integer
                         minimum: 0
                         default: 10
-
+                    required: false
                 -   name: offset
                     in: query
-                    required: false
-                    description: Number of orders to skip.
+                    description: "Number of orders to skip"
                     schema:
                         type: integer
                         minimum: 0
                         default: 0
-
+                    required: false
             responses:
                 '200':
-                    description: OK
+                    description: "Returns array of orders with full info about each"
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/GetOrdersResponse'
-
                 '400':
-                    description: Wrong limit or offset parameters
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ErrorResponse'
-
-    /v1/courier/assign:
-        post:
-            summary: the method connects the order and the courier with each other
-            description: connect order and courier
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/ConnectOrderAndCourierRequest'
-            responses:
-                '204':
-                    description: Successful operation
-                '400':
-                    description: Wrong param
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ErrorResponse'
-                '404':
-                    description: no found order or courier
-                    
-        get:
-            summary: Get array of IDs of all available couriers
-            parameters:
-                -   name: limit
-                    in: query
-                    required: false
-                    description: Maximum number of couriers in response.
-                    schema:
-                        type: integer
-                        minimum: 0
-                        default: 10
-
-                -   name: offset
-                    in: query
-                    required: false
-                    description: Number of couriers to skip.
-                    schema:
-                        type: integer
-                        minimum: 0
-                        default: 0
-
-            responses:
-                '200':
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/GetAvailableCouriersResponse'
-
-                '400':
-                    description: Wrong limit or offset parameters
+                    description: "Wrong limit or offset parameters"
                     content:
                         application/json:
                             schema:
@@ -211,23 +216,19 @@ components:
         CourierInfo:
             type: object
             properties:
-                id:
-                    type: integer
-                    description: Courier ID
                 login:
                     type: string
-                    description: Courier login
                 orders_id:
                     type: array
                     items:
                         type: integer
+                        description: "All orders of this courier (only ID)"
                         minimum: 0
-                    description: Courier orders
+            
             required:
-                - id
                 - login
                 - orders_id
-
+        
         GetAvailableCouriersResponse:
             type: object
             properties:
@@ -235,31 +236,31 @@ components:
                     type: array
                     items:
                         type: integer
-
+                        minimum: 0
+        
         Coordinate:
             type: object
             properties:
                 lon:
                     type: number
+                    description: "City geographic location (longitude)"
                     maximum: 180
                     minimum: -180
-                    description: City geographic location (longitude)
-
                 lat:
                     type: number
+                    description: "City geographic location (latitude)"
                     maximum: 90
                     minimum: -90
-                    description: City geographic location (latitude)
             required:
                 - lon
                 - lat
-
+        
         OrderDto:
             type: object
             properties:
-                id:
+                order_id:
                     type: integer
-                customerId:
+                customer_id:
                     type: integer
                     minimum: 0
                     example: 1
@@ -271,27 +272,27 @@ components:
                     type: string
                     enum: [ new, waiting, in_progress, done, canceled ]
             required:
-                - id
+                - order_id
                 - start
                 - finish
-                - customerId
+                - customer_id
                 - status
-
+        
         GetOrdersResponse:
             type: object
             properties:
                 orders:
                     type: array
+                    description: "Array with full info about orders"
                     items:
                         $ref: '#/components/schemas/OrderDto'
-
+        
         OrderCreationRequest:
             type: object
             properties:
-                customerId:
+                customer_id:
                     type: integer
                     minimum: 0
-                    example: 1
                 start:
                     $ref: '#/components/schemas/Coordinate'
                 finish:
@@ -299,45 +300,43 @@ components:
             required:
                 - start
                 - finish
-                - customerId
-
+                - customer_id
+        
         OrderId:
             type: object
             properties:
-                orderId:
+                order_id:
                     type: integer
                     minimum: 0
-                    example: 1
             required:
-                - orderId
-
+                - order_id
+        
         ConnectOrderAndCourierRequest:
             type: object
             properties:
-                orderId:
+                order_id:
                     type: integer
                     minimum: 0
-                    example: 1
-                courierId:
+                courier_id:
                     type: integer
                     minimum: 0
-                    example: 1
             required:
-                - orderId
-                - courierId
-
+                - order_id
+                - courier_id
+        
         OrderChangeStatus:
             type: object
             properties:
-                orderId:
+                order_id:
                     type: integer
                     minimum: 0
                 status:
                     type: string
-                    enum: [in_progress, delivered, canceled]
+                    enum: [ waiting, in_progress, done, canceled ]
             required:
-                - orderId
+                - order_id
                 - status
+        
         ErrorResponse:
             type: object
             properties:
@@ -345,3 +344,17 @@ components:
                     type: string
             required:
                 - message
+        
+        UserGetInfoRequest:
+            type: object
+            description: "A request that receives either a login or an id to get user information"
+            properties:
+                login:
+                    type: string
+                    description: "Uniq user name"
+                id:
+                    type: integer
+                    minimum: 0
+            oneOf:
+                -   required: [ login ]
+                -   required: [ id ]

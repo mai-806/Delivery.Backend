@@ -7,6 +7,7 @@ CREATE TYPE deli_auth.user_type AS ENUM (
     'courier',
     'admin'
 );
+
 CREATE TABLE IF NOT EXISTS deli_auth.users
 (
     id         BIGSERIAL PRIMARY KEY,
@@ -16,6 +17,7 @@ CREATE TABLE IF NOT EXISTS deli_auth.users
     created_at TIMESTAMPTZ,
     updated_at TIMESTAMPTZ
 );
+
 CREATE TABLE IF NOT EXISTS deli_auth.bearer_tokens
 (
     id            BIGSERIAL PRIMARY KEY,
@@ -26,6 +28,7 @@ CREATE TABLE IF NOT EXISTS deli_auth.bearer_tokens
     updated       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     FOREIGN KEY (user_id) REFERENCES deli_auth.users (id) ON DELETE CASCADE
 );
+
 CREATE TYPE deli_auth.user_register_request AS (
     login      TEXT,
     password   TEXT,

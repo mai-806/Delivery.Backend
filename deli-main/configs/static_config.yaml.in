@@ -57,8 +57,28 @@ components_manager:
             throttling_enabled: false
             url_trailing_slash: strict-match
 
+        v1-order-get-handler:
+            path: /v1/order
+            method: GET
+            task_processor: main-task-processor
+
         v1-order-post-handler:
             path: /v1/order
+            method: POST
+            task_processor: main-task-processor
+
+        v1-orders-get-handler:
+            path: /v1/orders
+            method: GET
+            task_processor: main-task-processor
+
+        v1-couriers-available-get-handler:
+            path: /v1/couriers/available
+            method: GET
+            task_processor: main-task-processor
+
+        testing-clients-deli-auth-v1-user-get-post:
+            path: /testing/clients/deli-auth-v1-user-get
             method: POST
             task_processor: main-task-processor
 
@@ -72,3 +92,6 @@ components_manager:
             fs-task-processor: fs-task-processor
 
         requester:
+
+        deli-auth-client:
+            v1-user-get-url: NEED_TO_ADD

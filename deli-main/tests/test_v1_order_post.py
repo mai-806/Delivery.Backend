@@ -60,6 +60,23 @@ from testsuite.databases import pgsql
             None,
             id='lat param out of bounds',
         ),
+        pytest.param(
+            {
+                'customerId': 1,
+                'start': {
+                    'lon': 22,
+                    'lat': 11,
+                },
+                'finish': {
+                    'lon': 200,
+                    'lat': 12,
+                },
+            },
+            {'message': 'lon param out of bounds'},
+            400,
+            None,
+            id='lon param out of bounds',
+        ),
     ],
 )
 async def test_v1_order_post(service_client, request_body,
