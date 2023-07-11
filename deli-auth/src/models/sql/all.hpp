@@ -11,3 +11,6 @@
 #include <models/sql/select_user_id_by_token.hpp>
 #include <models/sql/insert_user.hpp>
 #include <models/sql/get_user.hpp>
+#include <models/sql/check_user_exist.hpp>
+#include <models/sql/update_user_login.hpp>
+#include <models/sql/update_user_type.hpp>

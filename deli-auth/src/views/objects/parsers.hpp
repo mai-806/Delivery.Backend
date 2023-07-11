@@ -10,6 +10,10 @@
 #include <views/objects/objects.hpp>
 
 namespace userver::formats::parse {
+  
+  deli_auth::views::v1::user::patch::UserUpdateRequest Parse(
+          const userver::formats::json::Value &elem,
+          userver::formats::parse::To<deli_auth::views::v1::user::patch::UserUpdateRequest>);
 
   deli_auth::views::ErrorResponse
   Parse(const userver::formats::json::Value &elem,
@@ -44,6 +48,9 @@ namespace userver::formats::parse {
 namespace userver::formats::serialize {
 
   json::Value Serialize(const deli_auth::views::ErrorResponse &value,
+                        serialize::To<json::Value>);
+
+  json::Value Serialize(const deli_auth::views::v1::user::patch::UserUpdateResponse200 &value,
                         serialize::To<json::Value>);
 
   json::Value Serialize(const deli_auth::views::v1::auth::login::post::AuthRequest &value,

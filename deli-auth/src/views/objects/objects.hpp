@@ -21,6 +21,20 @@ namespace deli_auth::views {
       int64_t expires_in;
       std::string token_type = "bearer";
   };
+  
+  namespace v1::user::patch {
+    struct UserUpdateRequest {
+      int64_t id;
+      std::optional<std::string> login;
+      std::optional<UserType> user_type;
+    };
+
+    struct UserUpdateResponse200 {
+      int64_t id;
+      std::string login;
+      std::string user_type;
+    };
+  };
     
   namespace v1::auth::login::post {
     struct AuthRequest{

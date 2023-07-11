@@ -29,7 +29,6 @@ CREATE TABLE IF NOT EXISTS deli_auth.bearer_tokens
     FOREIGN KEY (user_id) REFERENCES deli_auth.users (id) ON DELETE CASCADE
 );
 
-
 CREATE TYPE deli_auth.user_register_request AS (
     login      TEXT,
     password   TEXT,

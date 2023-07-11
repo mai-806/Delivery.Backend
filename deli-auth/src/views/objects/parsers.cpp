@@ -112,10 +112,48 @@ namespace {
   using UserType = deli_auth::views::UserType;
   using UserResetRequest = deli_auth::views::v1::auth::user::reset::post::UserResetRequest;
   using UserGetResponse = deli_auth::views::v1::user::get::UserGetResponse;
+  using UserUpdateRequest = deli_auth::views::v1::user::patch::UserUpdateRequest;
+  using UserUpdateResponse200 = deli_auth::views::v1::user::patch::UserUpdateResponse200;
 
 }
 
 namespace userver::formats::parse {
+  
+  UserUpdateRequest
+  Parse(const userver::formats::json::Value &elem,
+        userver::formats::parse::To<UserUpdateRequest>) {
+    const Keys required_keys = {"id"};
+    const Keys optional_keys = {"login", "user_type",};
+    const Types key_types = {
+            {"id", FieldType::kInt},
+            {"login", FieldType::kString},
+            {"user_type", FieldType::kString}
+    };
+
+    CheckFields(required_keys, optional_keys, key_types, elem);
+    LOG_DEBUG() << "fields are checked";
+
+    std::string user_type = GetRequiredValue<std::string>(elem, "user_type");
+    deli_auth::views::UserType enum_user_type;
+    if (user_type == "customer") {
+        enum_user_type = deli_auth::views::UserType::kUserTypeCustomer;
+    } else if (user_type == "courier") {
+        enum_user_type = deli_auth::views::UserType::kUserTypeCourier;
+    } else if (user_type == "admin") {
+        enum_user_type = deli_auth::views::UserType::kUserTypeAdmin;
+    } else {
+        throw userver::formats::json::ParseException(
+                fmt::format("user_type is invalid"));
+    }
+
+    UserUpdateRequest user_update_request {
+            .id = GetRequiredValue<int64_t>(elem, "id"),
+            .login = GetOptionalValue<std::string>(elem, "login"),
+            .user_type = enum_user_type
+    };
+    LOG_DEBUG() << "request parsed";
+    return user_update_request;
+  }
 
   ErrorResponse Parse(const userver::formats::json::Value &elem,
                       userver::formats::parse::To<ErrorResponse>) {
@@ -276,6 +314,17 @@ namespace userver::formats::parse {
 
 
 namespace userver::formats::serialize {
+
+  json::Value Serialize(const UserUpdateResponse200 &value,
+                        serialize::To<json::Value>) {
+    json::ValueBuilder builder;
+
+    builder["id"] = value.id;
+    builder["login"] = value.login;
+    builder["user_type"] = value.user_type;
+
+    return builder.ExtractValue();
+  }
 
     json::Value Serialize(const RegisterResponse &value,
                           serialize::To<json::Value>) {
